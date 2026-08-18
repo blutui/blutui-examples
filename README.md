@@ -6,6 +6,35 @@ dependencies, and run it with the Blutui Courier CLI.
 
 ## Examples
 
+### [`blocks/simple-blocks-usage`](blocks/simple-blocks-usage)
+
+A Schweppes-inspired brand site showing **simple, straightforward Canopy
+blocks**. Each block is a self-contained section — hero, product hero, story,
+heritage timeline, recipes, nutrition table, tasting notes, royal warrant and
+more — with a small set of Content/Style settings and sensible image defaults,
+so it's easy to see how a block's `config` and `template` sections fit
+together.
+
+Highlights:
+
+- **17 content blocks** across a home page and a product page, composed with
+  two layouts (`home` and `product`) and shared header/footer components.
+- **Simple settings model** — headings, text, image uploads and the occasional
+  checkbox; every setting falls back to a bundled default image or copy, so
+  blocks render finished-looking straight out of the box.
+- **Nested block partials** — repeatable rows like products, tasting notes and
+  nutrition entries live as sub-templates (`products/item.canvas`,
+  `nutrition/row.canvas`), showing how to structure list-style blocks.
+
+**Run it locally:**
+
+```bash
+cd blocks/simple-blocks-usage
+npm install
+npm run dev      # Tailwind/Parcel watch
+courier dev      # serves at https://localhost:8080
+```
+
 ### [`blocks/highly-editable-blocks`](blocks/highly-editable-blocks)
 
 An artist landing page built as a system of **highly editable Canopy blocks**.
@@ -39,6 +68,8 @@ npm run dev      # Tailwind/Parcel watch
 courier dev      # serves at https://localhost:8080
 ```
 
-Requires the [Courier CLI](https://www.blutui.com/docs/courier) and a
-`courier.json` pointing at your own site handle (not committed — see
+---
+
+Both examples require the [Courier CLI](https://www.blutui.com/docs/courier)
+and a `courier.json` pointing at your own site handle (not committed — see
 `.gitignore`).
