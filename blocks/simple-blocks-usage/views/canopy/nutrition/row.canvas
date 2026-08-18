@@ -1,0 +1,19 @@
+{% canopy config %}
+{
+    "title": "Nutrition row",
+    "name": "row",
+    "settings": [
+        { "name": "nutrient", "type": "text", "label": "Nutrient", "default": "Energy" },
+        { "name": "serving", "type": "text", "label": "Per serving", "default": "0 kJ / 0 Cal" },
+        { "name": "hundred", "type": "text", "label": "Per 100ml", "default": "0 kJ / 0 Cal" }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+<tr>
+  <th scope="row" class="py-0 font-normal">{{ settings.nutrient }}</th>
+  <td class="py-0">{{ settings.serving }}</td>
+  <td class="py-0">{{ settings.hundred }}</td>
+</tr>
+{% endcanopy %}

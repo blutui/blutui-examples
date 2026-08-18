@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "blutui": {
+      "args": [
+        "mcp",
+        "server"
+      ],
+      "command": "courier"
+    }
+  }
+}

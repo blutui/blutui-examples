@@ -1,0 +1,146 @@
+{% canopy config %}
+{
+    "title": "Product",
+    "name": "item",
+    "settings": [
+        { "name": "name", "type": "text", "label": "Product name", "tab": "Content",
+          "default": "Antipodean KIWI & LIME" },
+        { "name": "category", "type": "text", "label": "Category", "tab": "Content",
+          "help": "Must match one of the category tabs on the showcase.",
+          "default": "Sparkling Water Beverages" },
+        { "name": "image", "type": "file", "label": "Pack shot", "accept": "image/*", "tab": "Content" },
+        { "name": "link", "type": "url", "label": "Product page", "tab": "Content",
+          "help": "The pack shot and product name link here.",
+          "default": { "url": "/products/kiwi-lime", "text": "Antipodean KIWI & LIME", "target": "_self" } },
+        { "name": "features", "type": "text", "label": "Feature line", "tab": "Content",
+          "default": "CAFFEINE FREE" },
+        { "name": "nutrition", "type": "textarea", "label": "Nutrition summary", "tab": "Content",
+          "default": "SERVING SIZE: 12.00 FL. OZ.  •  CALORIES 120  •  TOTAL SUGARS 33G  •  SODIUM 60MG" },
+        { "name": "disclaimer", "type": "text", "label": "Disclaimer", "tab": "Content",
+          "default": "*Percent Daily Values are based on a 2,000-calorie diet." },
+        { "name": "ingredients", "type": "textarea", "label": "Ingredients", "tab": "Content",
+          "default": "Carbonated mineral water, natural flavours, citric acid and other ingredients as required by the final formulation." },
+        { "name": "rating", "type": "number", "label": "Star rating", "tab": "Reviews", "min": 0, "max": 5, "default": 4 },
+        { "name": "reviews", "type": "url", "label": "Reviews link", "tab": "Reviews",
+          "default": { "url": "#reviews", "text": "Read reviews", "target": "_self" } },
+        { "name": "show_share", "type": "checkbox", "label": "Show share buttons", "tab": "Reviews", "default": true }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+{% set pack_shot = settings.image.path|default(asset('images/product-kiwi-lime.png')) %}
+{% set stars = settings.rating|default(0)|round %}
+
+<article
+  class="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] lg:gap-[52px]"
+  data-product-category="{{ settings.category }}"
+>
+  <div class="flex justify-center lg:justify-end">
+    {% if settings.link.url %}
+      <a
+        href="{{ settings.link.url }}"
+        target="{{ settings.link.target }}"
+        class="block transition-transform duration-200 hover:scale-[1.03] focus-visible:scale-[1.03]"
+      >
+        <img
+          src="{{ pack_shot | image_url({ width: 700, format: 'webp' }) }}"
+          alt="{{ settings.name }}"
+          class="h-[340px] w-auto object-contain lg:h-[516px]"
+        />
+      </a>
+    {% else %}
+      <img
+        src="{{ pack_shot | image_url({ width: 700, format: 'webp' }) }}"
+        alt="{{ settings.name }}"
+        class="h-[340px] w-auto object-contain lg:h-[516px]"
+      />
+    {% endif %}
+  </div>
+
+  <div class="max-w-[560px]">
+    <h3 class="text-[26px] font-bold leading-[0.95] text-heritage lg:text-[32px]">
+      {% if settings.link.url %}
+        <a href="{{ settings.link.url }}" target="{{ settings.link.target }}" class="underline-offset-4 hover:underline">
+          {{ settings.name }}
+        </a>
+      {% else %}
+        {{ settings.name }}
+      {% endif %}
+    </h3>
+
+    {% if settings.show_share %}
+      <ul class="mt-3 flex items-center gap-[14px]">
+        {% for share in [
+          { key: 'twitter', label: 'Share on X', path: 'M18.9 5.6 13.7 11l5.6 7.4h-4.4l-3.4-4.5-3.9 4.5H5.1l5.6-6.4L5.3 5.6h4.5l3 4.1 3.6-4.1h2.5Z' },
+          { key: 'facebook', label: 'Share on Facebook', path: 'M16.2 6.5h-2c-.6 0-1 .5-1 1.1v1.6h3l-.4 2.9h-2.6V19h-3v-6.9H8.1V9.2h2.1V7.4c0-2.1 1.3-3.4 3.3-3.4h2.7v2.5Z' },
+          { key: 'email', label: 'Share by email', path: 'M5 7h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1Zm.9 1.6 6.1 4 6.1-4H5.9Zm12.5 1.2-6.4 4.2-6.4-4.2v5.6h12.8V9.8Z' }
+        ] %}
+          <li>
+            <a
+              href="#"
+              data-share="{{ share.key }}"
+              data-share-text="{{ settings.name }}"
+              target="_blank"
+              rel="noopener"
+              class="flex h-[30px] w-[30px] items-center justify-center rounded-full bg-heritage text-white transition-opacity hover:opacity-80"
+            >
+              <svg viewBox="0 0 24 24" class="h-[18px] w-[18px]" fill="currentColor" aria-hidden="true">
+                <path d="{{ share.path }}" />
+              </svg>
+              <span class="sr-only">{{ share.label }}</span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <div class="mt-[14px] flex items-center gap-[10px]">
+      <span class="flex items-center gap-[10px]" role="img" aria-label="Rated {{ stars }} out of 5">
+        {% for index in 1..5 %}
+          <svg
+            viewBox="0 0 17.119 16.2812"
+            class="h-[18px] w-[18px]{% if index > stars %} opacity-30{% endif %}"
+            fill="#5BA63D"
+            aria-hidden="true"
+          >
+            <path d="M8.55951 0L10.5801 6.21885H17.119L11.8289 10.0623L13.8496 16.2812L8.55951 12.4377L3.26944 16.2812L5.29007 10.0623L0 6.21885H6.53888L8.55951 0Z" />
+          </svg>
+        {% endfor %}
+      </span>
+
+      {% if settings.reviews.url %}
+        <a
+          href="{{ settings.reviews.url }}"
+          target="{{ settings.reviews.target }}"
+          class="text-[15px] leading-relaxed text-heritage underline-offset-4 hover:underline"
+        >
+          {{ settings.reviews.text }}
+        </a>
+      {% endif %}
+    </div>
+
+    {% if settings.features %}
+      <p class="mt-[14px] text-[16px] font-light uppercase leading-none tracking-[0.5px] text-heritage">
+        {{ settings.features }}
+      </p>
+    {% endif %}
+
+    {% if settings.nutrition %}
+      <p class="mt-[14px] text-[16px] font-light uppercase leading-tight tracking-[0.5px] text-body">
+        {{ settings.nutrition }}
+      </p>
+    {% endif %}
+
+    {% if settings.disclaimer %}
+      <p class="mt-[14px] text-[12px] italic leading-relaxed text-body">{{ settings.disclaimer }}</p>
+    {% endif %}
+
+    {% if settings.ingredients %}
+      <p class="mt-[14px] text-[15px] leading-relaxed text-body">
+        Ingredients: <span class="uppercase">{{ settings.ingredients }}</span>
+      </p>
+    {% endif %}
+  </div>
+</article>
+{% endcanopy %}

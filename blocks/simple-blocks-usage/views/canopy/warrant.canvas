@@ -1,0 +1,23 @@
+{% canopy config %}
+{
+    "title": "Royal Warrant",
+    "name": "warrant",
+    "settings": [
+        { "name": "lead", "type": "textarea", "label": "Lead line",
+          "default": "Schweppes received a" },
+        { "name": "emphasis", "type": "text", "label": "Emphasis line",
+          "default": "Warrant of Appointment" },
+        { "name": "tail", "type": "textarea", "label": "Closing line",
+          "default": "in 1836 from King William IV of England, which significantly contributed to the popularity of the growing brand." },
+        { "name": "image", "type": "file", "label": "Background panel", "accept": "image/*" },
+        { "name": "overlay_image", "type": "file", "label": "Portrait cut-out", "accept": "image/*" }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+{% set story_style = { theme: 'blue', image_side: 'right', media_style: 'panel', show_band: false, emphasis_size: 'regular' } %}
+{% set story_image = asset('images/warrant-bg-blue.png') %}
+{% set story_overlay = asset('images/king-william-iv-blue.png') %}
+{{ include('components/story-section.html') }}
+{% endcanopy %}

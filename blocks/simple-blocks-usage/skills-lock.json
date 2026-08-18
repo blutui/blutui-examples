@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "skills": {
+    "blutui-canopy-blocks": {
+      "source": "blutui/context",
+      "ref": "canopy",
+      "sourceType": "github",
+      "skillPath": "skills/blutui-canopy-blocks/SKILL.md",
+      "computedHash": "f3990132907c10ce8624ffd2c26299f7e2d95192889b14396920935fc8d46ab4"
+    },
+    "blutui-project-guidelines": {
+      "source": "blutui/context",
+      "ref": "canopy",
+      "sourceType": "github",
+      "skillPath": "skills/blutui-project-guidelines/SKILL.md",
+      "computedHash": "38a8409f592664442ac4739abdc6c5966e9d6b59b6befad4cf0e2350509d007e"
+    }
+  }
+}

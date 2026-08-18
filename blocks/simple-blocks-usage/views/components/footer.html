@@ -1,0 +1,37 @@
+{# Site footer — logo, the `footer` menu and the trademark line. #}
+{% set footer_nav = cms.menu('footer') %}
+
+<footer class="bg-footer">
+  <div class="shell flex flex-col items-center gap-5 py-[50px]">
+    <img
+      src="{{ asset('images/schweppes-logo-color.png') | image_url({ width: 190, format: 'webp' }) }}"
+      alt="Schweppes"
+      width="95"
+      height="81"
+      class="h-[81px] w-auto object-contain"
+    />
+
+    <nav aria-label="Footer">
+      <ul class="flex flex-wrap items-start justify-center gap-x-6 gap-y-[10px]">
+        {% for item in footer_nav.items %}
+          {% if item.active %}
+            <li>
+              <a
+                href="{{ item.href }}"
+                class="text-[12px] font-medium uppercase leading-normal tracking-wide text-ink underline-offset-4 hover:underline"
+                {% if item.opens_new_tab %}target="_blank" rel="noopener"{% endif %}
+              >
+                {{ item.label }}
+              </a>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </nav>
+
+    <p class="max-w-[1170px] text-center text-[12px] font-medium uppercase leading-normal tracking-wide text-body">
+      Schweppes and the Fountain Device are registered trademarks of Dr Pepper/Seven Up, Inc.
+      &copy; {{ 'now' | date('Y') }} Dr Pepper/Seven Up, Inc
+    </p>
+  </div>
+</footer>

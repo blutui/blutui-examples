@@ -1,0 +1,55 @@
+{% canopy config %}
+{
+    "title": "Heritage story",
+    "name": "story",
+    "settings": [
+        { "name": "lead", "type": "textarea", "label": "Lead line", "tab": "Content",
+          "default": "Customers referred to Schweppes as" },
+        { "name": "emphasis", "type": "text", "label": "Emphasis line", "tab": "Content",
+          "default": "Lightning in a bottle" },
+        { "name": "tail", "type": "textarea", "label": "Closing line", "tab": "Content",
+          "default": "because it was the first bottle of its kind to retain carbonation." },
+        { "name": "signature", "type": "file", "label": "Signature image", "accept": "image/*", "tab": "Content",
+          "description": "Optional signature lockup shown under the copy." },
+
+        { "name": "image", "type": "file", "label": "Main image", "accept": "image/*", "tab": "Media" },
+        { "name": "overlay_image", "type": "file", "label": "Foreground image", "accept": "image/*", "tab": "Media",
+          "description": "Optional cut-out layered over the main image." },
+        { "name": "band_image", "type": "file", "label": "Top band image", "accept": "image/*", "tab": "Media" },
+
+        { "name": "theme", "type": "select", "label": "Theme", "tab": "Style",
+          "options": [
+            { "value": "light", "label": "Light" },
+            { "value": "blue", "label": "Warrant blue" },
+            { "value": "plum", "label": "Plum" },
+            { "value": "green", "label": "Heritage green" }
+          ],
+          "default": "light" },
+        { "name": "image_side", "type": "radio", "label": "Image side", "tab": "Style",
+          "options": [{ "value": "left", "label": "Left" }, { "value": "right", "label": "Right" }],
+          "default": "left" },
+        { "name": "media_style", "type": "radio", "label": "Image treatment", "tab": "Style",
+          "options": [
+            { "value": "contained", "label": "Contained" },
+            { "value": "panel", "label": "Full bleed panel" }
+          ],
+          "default": "contained" },
+        { "name": "emphasis_size", "type": "radio", "label": "Emphasis size", "tab": "Style",
+          "options": [{ "value": "regular", "label": "Regular" }, { "value": "large", "label": "Large" }],
+          "default": "regular" },
+        { "name": "show_band", "type": "checkbox", "label": "Show top band", "tab": "Style", "default": false }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+{% set story_style = {
+  theme: settings.theme,
+  image_side: settings.image_side,
+  media_style: settings.media_style,
+  show_band: settings.show_band,
+  emphasis_size: settings.emphasis_size
+} %}
+{% set story_image = asset('images/old-schweppes-bottle-gray.png') %}
+{{ include('components/story-section.html') }}
+{% endcanopy %}

@@ -1,0 +1,63 @@
+{% canopy config %}
+{
+    "title": "Heritage intro",
+    "name": "heritage",
+    "settings": [
+        { "name": "anchor", "type": "text", "label": "Anchor id", "tab": "Style",
+          "help": "Used for in-page links, e.g. /#heritage. Lowercase, no spaces.",
+          "default": "heritage" },
+        { "name": "display_heading", "type": "text", "label": "Display heading", "tab": "Content",
+          "default": "Our Sparkling" },
+        { "name": "heading", "type": "heading", "label": "Heading", "tab": "Content",
+          "elements": [{ "value": "h2", "label": "Heading 2" }, { "value": "h3", "label": "Heading 3" }],
+          "default": { "value": "Heritage", "element": "h2" } },
+        { "name": "emphasis", "type": "text", "label": "Emphasis line", "tab": "Content",
+          "default": "Schweppes Tonic Water" },
+        { "name": "body", "type": "textarea", "label": "Body", "tab": "Content",
+          "default": "began in 1783 as the world's original soft drink. Its founder, Jacob Schweppe, was drawn to the new art of carbonating beverages, so he refined and patented his own process of creating mineral water." },
+        { "name": "image", "type": "file", "label": "Portrait image", "accept": "image/*", "tab": "Media" }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+{% set portrait = settings.image.path|default(asset('images/jacob-schweppe-green.jpg')) %}
+
+<section
+  id="{{ settings.anchor|lower|replace({' ': '-'}) }}" class="relative isolate overflow-hidden bg-heritage">
+  <img
+    src="{{ portrait | image_url({ width: 1120, format: 'webp' }) }}"
+    alt=""
+    aria-hidden="true"
+    class="h-[280px] w-full object-cover lg:absolute lg:inset-y-0 lg:right-0 lg:h-full lg:w-[39%]"
+  />
+
+  <div class="shell relative py-12 lg:py-[90px]">
+    <div class="max-w-[700px] lg:w-[58%] lg:text-right">
+      {% if settings.display_heading %}
+        <p class="font-display text-[38px] font-bold uppercase leading-[0.9] tracking-[0.5px] text-white lg:text-[65px]">
+          {{ settings.display_heading }}
+        </p>
+      {% endif %}
+
+      <{{ settings.heading.element }}
+        class="mt-[10px] text-[32px] leading-none text-white lg:text-[50px]"
+      >
+        {{ settings.heading.value }}
+      </{{ settings.heading.element }}>
+
+      {% if settings.emphasis %}
+        <p class="mt-[40px] text-[20px] font-semibold uppercase leading-tight text-white lg:text-[28px]">
+          {{ settings.emphasis }}
+        </p>
+      {% endif %}
+
+      {% if settings.body %}
+        <p class="mt-[10px] text-[19px] font-light leading-snug tracking-[0.5px] text-white lg:text-[28px]">
+          {{ settings.body }}
+        </p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endcanopy %}

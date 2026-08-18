@@ -1,0 +1,167 @@
+{% canopy config %}
+{
+    "title": "Product showcase",
+    "name": "products",
+    "settings": [
+        { "name": "anchor", "type": "text", "label": "Anchor id", "tab": "Style",
+          "help": "Used for in-page links, e.g. /#products. Lowercase, no spaces.",
+          "default": "products" },
+        { "name": "categories", "type": "list", "label": "Category tabs",
+          "help": "Each tab filters the products below by their Category field.",
+          "description": "Leave empty to hide the tab bar and show every product.",
+          "default": ["Ginger Ale", "Sparkling Water Beverages", "Club Soda", "Tonic Water"] }
+    ],
+    "children": {
+        "allow": ["products/item"],
+        "default": [{ "block": "products/item" }]
+    }
+}
+{% endcanopy %}
+
+{% canopy template %}
+{% set product_items = canopy.childList() %}
+
+<section
+  id="{{ settings.anchor|lower|replace({' ': '-'}) }}" class="bg-white py-12 lg:py-[67px]" data-products>
+  {% if settings.categories is not empty %}
+    <div class="shell">
+      <div class="mx-auto max-w-[950px] overflow-x-auto">
+        <div
+          class="flex min-w-max items-center justify-between gap-8 rounded-full bg-heritage px-[25px] py-5 lg:h-16 lg:py-0"
+          role="tablist"
+          aria-label="Product categories"
+        >
+          {% for category in settings.categories %}
+            <button
+              type="button"
+              role="tab"
+              class="shrink-0 whitespace-nowrap text-[15px] font-semibold uppercase leading-tight tracking-[0.5px] text-white opacity-70 transition-opacity aria-selected:opacity-100 hover:opacity-100 lg:text-[20px]"
+              data-product-tab="{{ category }}"
+              aria-selected="{{ loop.first ? 'true' : 'false' }}"
+            >
+              {{ category }}
+            </button>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="shell mt-10 lg:mt-[57px]">
+    <div data-products-track>{{ canopy.children() }}</div>
+
+    <p class="hidden py-16 text-center text-[18px] text-body" data-products-empty>
+      No products in this category yet.
+    </p>
+  </div>
+
+  {% if product_items|length > 1 %}
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-5 lg:mt-[57px]" data-products-dots>
+      {% for item in product_items %}
+        <button
+          type="button"
+          class="h-5 w-5 rounded-full border-2 border-heritage bg-heritage transition-colors aria-[current=true]:bg-white"
+          data-product-dot="{{ loop.index0 }}"
+          aria-current="{{ loop.first ? 'true' : 'false' }}"
+        >
+          <span class="sr-only">Show product {{ loop.index }}</span>
+        </button>
+      {% endfor %}
+    </div>
+  {% endif %}
+</section>
+{% endcanopy %}
+
+{% canopy scripts %}
+<script>
+  (function () {
+    document.querySelectorAll('[data-products]').forEach(function (root) {
+      var track = root.querySelector('[data-products-track]');
+      if (!track) return;
+
+      var slides = Array.prototype.filter.call(track.children, function (node) {
+        return node.nodeType === 1;
+      });
+      var tabs = Array.prototype.slice.call(root.querySelectorAll('[data-product-tab]'));
+      var dots = Array.prototype.slice.call(root.querySelectorAll('[data-product-dot]'));
+      var empty = root.querySelector('[data-products-empty]');
+
+      var normalise = function (value) {
+        return (value || '').trim().toLowerCase();
+      };
+
+      var matching = function (category) {
+        if (!category) return slides;
+        return slides.filter(function (slide) {
+          return normalise(slide.getAttribute('data-product-category')) === normalise(category);
+        });
+      };
+
+      // Every category tab stays visible, whether or not it has products yet.
+      // Open on the first tab that actually has something to show.
+      var populated = tabs.filter(function (tab) {
+        return matching(tab.getAttribute('data-product-tab')).length > 0;
+      });
+      var initialTab = populated[0] || tabs[0];
+
+      var activeCategory = initialTab ? initialTab.getAttribute('data-product-tab') : null;
+      var activeIndex = 0;
+
+      var render = function () {
+        var visible = matching(activeCategory);
+        if (activeIndex >= visible.length) activeIndex = 0;
+
+        slides.forEach(function (slide) {
+          slide.hidden = true;
+        });
+        if (visible[activeIndex]) visible[activeIndex].hidden = false;
+
+        if (empty) empty.classList.toggle('hidden', visible.length > 0);
+
+        tabs.forEach(function (tab) {
+          tab.setAttribute(
+            'aria-selected',
+            normalise(tab.getAttribute('data-product-tab')) === normalise(activeCategory) ? 'true' : 'false'
+          );
+        });
+
+        dots.forEach(function (dot, index) {
+          dot.hidden = index >= visible.length;
+          dot.setAttribute('aria-current', index === activeIndex ? 'true' : 'false');
+        });
+      };
+
+      tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          activeCategory = tab.getAttribute('data-product-tab');
+          activeIndex = 0;
+          render();
+        });
+      });
+
+      dots.forEach(function (dot, index) {
+        dot.addEventListener('click', function () {
+          activeIndex = index;
+          render();
+        });
+      });
+
+      render();
+    });
+
+    // Share links can only be built once the page URL is known.
+    document.querySelectorAll('[data-share]').forEach(function (link) {
+      var url = encodeURIComponent(window.location.href);
+      var text = encodeURIComponent(link.getAttribute('data-share-text') || document.title);
+
+      var targets = {
+        twitter: 'https://twitter.com/intent/tweet?url=' + url + '&text=' + text,
+        facebook: 'https://www.facebook.com/sharer/sharer.php?u=' + url,
+        email: 'mailto:?subject=' + text + '&body=' + url
+      };
+
+      link.href = targets[link.getAttribute('data-share')] || window.location.href;
+    });
+  })();
+</script>
+{% endcanopy %}

@@ -1,0 +1,23 @@
+{% canopy config %}
+{
+    "title": "Great Exhibition",
+    "name": "exhibition",
+    "settings": [
+        { "name": "lead", "type": "textarea", "label": "Lead line",
+          "default": "Schweppes was the official drink of the 1851" },
+        { "name": "emphasis", "type": "text", "label": "Emphasis line",
+          "default": "Great Exhibition" },
+        { "name": "tail", "type": "textarea", "label": "Closing line",
+          "default": "held at the Crystal Palace in London. The event made such an impact that the fountain is still featured on the logo today." },
+        { "name": "image", "type": "file", "label": "Background panel", "accept": "image/*" },
+        { "name": "overlay_image", "type": "file", "label": "Insignia image", "accept": "image/*" }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+{% set story_style = { theme: 'light', image_side: 'left', media_style: 'panel', show_band: false, emphasis_size: 'regular' } %}
+{% set story_image = asset('images/great-exhibition-bg-gray.jpg') %}
+{% set story_overlay = asset('images/insignia-gray.png') %}
+{{ include('components/story-section.html') }}
+{% endcanopy %}

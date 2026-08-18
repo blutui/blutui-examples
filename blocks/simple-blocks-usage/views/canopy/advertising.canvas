@@ -1,0 +1,61 @@
+{% canopy config %}
+{
+    "title": "Advertising story",
+    "name": "advertising",
+    "settings": [
+        { "name": "lead", "type": "textarea", "label": "Lead line", "tab": "Content",
+          "default": "In the 1950s Schweppshire advertising campaign, spokesman Commander Edward Whitehead coined" },
+        { "name": "wordmark", "type": "file", "label": "Wordmark image", "accept": "image/*", "tab": "Content",
+          "description": "The hand lettered word set between the two lines of copy." },
+        { "name": "wordmark_text", "type": "text", "label": "Wordmark alt text", "tab": "Content",
+          "default": "Schweppervescence" },
+        { "name": "tail", "type": "textarea", "label": "Closing line", "tab": "Content",
+          "default": "to describe the bright, effervescent quality of Schweppes." },
+        { "name": "photo", "type": "file", "label": "Campaign photo", "accept": "image/*", "tab": "Media" },
+        { "name": "inset_photo", "type": "file", "label": "Inset photo", "accept": "image/*", "tab": "Media",
+          "description": "The tall crop layered in front of the campaign photo." }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+{% set wordmark = settings.wordmark.path|default(asset('images/schweppervescence.png')) %}
+{% set photo = settings.photo.path|default(asset('images/whitesuit-1966.jpg')) %}
+{% set inset_photo = settings.inset_photo.path|default(asset('images/whitesuit-1966-bottle.jpg')) %}
+
+<section class="relative isolate overflow-hidden bg-plum">
+  <div class="shell relative grid items-center gap-16 py-14 lg:grid-cols-[minmax(0,600px)_minmax(0,1fr)] lg:gap-[46px] lg:py-[0px]">
+    <div class="max-w-[600px] text-white">
+      {% if settings.lead %}
+        <p class="text-[19px] font-light leading-snug tracking-[0.5px] lg:text-[28px]">{{ settings.lead }}</p>
+      {% endif %}
+
+      <img
+        src="{{ wordmark | image_url({ width: 1100, format: 'webp' }) }}"
+        alt="{{ settings.wordmark_text }}"
+        class="mt-[14px] w-full max-w-[545px] object-contain"
+      />
+
+      {% if settings.tail %}
+        <p class="mt-[14px] text-[19px] font-light leading-snug tracking-[0.5px] lg:text-[28px]">{{ settings.tail }}</p>
+      {% endif %}
+    </div>
+
+    <div class="relative flex justify-center lg:justify-end">
+      <img
+        src="{{ photo | image_url({ width: 900, format: 'webp' }) }}"
+        alt=""
+        aria-hidden="true"
+        class="h-[400px] w-auto rotate-[13deg] object-cover shadow-2xl lg:h-[550px]"
+      />
+
+      <img
+        src="{{ inset_photo | image_url({ width: 320, format: 'webp' }) }}"
+        alt=""
+        aria-hidden="true"
+        class="absolute bottom-0 left-0 h-[240px] w-auto object-cover shadow-xl lg:h-[387px]"
+      />
+    </div>
+  </div>
+</section>
+{% endcanopy %}

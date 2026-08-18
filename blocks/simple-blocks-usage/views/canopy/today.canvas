@@ -1,0 +1,23 @@
+{% canopy config %}
+{
+    "title": "Schweppes Today",
+    "name": "today",
+    "settings": [
+        { "name": "lead", "type": "textarea", "label": "Lead line", "default": "" },
+        { "name": "emphasis", "type": "text", "label": "Emphasis line",
+          "default": "For over 235 years," },
+        { "name": "tail", "type": "textarea", "label": "Body",
+          "default": "we've been refining the perfect way to elevate your everyday refreshment. With every sip of Schweppes, the dedication to quality, excellence, and the art of tastefulness, leaves us feeling simply refreshed." },
+        { "name": "image", "type": "file", "label": "Drinks image", "accept": "image/*" },
+        { "name": "signature", "type": "file", "label": "Signature image", "accept": "image/*" },
+        { "name": "band_image", "type": "file", "label": "Top band image", "accept": "image/*" }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+{% set story_style = { theme: 'light', image_side: 'left', media_style: 'contained', show_band: true, emphasis_size: 'regular' } %}
+{% set story_image = asset('images/drink-suite-desktop.png') %}
+{% set story_signature = asset('images/schweppes-sign-ltgray.png') %}
+{{ include('components/story-section.html') }}
+{% endcanopy %}
