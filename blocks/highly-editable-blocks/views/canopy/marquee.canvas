@@ -1,0 +1,132 @@
+{% canopy config %}
+{
+    "title": "Marquee Banner",
+    "name": "marquee",
+    "settings": [
+        { "name": "text", "type": "text", "label": "Text", "tab": "Content", "default": "New album out now" },
+        { "name": "separator", "type": "text", "label": "Separator between repeats", "tab": "Content", "default": "✦" },
+        { "name": "link", "type": "url", "label": "Link (optional)", "tab": "Content", "default": { "url": "", "text": "", "target": "_self" } },
+        {
+            "name": "speed",
+            "type": "select",
+            "label": "Speed",
+            "tab": "Style",
+            "options": [
+                { "value": "60s", "label": "Slow" },
+                { "value": "35s", "label": "Medium" },
+                { "value": "18s", "label": "Fast" }
+            ],
+            "default": "35s"
+        },
+        {
+            "name": "size",
+            "type": "select",
+            "label": "Text size",
+            "tab": "Style",
+            "options": [
+                { "value": "text-sm", "label": "Small" },
+                { "value": "text-2xl", "label": "Medium" },
+                { "value": "text-5xl", "label": "Large" },
+                { "value": "text-7xl", "label": "Huge" }
+            ],
+            "default": "text-2xl"
+        },
+        {
+            "name": "tone",
+            "type": "select",
+            "label": "Background",
+            "tab": "Style",
+            "options": [
+                { "value": "accent", "label": "Accent" },
+                { "value": "default", "label": "Page background" },
+                { "value": "surface", "label": "Card colour" },
+                { "value": "invert", "label": "Inverted" },
+                { "value": "custom", "label": "Custom colours" }
+            ],
+            "default": "accent"
+        },
+        { "name": "bg_color", "type": "color", "label": "Custom background", "tab": "Style", "group": "Custom colours", "default": "#7c5cff" },
+        { "name": "text_color", "type": "color", "label": "Custom text", "tab": "Style", "group": "Custom colours", "default": "#ffffff" },
+        { "name": "reverse", "type": "checkbox", "label": "Scroll right to left", "tab": "Style", "default": false },
+        { "name": "borders", "type": "checkbox", "label": "Show top and bottom borders", "tab": "Style", "default": false }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+{% set tones = {
+    'default': 'bg-bg text-ink',
+    'surface': 'bg-surface text-ink',
+    'accent': 'bg-accent text-on-accent',
+    'invert': 'bg-ink text-bg'
+} %}
+{% set tone_class = settings.tone == 'custom' ? '' : (tones[settings.tone] ?? tones['accent']) %}
+{% set tone_style = settings.tone == 'custom' ? 'background-color:' ~ settings.bg_color ~ ';color:' ~ settings.text_color ~ ';' : '' %}
+
+<div
+  class="marquee {{ tone_class }} {{ settings.borders ? 'border-y border-line' : '' }} py-3"
+  style="{{ tone_style }}--marquee-duration: {{ settings.speed }};"
+>
+  <div class="marquee__track {{ settings.reverse ? 'marquee__track--reverse' : '' }}">
+    {% for i in 1..2 %}
+      <div class="marquee__group font-heading {{ settings.size }}" {% if i == 2 %}aria-hidden="true"{% endif %}>
+        {% for n in 1..6 %}
+          {% if settings.link.url %}
+            <a href="{{ settings.link.url }}" target="{{ settings.link.target }}" class="no-underline">{{ settings.text }}</a>
+          {% else %}
+            <span>{{ settings.text }}</span>
+          {% endif %}
+          {% if settings.separator %}<span class="opacity-50">{{ settings.separator }}</span>{% endif %}
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endcanopy %}
+
+{% canopy head %}
+<style>
+  .marquee {
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .marquee__track {
+    display: flex;
+    width: max-content;
+    animation: marquee-scroll var(--marquee-duration, 35s) linear infinite;
+  }
+
+  .marquee__track--reverse {
+    animation-direction: reverse;
+  }
+
+  .marquee:hover .marquee__track {
+    animation-play-state: paused;
+  }
+
+  .marquee__group {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding-right: 1.5rem;
+    white-space: nowrap;
+  }
+
+  @keyframes marquee-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee__track {
+      animation: none;
+    }
+  }
+</style>
+{% endcanopy %}
+

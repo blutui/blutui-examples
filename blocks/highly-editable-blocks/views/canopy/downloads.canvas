@@ -1,0 +1,387 @@
+{% canopy config %}
+{
+    "title": "Downloads (Collection)",
+    "name": "downloads",
+    "settings": [
+        {
+            "name": "layout",
+            "type": "select",
+            "label": "Layout",
+            "tab": "Content",
+            "options": [
+                { "value": "grid", "label": "Grid — artwork cards" },
+                { "value": "list", "label": "List — one per row" },
+                { "value": "featured", "label": "Featured — one download, large" },
+                { "value": "strip", "label": "Strip — swipeable row" }
+            ],
+            "default": "grid"
+        },
+        { "name": "eyebrow", "type": "text", "label": "Eyebrow", "tab": "Content", "default": "Free downloads" },
+        { "name": "heading", "type": "heading", "label": "Heading", "tab": "Content", "default": { "value": "Take it with you", "element": "h2" }, "elements": [{ "value": "h2", "label": "H2" }, { "value": "h3", "label": "H3" }] },
+        { "name": "intro", "type": "textarea", "label": "Intro", "tab": "Content", "default": "" },
+        { "name": "show_header", "type": "checkbox", "label": "Show the heading", "tab": "Content", "default": true },
+        { "name": "cta_label", "type": "text", "label": "Download button label", "tab": "Content", "default": "Download" },
+        { "name": "note", "type": "text", "label": "Small print below the list", "tab": "Content", "default": "" },
+        { "name": "empty_text", "type": "text", "label": "Text shown when there's nothing to list", "tab": "Content", "default": "Nothing to download yet — watch this space." },
+        { "name": "footer_cta", "type": "url", "label": "Button below the list", "tab": "Content", "default": { "url": "", "text": "", "target": "_self" } },
+        {
+            "name": "collection_handle",
+            "type": "select",
+            "label": "Collection",
+            "tab": "Files",
+            "options": [
+                { "value": "downloads", "label": "Downloads" }
+            ],
+            "default": "downloads"
+        },
+        {
+            "name": "sort",
+            "type": "select",
+            "label": "Order",
+            "tab": "Files",
+            "options": [
+                { "value": "manual", "label": "Manual order field" },
+                { "value": "newest", "label": "Newest release first" },
+                { "value": "title", "label": "Title, A–Z" }
+            ],
+            "default": "manual"
+        },
+        {
+            "name": "filter_type",
+            "type": "select",
+            "label": "Only show this type",
+            "tab": "Files",
+            "options": [
+                { "value": "all", "label": "All types" },
+                { "value": "Single", "label": "Single" },
+                { "value": "Demo", "label": "Demo" },
+                { "value": "Live", "label": "Live" },
+                { "value": "Remix", "label": "Remix" },
+                { "value": "Stems", "label": "Stems" },
+                { "value": "Artwork", "label": "Artwork" },
+                { "value": "Other", "label": "Other" }
+            ],
+            "default": "all"
+        },
+        { "name": "featured_only", "type": "checkbox", "label": "Only show featured downloads", "tab": "Files", "default": false },
+        { "name": "limit", "type": "number", "label": "Maximum downloads (0 = no limit)", "tab": "Files", "min": 0, "max": 100, "default": 0 },
+        { "name": "date_format", "type": "text", "label": "Date format", "tab": "Files", "default": "M Y" },
+        { "name": "show_artwork", "type": "checkbox", "label": "Show the artwork", "tab": "Visibility", "default": true },
+        { "name": "show_type", "type": "checkbox", "label": "Show the type", "tab": "Visibility", "default": true },
+        { "name": "show_description", "type": "checkbox", "label": "Show the description", "tab": "Visibility", "default": true },
+        { "name": "show_meta", "type": "checkbox", "label": "Show the format, size and date", "tab": "Visibility", "default": true },
+        {
+            "name": "columns",
+            "type": "select",
+            "label": "Grid columns",
+            "tab": "Appearance",
+            "options": [
+                { "value": "2", "label": "Two" },
+                { "value": "3", "label": "Three" },
+                { "value": "4", "label": "Four" }
+            ],
+            "default": "3"
+        },
+        {
+            "name": "ratio",
+            "type": "select",
+            "label": "Artwork shape",
+            "tab": "Appearance",
+            "options": [
+                { "value": "square", "label": "Square" },
+                { "value": "portrait", "label": "Portrait" },
+                { "value": "landscape", "label": "Landscape" }
+            ],
+            "default": "square"
+        },
+        {
+            "name": "card_style",
+            "type": "radio",
+            "label": "Item style",
+            "tab": "Appearance",
+            "options": [
+                { "value": "plain", "label": "Plain" },
+                { "value": "card", "label": "Card" }
+            ],
+            "default": "plain"
+        },
+        {
+            "name": "button_style",
+            "type": "select",
+            "label": "Download button",
+            "tab": "Appearance",
+            "options": [
+                { "value": "primary", "label": "Accent" },
+                { "value": "accent-2", "label": "Second accent" },
+                { "value": "outline", "label": "Outline" }
+            ],
+            "default": "primary"
+        },
+        {
+            "name": "tone",
+            "type": "select",
+            "label": "Background",
+            "tab": "Style",
+            "options": [
+                { "value": "default", "label": "Page background" },
+                { "value": "surface", "label": "Card colour" },
+                { "value": "accent", "label": "Accent" },
+                { "value": "invert", "label": "Inverted" },
+                { "value": "custom", "label": "Custom colours" }
+            ],
+            "default": "default"
+        },
+        { "name": "bg_color", "type": "color", "label": "Custom background", "tab": "Style", "group": "Custom colours", "default": "#15151f" },
+        { "name": "text_color", "type": "color", "label": "Custom text", "tab": "Style", "group": "Custom colours", "default": "#f4f4f6" },
+        {
+            "name": "spacing",
+            "type": "select",
+            "label": "Vertical spacing",
+            "tab": "Style",
+            "options": [
+                { "value": "none", "label": "None" },
+                { "value": "sm", "label": "Small" },
+                { "value": "md", "label": "Medium" },
+                { "value": "lg", "label": "Large" },
+                { "value": "xl", "label": "Extra large" }
+            ],
+            "default": "lg"
+        },
+        {
+            "name": "align",
+            "type": "radio",
+            "label": "Header alignment",
+            "tab": "Style",
+            "options": [
+                { "value": "left", "label": "Left" },
+                { "value": "center", "label": "Centre" }
+            ],
+            "default": "left"
+        },
+        { "name": "anchor", "type": "text", "label": "Anchor ID (for menu links)", "tab": "Style", "default": "downloads" }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+{#
+  Free singles, demos and artwork from the `downloads` Collection.
+
+  An entry can either carry an uploaded file or point at an external host.
+  The uploaded file wins, and only that case gets the `download` attribute —
+  the browser ignores it cross-origin anyway.
+
+  Guard the lookup with `?? []` — an unknown handle returns null, and piping
+  null into |filter throws, which Canopy swallows into a blank section.
+#}
+{% set tones = {
+    'default': 'bg-bg text-ink',
+    'surface': 'bg-surface text-ink',
+    'accent': 'bg-accent text-on-accent',
+    'invert': 'bg-ink text-bg'
+} %}
+{% set pads = { 'none': 'py-0', 'sm': 'py-10 sm:py-12', 'md': 'py-16 sm:py-20', 'lg': 'py-24 sm:py-28', 'xl': 'py-32 sm:py-40' } %}
+{% set cols = { '2': 'sm:grid-cols-2', '3': 'sm:grid-cols-2 lg:grid-cols-3', '4': 'sm:grid-cols-2 lg:grid-cols-4' } %}
+{% set ratios = { 'square': 'aspect-square', 'portrait': 'aspect-4/5', 'landscape': 'aspect-3/2' } %}
+{% set buttons = { 'primary': 'btn-primary', 'accent-2': 'btn-accent-2', 'outline': 'btn-outline' } %}
+
+{% set tone_class = settings.tone == 'custom' ? '' : (tones[settings.tone] ?? tones['default']) %}
+{% set tone_style = settings.tone == 'custom' ? 'background-color:' ~ settings.bg_color ~ ';color:' ~ settings.text_color ~ ';' : '' %}
+{% set pad_class = pads[settings.spacing] ?? pads['lg'] %}
+{% set col_class = cols[settings.columns] ?? cols['3'] %}
+{% set align_class = settings.align == 'center' ? 'text-center mx-auto max-w-2xl' : '' %}
+{% set el = settings.heading.element ?? 'h2' %}
+{% set layout = settings.layout ?? 'grid' %}
+
+{% set cfg = {
+    'ratio': ratios[settings.ratio] ?? ratios['square'],
+    'card': settings.card_style == 'card' ? 'card p-5' : '',
+    'btn': buttons[settings.button_style] ?? buttons['primary'],
+    'cta_label': settings.cta_label ?: 'Download',
+    'date_format': settings.date_format ?: 'M Y',
+    'show_artwork': settings.show_artwork,
+    'show_type': settings.show_type,
+    'show_description': settings.show_description,
+    'show_meta': settings.show_meta
+} %}
+
+{% set items = cms.collection(settings.collection_handle ?? 'downloads') ?? [] %}
+
+{% if settings.filter_type != 'all' %}
+  {% set items = items|filter(i => i.type == settings.filter_type) %}
+{% endif %}
+{% if settings.featured_only %}
+  {% set items = items|filter(i => i.featured == 'Yes') %}
+{% endif %}
+
+{% if settings.sort == 'title' %}
+  {% set items = items|sort((a, b) => a.title <=> b.title) %}
+{% elseif settings.sort == 'newest' %}
+  {% set items = items|sort((a, b) => (b.release_date|date('U')) <=> (a.release_date|date('U'))) %}
+{% else %}
+  {% set items = items|sort((a, b) => (a.order ?? 0) <=> (b.order ?? 0)) %}
+{% endif %}
+
+{% if layout == 'featured' %}
+  {% set items = items|slice(0, 1) %}
+{% elseif settings.limit > 0 %}
+  {% set items = items|slice(0, settings.limit) %}
+{% endif %}
+
+{% import _self as ui %}
+
+{% macro artwork(item, cfg, ratio) %}
+  {% if cfg.show_artwork %}
+    {% if item.artwork %}
+      <img
+        src="{{ item.artwork | image_url({ width: 800, format: 'webp' }) }}"
+        alt="{{ item.title }}"
+        loading="lazy"
+        class="{{ ratio }} w-full rounded-theme object-cover"
+      />
+    {% else %}
+      <div class="{{ ratio }} flex w-full items-center justify-center rounded-theme border border-line bg-surface" aria-hidden="true">
+        <span class="font-heading text-3xl opacity-20">{{ item.title|slice(0, 1) }}</span>
+      </div>
+    {% endif %}
+  {% endif %}
+{% endmacro %}
+
+{% macro meta(item, cfg) %}
+  {% if cfg.show_meta %}
+    {% set bits = [
+        item.format,
+        item.file_size,
+        item.release_date ? item.release_date|date(cfg.date_format) : ''
+    ] | filter(b => b is not empty) %}
+    {% if bits|length %}
+      <ul class="mt-2 flex list-none flex-wrap gap-x-3 gap-y-1 text-xs opacity-50">
+        {% for bit in bits %}<li>{{ bit }}</li>{% endfor %}
+      </ul>
+    {% endif %}
+  {% endif %}
+{% endmacro %}
+
+{% macro button(item, cfg, klass) %}
+  {% set href = item.file ?: item.external_url %}
+  {% if href %}
+    <a
+      href="{{ href }}"
+      class="btn {{ cfg.btn }} btn-sm {{ klass }}"
+      {% if item.file %}download{% else %}target="_blank" rel="noopener"{% endif %}
+    >{{ cfg.cta_label }}</a>
+  {% endif %}
+{% endmacro %}
+
+<section
+  {% if settings.anchor %}id="{{ settings.anchor }}"{% endif %}
+  class="{{ tone_class }}"
+  {% if tone_style %}style="{{ tone_style }}"{% endif %}
+>
+  <div class="wrap {{ pad_class }}">
+
+    {% if settings.show_header %}
+      <div class="{{ align_class }}">
+        {% if settings.eyebrow %}<span class="eyebrow text-accent">{{ settings.eyebrow }}</span>{% endif %}
+        <{{ el }} class="mt-3 text-4xl text-balance sm:text-5xl">{{ settings.heading.value }}</{{ el }}>
+        {% if settings.intro %}<p class="mt-4 text-lg opacity-70">{{ settings.intro }}</p>{% endif %}
+      </div>
+    {% endif %}
+
+    {% if items|length %}
+
+      {# ---------------- Featured — one download, large ---------------- #}
+      {% if layout == 'featured' %}
+        {% set item = items|first %}
+        <div class="mt-12 grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          {{ ui.artwork(item, cfg, cfg.ratio) }}
+          <div>
+            {% if cfg.show_type and item.type %}
+              <p class="text-xs font-semibold tracking-[0.14em] uppercase opacity-50">{{ item.type }}</p>
+            {% endif %}
+            <p class="font-heading mt-2 text-4xl leading-tight sm:text-5xl">{{ item.title }}</p>
+            {% if cfg.show_description and item.description %}
+              <p class="mt-4 text-lg leading-relaxed opacity-70">{{ item.description }}</p>
+            {% endif %}
+            {{ ui.meta(item, cfg) }}
+            <div class="mt-6">{{ ui.button(item, cfg, '') }}</div>
+          </div>
+        </div>
+
+      {# ---------------- List ---------------- #}
+      {% elseif layout == 'list' %}
+        <ul class="mt-12 list-none">
+          {% for item in items %}
+            <li class="flex flex-col gap-5 border-b border-line py-6 first:border-t sm:flex-row sm:items-center">
+              {% if cfg.show_artwork %}
+                <div class="w-20 shrink-0">{{ ui.artwork(item, cfg, 'aspect-square') }}</div>
+              {% endif %}
+              <div class="min-w-0 flex-1">
+                {% if cfg.show_type and item.type %}
+                  <p class="text-xs font-semibold tracking-[0.14em] uppercase opacity-50">{{ item.type }}</p>
+                {% endif %}
+                <p class="font-heading text-xl leading-tight">{{ item.title }}</p>
+                {% if cfg.show_description and item.description %}
+                  <p class="mt-1 text-sm opacity-60">{{ item.description }}</p>
+                {% endif %}
+                {{ ui.meta(item, cfg) }}
+              </div>
+              <div class="shrink-0">{{ ui.button(item, cfg, '') }}</div>
+            </li>
+          {% endfor %}
+        </ul>
+
+      {# ---------------- Strip — horizontal scroll ---------------- #}
+      {% elseif layout == 'strip' %}
+        <div class="scroll-strip mt-12">
+          {% for item in items %}
+            <div class="{{ cfg.card }}">
+              {{ ui.artwork(item, cfg, cfg.ratio) }}
+              <div class="mt-4">
+                <p class="font-heading text-lg leading-tight">{{ item.title }}</p>
+                {{ ui.meta(item, cfg) }}
+                <div class="mt-3">{{ ui.button(item, cfg, '') }}</div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+      {# ---------------- Grid ---------------- #}
+      {% else %}
+        <div class="mt-12 grid gap-8 {{ col_class }}">
+          {% for item in items %}
+            <div class="flex flex-col {{ cfg.card }}">
+              {{ ui.artwork(item, cfg, cfg.ratio) }}
+              <div class="mt-4 flex flex-1 flex-col">
+                {% if cfg.show_type and item.type %}
+                  <p class="text-xs font-semibold tracking-[0.14em] uppercase opacity-50">{{ item.type }}</p>
+                {% endif %}
+                <p class="font-heading text-lg leading-tight">{{ item.title }}</p>
+                {% if cfg.show_description and item.description %}
+                  <p class="mt-2 text-sm opacity-60">{{ item.description }}</p>
+                {% endif %}
+                {{ ui.meta(item, cfg) }}
+                <div class="mt-auto pt-4">{{ ui.button(item, cfg, '') }}</div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if settings.note %}
+        <p class="mt-8 text-sm opacity-50">{{ settings.note }}</p>
+      {% endif %}
+
+      {% if settings.footer_cta.url %}
+        <div class="mt-10 {{ settings.align == 'center' ? 'text-center' : '' }}">
+          <a href="{{ settings.footer_cta.url }}" target="{{ settings.footer_cta.target }}" class="btn btn-outline">{{ settings.footer_cta.text }}</a>
+        </div>
+      {% endif %}
+
+    {% else %}
+      <p class="mt-10 text-lg opacity-60">{{ settings.empty_text }}</p>
+    {% endif %}
+  </div>
+</section>
+{% endcanopy %}
+

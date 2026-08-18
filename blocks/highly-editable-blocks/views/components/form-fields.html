@@ -1,0 +1,116 @@
+{#
+  Field macros shared by every form on the site.
+  Styling comes from the .field-* classes in src/styles/global.css, so forms
+  pick up the Site Theme colours automatically.
+#}
+
+{% macro input(data) %}
+  <input
+    type="{{ data.type }}"
+    name="{{ data.name }}"
+    id="field-{{ data.name }}"
+    class="field-input"
+    placeholder="{{ data.placeholder }}"
+    value="{{ data.value }}"
+    {% if data.required %}required{% endif %}
+  />
+{% endmacro %}
+
+{% macro textarea(data) %}
+  <textarea
+    name="{{ data.name }}"
+    id="field-{{ data.name }}"
+    rows="5"
+    class="field-input"
+    placeholder="{{ data.placeholder }}"
+    {% if data.required %}required{% endif %}
+  >{{ data.value }}</textarea>
+{% endmacro %}
+
+{% macro select(data) %}
+  <select name="{{ data.name }}" id="field-{{ data.name }}" class="field-input" {% if data.required %}required{% endif %}>
+    {% for option in data.options %}
+      <option value="{{ option.value }}">{{ option.label ?? option.value }}</option>
+    {% endfor %}
+  </select>
+{% endmacro %}
+
+{% macro choices(data) %}
+  <div class="space-y-2">
+    {% for option in data.options %}
+      <label class="flex items-center gap-3 text-sm">
+        <input
+          type="{{ data.type == 'checkbox' ? 'checkbox' : 'radio' }}"
+          name="{{ data.name }}{{ data.type == 'checkbox' ? '[]' : '' }}"
+          value="{{ option.value }}"
+          class="h-4 w-4 accent-[var(--site-accent)]"
+        />
+        <span>{{ option.label ?? option.value }}</span>
+      </label>
+    {% endfor %}
+  </div>
+{% endmacro %}
+
+{% macro errors(data) %}
+  {% if data.errors %}
+    <ul class="field-errors list-none">
+      {% for error in data.errors %}
+        <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endmacro %}
+
+{#
+  The body of a form: every field plus the submit button.
+  `form` must be passed in explicitly — macros don't see the outer context.
+#}
+{% macro body(form, hide_labels, columns, submit_label) %}
+  <div class="grid gap-5 {{ (columns ?? 1) == 2 ? 'sm:grid-cols-2' : '' }}">
+    {% for field in form.fields %}
+      {{ _self.field(field, hide_labels ?? false) }}
+    {% endfor %}
+  </div>
+
+  <button type="submit" class="btn btn-primary mt-6 w-full sm:w-auto">
+    {{ submit_label ?? 'Send' }}
+  </button>
+{% endmacro %}
+
+{# Shown when no form with the given handle exists in the dashboard. #}
+{% macro missing(handle) %}
+  <p class="rounded-theme border border-line px-4 py-3 text-sm opacity-60">
+    No form found with the handle <code>{{ handle }}</code>. Create it in the dashboard to enable this section.
+  </p>
+{% endmacro %}
+
+{% macro field(data, hide_labels) %}
+  {% if data.type == 'hidden' %}
+    <input type="hidden" name="{{ data.name }}" value="{{ data.value }}" />
+  {% else %}
+    <div class="{{ data.type == 'textarea' ? 'sm:col-span-2' : '' }}">
+      {% if not hide_labels %}
+        <label class="field-label" for="field-{{ data.name }}">
+          {{ data.label }}{% if data.required %} <span aria-hidden="true">*</span>{% endif %}
+        </label>
+      {% endif %}
+
+      {% if data.type == 'textarea' %}
+        {{ _self.textarea(data) }}
+      {% elseif data.type == 'select' %}
+        {{ _self.select(data) }}
+      {% elseif data.type in ['radio', 'checkbox'] %}
+        {{ _self.choices(data) }}
+      {% else %}
+        {{ _self.input(data) }}
+      {% endif %}
+
+      {% if data.help_text %}
+        <p class="mt-1.5 text-xs opacity-50">{{ data.help_text }}</p>
+      {% endif %}
+
+      {{ _self.errors(data) }}
+    </div>
+  {% endif %}
+{% endmacro %}
+

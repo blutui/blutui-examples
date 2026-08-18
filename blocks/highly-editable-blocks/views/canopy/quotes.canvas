@@ -1,0 +1,147 @@
+{% canopy config %}
+{
+    "title": "Press Quotes",
+    "name": "quotes",
+    "settings": [
+        {
+            "name": "layout",
+            "type": "radio",
+            "label": "Layout",
+            "tab": "Content",
+            "options": [
+                { "value": "featured", "label": "Featured — one big quote" },
+                { "value": "grid", "label": "Grid — quote cards" },
+                { "value": "ticker", "label": "Ticker — single scrolling row" }
+            ],
+            "default": "grid"
+        },
+        { "name": "eyebrow", "type": "text", "label": "Eyebrow", "tab": "Content", "default": "Press" },
+        { "name": "heading", "type": "heading", "label": "Heading", "tab": "Content", "default": { "value": "What they're saying", "element": "h2" }, "elements": [{ "value": "h2", "label": "H2" }, { "value": "h3", "label": "H3" }] },
+        { "name": "show_header", "type": "checkbox", "label": "Show the heading", "tab": "Content", "default": true },
+        {
+            "name": "quotes",
+            "type": "list",
+            "label": "Quotes — one per item, separated by | : Quote | Source | Link",
+            "tab": "Content",
+            "default": [
+                "A record that sounds like it was made at 4am and means every second of it. | NME |",
+                "The most assured debut of the year. | The Line of Best Fit |",
+                "Live, they are genuinely something else. | DIY Magazine |"
+            ]
+        },
+        {
+            "name": "tone",
+            "type": "select",
+            "label": "Background",
+            "tab": "Style",
+            "options": [
+                { "value": "default", "label": "Page background" },
+                { "value": "surface", "label": "Card colour" },
+                { "value": "accent", "label": "Accent" },
+                { "value": "invert", "label": "Inverted" },
+                { "value": "custom", "label": "Custom colours" }
+            ],
+            "default": "default"
+        },
+        { "name": "bg_color", "type": "color", "label": "Custom background", "tab": "Style", "group": "Custom colours", "default": "#15151f" },
+        { "name": "text_color", "type": "color", "label": "Custom text", "tab": "Style", "group": "Custom colours", "default": "#f4f4f6" },
+        {
+            "name": "spacing",
+            "type": "select",
+            "label": "Vertical spacing",
+            "tab": "Style",
+            "options": [
+                { "value": "none", "label": "None" },
+                { "value": "sm", "label": "Small" },
+                { "value": "md", "label": "Medium" },
+                { "value": "lg", "label": "Large" },
+                { "value": "xl", "label": "Extra large" }
+            ],
+            "default": "lg"
+        },
+        { "name": "anchor", "type": "text", "label": "Anchor ID (for menu links)", "tab": "Style", "default": "" }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+{% set tones = {
+    'default': 'bg-bg text-ink',
+    'surface': 'bg-surface text-ink',
+    'accent': 'bg-accent text-on-accent',
+    'invert': 'bg-ink text-bg'
+} %}
+{% set pads = { 'none': 'py-0', 'sm': 'py-10 sm:py-12', 'md': 'py-16 sm:py-20', 'lg': 'py-24 sm:py-28', 'xl': 'py-32 sm:py-40' } %}
+
+{% set tone_class = settings.tone == 'custom' ? '' : (tones[settings.tone] ?? tones['default']) %}
+{% set tone_style = settings.tone == 'custom' ? 'background-color:' ~ settings.bg_color ~ ';color:' ~ settings.text_color ~ ';' : '' %}
+{% set pad_class = pads[settings.spacing] ?? pads['lg'] %}
+{% set el = settings.heading.element ?? 'h2' %}
+{% set rows = settings.quotes | filter(q => q|trim is not empty) %}
+
+<section
+  {% if settings.anchor %}id="{{ settings.anchor }}"{% endif %}
+  class="{{ tone_class }} overflow-hidden"
+  {% if tone_style %}style="{{ tone_style }}"{% endif %}
+>
+  <div class="wrap {{ pad_class }}">
+
+    {% if settings.show_header and settings.layout != 'featured' %}
+      <div class="mb-12 text-center">
+        {% if settings.eyebrow %}<span class="eyebrow text-accent">{{ settings.eyebrow }}</span>{% endif %}
+        <{{ el }} class="mt-3 text-4xl text-balance sm:text-5xl">{{ settings.heading.value }}</{{ el }}>
+      </div>
+    {% endif %}
+
+    {% if rows|length %}
+      {% if settings.layout == 'featured' %}
+        {% set p = rows[0]|split('|') %}
+        {% set quote = (p[0] ?? '')|trim %}
+        {% set source = (p[1] ?? '')|trim %}
+        {% set link = (p[2] ?? '')|trim %}
+        <figure class="mx-auto max-w-4xl text-center">
+          {% if settings.eyebrow %}<span class="eyebrow text-accent">{{ settings.eyebrow }}</span>{% endif %}
+          <blockquote class="font-heading mt-5 text-3xl leading-tight text-balance sm:text-5xl">&ldquo;{{ quote }}&rdquo;</blockquote>
+          {% if source %}
+            <figcaption class="mt-8 text-sm font-semibold tracking-widest uppercase opacity-60">
+              {% if link %}<a href="{{ link }}" target="_blank" rel="noopener" class="no-underline">{{ source }}</a>{% else %}{{ source }}{% endif %}
+            </figcaption>
+          {% endif %}
+        </figure>
+
+      {% elseif settings.layout == 'ticker' %}
+        <div class="scroll-strip">
+          {% for row in rows %}
+            {% set p = row|split('|') %}
+            <figure class="card m-0 p-6">
+              <blockquote class="text-lg leading-snug">&ldquo;{{ (p[0] ?? '')|trim }}&rdquo;</blockquote>
+              {% if (p[1] ?? '')|trim %}
+                <figcaption class="mt-4 text-xs font-semibold tracking-widest uppercase opacity-50">{{ (p[1] ?? '')|trim }}</figcaption>
+              {% endif %}
+            </figure>
+          {% endfor %}
+        </div>
+
+      {% else %}
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {% for row in rows %}
+            {% set p = row|split('|') %}
+            {% set quote = (p[0] ?? '')|trim %}
+            {% set source = (p[1] ?? '')|trim %}
+            {% set link = (p[2] ?? '')|trim %}
+            <figure class="card m-0 flex flex-col p-7">
+              <blockquote class="flex-1 text-lg leading-snug">&ldquo;{{ quote }}&rdquo;</blockquote>
+              {% if source %}
+                <figcaption class="mt-6 text-xs font-semibold tracking-widest uppercase opacity-50">
+                  {% if link %}<a href="{{ link }}" target="_blank" rel="noopener" class="no-underline">{{ source }}</a>{% else %}{{ source }}{% endif %}
+                </figcaption>
+              {% endif %}
+            </figure>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endif %}
+  </div>
+</section>
+{% endcanopy %}
+

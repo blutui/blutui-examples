@@ -1,0 +1,454 @@
+{% canopy config %}
+{
+    "title": "Band Members (Collection)",
+    "name": "members",
+    "settings": [
+        {
+            "name": "layout",
+            "type": "select",
+            "label": "Layout",
+            "tab": "Content",
+            "options": [
+                { "value": "lead", "label": "Lead — front person large, the rest in a grid" },
+                { "value": "grid", "label": "Grid — everyone the same size" },
+                { "value": "list", "label": "List — one member per row" },
+                { "value": "profile", "label": "Profile — one member, full biography" },
+                { "value": "strip", "label": "Strip — swipeable row" }
+            ],
+            "default": "lead"
+        },
+        { "name": "eyebrow", "type": "text", "label": "Eyebrow", "tab": "Content", "default": "The band" },
+        { "name": "heading", "type": "heading", "label": "Heading", "tab": "Content", "default": { "value": "Who we are", "element": "h2" }, "elements": [{ "value": "h2", "label": "H2" }, { "value": "h3", "label": "H3" }] },
+        { "name": "intro", "type": "textarea", "label": "Intro", "tab": "Content", "default": "" },
+        { "name": "show_header", "type": "checkbox", "label": "Show the heading", "tab": "Content", "default": true },
+        { "name": "empty_text", "type": "text", "label": "Text shown when there's nobody to list", "tab": "Content", "default": "Add the line-up to the Members collection to fill this in." },
+        { "name": "footer_cta", "type": "url", "label": "Button below the members", "tab": "Content", "default": { "url": "", "text": "Read the full story", "target": "_self" } },
+        {
+            "name": "collection_handle",
+            "type": "select",
+            "label": "Collection",
+            "tab": "Members",
+            "options": [
+                { "value": "members", "label": "Members" }
+            ],
+            "default": "members"
+        },
+        {
+            "name": "sort",
+            "type": "select",
+            "label": "Order",
+            "tab": "Members",
+            "options": [
+                { "value": "manual", "label": "Manual order field" },
+                { "value": "featured", "label": "Front person first, then manual order" },
+                { "value": "name", "label": "Name, A–Z" }
+            ],
+            "default": "featured"
+        },
+        { "name": "featured_only", "type": "checkbox", "label": "Only show members marked front and centre", "tab": "Members", "default": false },
+        { "name": "limit", "type": "number", "label": "Maximum members (0 = no limit)", "tab": "Members", "min": 0, "max": 50, "default": 0 },
+        {
+            "name": "columns",
+            "type": "select",
+            "label": "Grid columns",
+            "tab": "Members",
+            "options": [
+                { "value": "2", "label": "Two" },
+                { "value": "3", "label": "Three" },
+                { "value": "4", "label": "Four" }
+            ],
+            "default": "3"
+        },
+        { "name": "show_photo", "type": "checkbox", "label": "Show the photo", "tab": "Visibility", "default": true },
+        { "name": "show_role", "type": "checkbox", "label": "Show the role", "tab": "Visibility", "default": true },
+        { "name": "show_quote", "type": "checkbox", "label": "Show the short quote", "tab": "Visibility", "default": true },
+        { "name": "show_bio", "type": "checkbox", "label": "Show the biography", "tab": "Visibility", "default": true, "help_text": "Full text in the lead and profile layouts." },
+        { "name": "show_details", "type": "checkbox", "label": "Show instruments, hometown and joining date", "tab": "Visibility", "default": true },
+        { "name": "show_socials", "type": "checkbox", "label": "Show the member's social links", "tab": "Visibility", "default": true },
+        {
+            "name": "ratio",
+            "type": "select",
+            "label": "Photo shape",
+            "tab": "Appearance",
+            "options": [
+                { "value": "portrait", "label": "Portrait" },
+                { "value": "square", "label": "Square" },
+                { "value": "tall", "label": "Tall" },
+                { "value": "landscape", "label": "Landscape" }
+            ],
+            "default": "portrait"
+        },
+        {
+            "name": "radius",
+            "type": "select",
+            "label": "Photo corners",
+            "tab": "Appearance",
+            "options": [
+                { "value": "theme", "label": "Follow the site theme" },
+                { "value": "none", "label": "Square corners" },
+                { "value": "large", "label": "Extra rounded" },
+                { "value": "circle", "label": "Circles" }
+            ],
+            "default": "theme"
+        },
+        {
+            "name": "treatment",
+            "type": "select",
+            "label": "Photo treatment",
+            "tab": "Appearance",
+            "options": [
+                { "value": "none", "label": "None" },
+                { "value": "grayscale", "label": "Black and white" },
+                { "value": "colour", "label": "Black and white, colour on hover" },
+                { "value": "punch", "label": "High contrast" }
+            ],
+            "default": "colour"
+        },
+        {
+            "name": "card_style",
+            "type": "radio",
+            "label": "Member style",
+            "tab": "Appearance",
+            "options": [
+                { "value": "plain", "label": "Plain" },
+                { "value": "card", "label": "Card" }
+            ],
+            "default": "plain"
+        },
+        {
+            "name": "tone",
+            "type": "select",
+            "label": "Background",
+            "tab": "Style",
+            "options": [
+                { "value": "default", "label": "Page background" },
+                { "value": "surface", "label": "Card colour" },
+                { "value": "accent", "label": "Accent" },
+                { "value": "invert", "label": "Inverted" },
+                { "value": "custom", "label": "Custom colours" }
+            ],
+            "default": "default"
+        },
+        { "name": "bg_color", "type": "color", "label": "Custom background", "tab": "Style", "group": "Custom colours", "default": "#15151f" },
+        { "name": "text_color", "type": "color", "label": "Custom text", "tab": "Style", "group": "Custom colours", "default": "#f4f4f6" },
+        {
+            "name": "spacing",
+            "type": "select",
+            "label": "Vertical spacing",
+            "tab": "Style",
+            "options": [
+                { "value": "none", "label": "None" },
+                { "value": "sm", "label": "Small" },
+                { "value": "md", "label": "Medium" },
+                { "value": "lg", "label": "Large" },
+                { "value": "xl", "label": "Extra large" }
+            ],
+            "default": "lg"
+        },
+        {
+            "name": "align",
+            "type": "radio",
+            "label": "Header alignment",
+            "tab": "Style",
+            "options": [
+                { "value": "left", "label": "Left" },
+                { "value": "center", "label": "Centre" }
+            ],
+            "default": "left"
+        },
+        { "name": "anchor", "type": "text", "label": "Anchor ID (for menu links)", "tab": "Style", "default": "band" }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+{#
+  The line-up from the `members` Collection. The "Front and centre" field is
+  what makes a lead singer render first and larger — the `featured` sort puts
+  those entries at the top, and the lead and profile layouts pull the first
+  one out of the list.
+
+  Guard the lookup with `?? []` — an unknown handle returns null, and piping
+  null into |filter throws, which Canopy swallows into a blank section.
+#}
+{% set tones = {
+    'default': 'bg-bg text-ink',
+    'surface': 'bg-surface text-ink',
+    'accent': 'bg-accent text-on-accent',
+    'invert': 'bg-ink text-bg'
+} %}
+{% set pads = { 'none': 'py-0', 'sm': 'py-10 sm:py-12', 'md': 'py-16 sm:py-20', 'lg': 'py-24 sm:py-28', 'xl': 'py-32 sm:py-40' } %}
+{% set cols = { '2': 'sm:grid-cols-2', '3': 'sm:grid-cols-2 lg:grid-cols-3', '4': 'sm:grid-cols-2 lg:grid-cols-4' } %}
+{% set ratios = { 'portrait': 'aspect-4/5', 'square': 'aspect-square', 'tall': 'aspect-2/3', 'landscape': 'aspect-3/2' } %}
+{% set radii = { 'theme': 'rounded-theme', 'none': 'rounded-none', 'large': 'rounded-3xl', 'circle': 'rounded-full' } %}
+{% set treatments = {
+    'none': '',
+    'grayscale': 'grayscale',
+    'colour': 'grayscale transition duration-500 group-hover:grayscale-0',
+    'punch': 'contrast-125 saturate-125'
+} %}
+
+{% set tone_class = settings.tone == 'custom' ? '' : (tones[settings.tone] ?? tones['default']) %}
+{% set tone_style = settings.tone == 'custom' ? 'background-color:' ~ settings.bg_color ~ ';color:' ~ settings.text_color ~ ';' : '' %}
+{% set pad_class = pads[settings.spacing] ?? pads['lg'] %}
+{% set col_class = cols[settings.columns] ?? cols['3'] %}
+{% set align_class = settings.align == 'center' ? 'text-center mx-auto max-w-2xl' : '' %}
+{% set el = settings.heading.element ?? 'h2' %}
+{% set layout = settings.layout ?? 'lead' %}
+
+{% set cfg = {
+    'ratio': ratios[settings.ratio] ?? ratios['portrait'],
+    'radius': radii[settings.radius] ?? radii['theme'],
+    'treatment': treatments[settings.treatment] ?? '',
+    'card': settings.card_style == 'card' ? 'card p-5' : '',
+    'show_photo': settings.show_photo,
+    'show_role': settings.show_role,
+    'show_quote': settings.show_quote,
+    'show_bio': settings.show_bio,
+    'show_details': settings.show_details,
+    'show_socials': settings.show_socials
+} %}
+
+{% set members = cms.collection(settings.collection_handle ?? 'members') ?? [] %}
+
+{% if settings.featured_only %}
+  {% set members = members|filter(m => m.featured == 'Yes') %}
+{% endif %}
+
+{% if settings.sort == 'name' %}
+  {% set members = members|sort((a, b) => a.name <=> b.name) %}
+{% elseif settings.sort == 'featured' %}
+  {# Two passes rather than one comparator — sorting on a Yes/No string and a
+     number at once is easy to get subtly wrong. #}
+  {% set members = members|sort((a, b) => (a.order ?? 0) <=> (b.order ?? 0)) %}
+  {% set members = (members|filter(m => m.featured == 'Yes'))|merge(members|filter(m => m.featured != 'Yes')) %}
+{% else %}
+  {% set members = members|sort((a, b) => (a.order ?? 0) <=> (b.order ?? 0)) %}
+{% endif %}
+
+{% if layout == 'profile' %}
+  {% set members = members|slice(0, 1) %}
+{% elseif settings.limit > 0 %}
+  {% set members = members|slice(0, settings.limit) %}
+{% endif %}
+
+{% import _self as ui %}
+
+{% macro photo(member, cfg, ratio) %}
+  {% if cfg.show_photo %}
+    {% if member.image %}
+      <div class="relative overflow-hidden {{ cfg.radius }}">
+        <img
+          src="{{ member.image | image_url({ width: 900, format: 'webp' }) }}"
+          alt="{{ member.name }}"
+          loading="lazy"
+          class="w-full {{ ratio }} object-cover {{ cfg.treatment }}"
+        />
+        {% if member.image_alt %}
+          {# Same person, so the hover shot is hidden from assistive tech. #}
+          <img
+            src="{{ member.image_alt | image_url({ width: 900, format: 'webp' }) }}"
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            class="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          />
+        {% endif %}
+      </div>
+    {% else %}
+      <div class="{{ ratio }} flex w-full items-center justify-center {{ cfg.radius }} border border-line bg-surface" aria-hidden="true">
+        <span class="font-heading text-4xl opacity-20">{{ member.name|slice(0, 1) }}</span>
+      </div>
+    {% endif %}
+  {% endif %}
+{% endmacro %}
+
+{% macro details(member, cfg) %}
+  {% if cfg.show_details %}
+    {% set bits = [member.instruments, member.hometown, member.joined] | filter(b => b is not empty) %}
+    {% if bits|length %}
+      <ul class="mt-3 flex list-none flex-wrap gap-x-4 gap-y-1 text-xs opacity-50">
+        {% for bit in bits %}<li>{{ bit }}</li>{% endfor %}
+      </ul>
+    {% endif %}
+  {% endif %}
+{% endmacro %}
+
+{% macro socials(member, cfg) %}
+  {% if cfg.show_socials %}
+    {% set links = [
+        { 'url': member.instagram, 'text': 'Instagram' },
+        { 'url': member.twitter, 'text': 'X' },
+        { 'url': member.tiktok, 'text': 'TikTok' },
+        { 'url': member.website, 'text': 'Website' }
+    ] | filter(l => l.url is not empty) %}
+    {% if links|length %}
+      <div class="mt-4 flex flex-wrap gap-2">
+        {% for link in links %}
+          <a href="{{ link.url }}" target="_blank" rel="noopener" class="pill text-xs">{{ link.text }}</a>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endif %}
+{% endmacro %}
+
+<section
+  {% if settings.anchor %}id="{{ settings.anchor }}"{% endif %}
+  class="{{ tone_class }}"
+  {% if tone_style %}style="{{ tone_style }}"{% endif %}
+>
+  <div class="wrap {{ pad_class }}">
+
+    {% if settings.show_header %}
+      <div class="{{ align_class }}">
+        {% if settings.eyebrow %}<span class="eyebrow text-accent">{{ settings.eyebrow }}</span>{% endif %}
+        <{{ el }} class="mt-3 text-4xl text-balance sm:text-5xl">{{ settings.heading.value }}</{{ el }}>
+        {% if settings.intro %}<p class="mt-4 text-lg opacity-70">{{ settings.intro }}</p>{% endif %}
+      </div>
+    {% endif %}
+
+    {% if members|length %}
+
+      {# ---------------- Profile — one member, full biography ---------------- #}
+      {% if layout == 'profile' %}
+        {% set member = members|first %}
+        <div class="group mt-12 grid items-start gap-10 lg:grid-cols-5 lg:gap-16">
+          <div class="lg:col-span-2">{{ ui.photo(member, cfg, cfg.ratio) }}</div>
+          <div class="lg:col-span-3">
+            {% if cfg.show_role and member.role %}
+              <p class="text-xs font-semibold tracking-[0.16em] text-accent uppercase">{{ member.role }}</p>
+            {% endif %}
+            <p class="font-heading mt-2 text-4xl leading-tight sm:text-5xl">{{ member.name }}</p>
+            {% if cfg.show_quote and member.quote %}
+              <p class="mt-4 text-xl leading-snug opacity-80">“{{ member.quote }}”</p>
+            {% endif %}
+            {{ ui.details(member, cfg) }}
+            {% if cfg.show_bio and member.bio %}
+              <div class="rich mt-6">{{ member.bio|raw }}</div>
+            {% endif %}
+            {{ ui.socials(member, cfg) }}
+          </div>
+        </div>
+
+      {# ---------------- Lead — front person large, rest in a grid ---------------- #}
+      {% elseif layout == 'lead' %}
+        {% set lead = members|first %}
+        {% set rest = members|slice(1) %}
+
+        <div class="group mt-12 grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          {{ ui.photo(lead, cfg, cfg.ratio) }}
+          <div>
+            {% if cfg.show_role and lead.role %}
+              <p class="text-xs font-semibold tracking-[0.16em] text-accent uppercase">{{ lead.role }}</p>
+            {% endif %}
+            <p class="font-heading mt-2 text-4xl leading-tight sm:text-5xl">{{ lead.name }}</p>
+            {% if cfg.show_quote and lead.quote %}
+              <p class="mt-4 text-xl leading-snug opacity-80">“{{ lead.quote }}”</p>
+            {% endif %}
+            {{ ui.details(lead, cfg) }}
+            {% if cfg.show_bio and lead.bio %}
+              <div class="rich mt-5">{{ lead.bio|raw }}</div>
+            {% endif %}
+            {{ ui.socials(lead, cfg) }}
+          </div>
+        </div>
+
+        {% if rest|length %}
+          <div class="mt-16 grid gap-8 {{ col_class }}">
+            {% for member in rest %}
+              <div class="group flex flex-col {{ cfg.card }}">
+                {{ ui.photo(member, cfg, cfg.ratio) }}
+                <div class="mt-4">
+                  {% if cfg.show_role and member.role %}
+                    <p class="text-xs font-semibold tracking-[0.14em] uppercase opacity-50">{{ member.role }}</p>
+                  {% endif %}
+                  <p class="font-heading text-xl leading-tight">{{ member.name }}</p>
+                  {% if cfg.show_quote and member.quote %}
+                    <p class="mt-2 text-sm opacity-60">{{ member.quote }}</p>
+                  {% endif %}
+                  {{ ui.details(member, cfg) }}
+                  {{ ui.socials(member, cfg) }}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+      {# ---------------- List — one member per row ---------------- #}
+      {% elseif layout == 'list' %}
+        <ul class="mt-12 list-none">
+          {% for member in members %}
+            <li class="group flex flex-col gap-6 border-b border-line py-8 first:border-t sm:flex-row sm:items-start">
+              {% if cfg.show_photo %}
+                <div class="w-full shrink-0 sm:w-40">{{ ui.photo(member, cfg, 'aspect-square') }}</div>
+              {% endif %}
+              <div class="min-w-0 flex-1">
+                {% if cfg.show_role and member.role %}
+                  <p class="text-xs font-semibold tracking-[0.14em] text-accent uppercase">{{ member.role }}</p>
+                {% endif %}
+                <p class="font-heading mt-1 text-2xl leading-tight">{{ member.name }}</p>
+                {% if cfg.show_quote and member.quote %}
+                  <p class="mt-2 text-base opacity-70">{{ member.quote }}</p>
+                {% endif %}
+                {% if cfg.show_bio and member.bio %}
+                  <div class="rich mt-3 text-sm">{{ member.bio|raw }}</div>
+                {% endif %}
+                {{ ui.details(member, cfg) }}
+                {{ ui.socials(member, cfg) }}
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+
+      {# ---------------- Strip — horizontal scroll ---------------- #}
+      {% elseif layout == 'strip' %}
+        <div class="scroll-strip mt-12">
+          {% for member in members %}
+            <div class="group {{ cfg.card }}">
+              {{ ui.photo(member, cfg, cfg.ratio) }}
+              <div class="mt-4">
+                {% if cfg.show_role and member.role %}
+                  <p class="text-xs font-semibold tracking-[0.14em] uppercase opacity-50">{{ member.role }}</p>
+                {% endif %}
+                <p class="font-heading text-xl leading-tight">{{ member.name }}</p>
+                {{ ui.socials(member, cfg) }}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+      {# ---------------- Grid ---------------- #}
+      {% else %}
+        <div class="mt-12 grid gap-8 {{ col_class }}">
+          {% for member in members %}
+            <div class="group flex flex-col {{ cfg.card }}">
+              {{ ui.photo(member, cfg, cfg.ratio) }}
+              <div class="mt-4">
+                {% if cfg.show_role and member.role %}
+                  <p class="text-xs font-semibold tracking-[0.14em] uppercase opacity-50">{{ member.role }}</p>
+                {% endif %}
+                <p class="font-heading text-xl leading-tight">{{ member.name }}</p>
+                {% if cfg.show_quote and member.quote %}
+                  <p class="mt-2 text-sm opacity-60">{{ member.quote }}</p>
+                {% endif %}
+                {{ ui.details(member, cfg) }}
+                {{ ui.socials(member, cfg) }}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if settings.footer_cta.url %}
+        <div class="mt-12 {{ settings.align == 'center' ? 'text-center' : '' }}">
+          <a href="{{ settings.footer_cta.url }}" target="{{ settings.footer_cta.target }}" class="btn btn-outline">{{ settings.footer_cta.text }}</a>
+        </div>
+      {% endif %}
+
+    {% else %}
+      <p class="mt-10 text-lg opacity-60">{{ settings.empty_text }}</p>
+    {% endif %}
+  </div>
+</section>
+{% endcanopy %}
+

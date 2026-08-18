@@ -1,0 +1,359 @@
+{% canopy config %}
+{
+    "title": "Site Header",
+    "name": "header",
+    "settings": [
+        {
+            "name": "layout",
+            "type": "select",
+            "label": "Layout",
+            "tab": "Content",
+            "options": [
+                { "value": "inline", "label": "Inline — logo left, nav right" },
+                { "value": "centered", "label": "Centred — logo above the nav" },
+                { "value": "split", "label": "Split — nav left, logo centre, button right" },
+                { "value": "floating", "label": "Floating — rounded bar over the hero" },
+                { "value": "poster", "label": "Poster — nav only, big spaced type" },
+                { "value": "rail", "label": "Side rail — fixed left column, numbered nav" },
+                { "value": "minimal", "label": "Minimal — logo only" }
+            ],
+            "default": "inline"
+        },
+        {
+            "name": "logo_source",
+            "type": "radio",
+            "label": "Logo",
+            "tab": "Content",
+            "group": "Logo",
+            "options": [
+                { "value": "brand", "label": "From the Brand collection" },
+                { "value": "upload", "label": "Upload one here" },
+                { "value": "text", "label": "Text only" }
+            ],
+            "default": "brand"
+        },
+        {
+            "name": "logo_variant",
+            "type": "select",
+            "label": "Which version",
+            "tab": "Content",
+            "group": "Logo",
+            "options": [
+                { "value": "primary", "label": "Primary logo" },
+                { "value": "light", "label": "Light — for dark backgrounds" },
+                { "value": "dark", "label": "Dark — for light backgrounds" },
+                { "value": "wordmark", "label": "Wordmark" },
+                { "value": "symbol", "label": "Symbol / icon" }
+            ],
+            "default": "primary"
+        },
+        { "name": "logo", "type": "file", "label": "Logo image", "accept": "image/*", "tab": "Content", "group": "Logo" },
+        { "name": "logo_text", "type": "text", "label": "Logo text (used if no image)", "tab": "Content", "group": "Logo", "default": "ARTIST NAME" },
+        { "name": "logo_height", "type": "number", "label": "Logo height (px)", "tab": "Content", "group": "Logo", "min": 16, "max": 120, "default": 36 },
+        { "name": "menu_handle", "type": "text", "label": "Menu handle", "tab": "Content", "default": "main" },
+        { "name": "cta", "type": "url", "label": "Header button", "tab": "Content", "default": { "url": "#tour", "text": "Tickets", "target": "_self" } },
+        { "name": "cta_2", "type": "url", "label": "Second header button", "tab": "Content", "default": { "url": "", "text": "Listen", "target": "_self" } },
+        { "name": "rail_footer", "type": "textarea", "label": "Side rail: text under the nav", "tab": "Content", "default": "" },
+        { "name": "show_logo", "type": "checkbox", "label": "Show the logo", "tab": "Visibility", "default": true },
+        { "name": "show_nav", "type": "checkbox", "label": "Show the navigation", "tab": "Visibility", "default": true },
+        { "name": "show_cta", "type": "checkbox", "label": "Show the header button", "tab": "Visibility", "default": true },
+        { "name": "show_cta_2", "type": "checkbox", "label": "Show the second header button", "tab": "Visibility", "default": false },
+        { "name": "show_numbers", "type": "checkbox", "label": "Number the navigation items", "tab": "Visibility", "default": false },
+        {
+            "name": "tone",
+            "type": "select",
+            "label": "Background",
+            "tab": "Style",
+            "options": [
+                { "value": "transparent", "label": "Transparent (overlays the hero)" },
+                { "value": "solid", "label": "Page background" },
+                { "value": "surface", "label": "Card colour" },
+                { "value": "accent", "label": "Accent" },
+                { "value": "invert", "label": "Inverted" },
+                { "value": "blur", "label": "Frosted glass" }
+            ],
+            "default": "blur"
+        },
+        { "name": "sticky", "type": "checkbox", "label": "Stick to top when scrolling", "tab": "Style", "default": true },
+        { "name": "border", "type": "checkbox", "label": "Show bottom border", "tab": "Style", "default": true },
+        { "name": "rail_width", "type": "number", "label": "Side rail width (px)", "tab": "Style", "min": 160, "max": 420, "default": 270 }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+{#
+  Site header. Seven layouts share one nav data source, so switching layout
+  never asks an editor to re-enter anything.
+
+  The `rail` layout is the odd one out: it's a fixed left column rather than a
+  bar across the top, so it sets --rail-width and the rest of the page is
+  shifted across by the .site-rail rules in global.css. That CSS can't live in
+  a head section on this block — canopy.head returns nothing for a shared area.
+#}
+{% set tones = {
+    'transparent': 'bg-transparent',
+    'solid': 'bg-bg text-ink',
+    'surface': 'bg-surface text-ink',
+    'accent': 'bg-accent text-on-accent',
+    'invert': 'bg-ink text-bg',
+    'blur': 'bg-bg/70 text-ink backdrop-blur-md'
+} %}
+{% set tone_class = tones[settings.tone] ?? tones['blur'] %}
+{% set nav = cms.menu(settings.menu_handle ?? 'main') %}
+{% set items = (nav and nav.items) ? nav.items | filter(i => i.active) : [] %}
+{% set layout = settings.layout ?? 'inline' %}
+{% set show_nav = settings.show_nav and layout != 'minimal' %}
+{% set ctas = [
+    settings.show_cta ? settings.cta : null,
+    settings.show_cta_2 ? settings.cta_2 : null
+] | filter(c => c and c.url) %}
+
+{# ---- Logo, from the Brand collection or from this block ----
+   `b` is null when the collection is missing or empty; reading fields off it
+   is safe, so no guard is needed. Never default it with `?? {}` — an empty
+   hash literal after ?? is a compile-time error that blanks the block. #}
+{% import 'components/brand' as brand %}
+{% set b = (cms.collection('brand') ?? [])|first %}
+
+{% if settings.logo_source == 'upload' %}
+  {% set logo_src = settings.logo.path ?? '' %}
+{% elseif settings.logo_source == 'text' %}
+  {% set logo_src = '' %}
+{% else %}
+  {# Falls through to text on its own if the collection has no logo yet. #}
+  {% set logo_src = brand.logo_url(b, settings.logo_variant)|trim %}
+{% endif %}
+
+{# Whichever source is chosen wins for the name too, so typing in this block's
+   "Logo text" field visibly does something instead of being overruled by the
+   collection. Each falls back to the other when it's empty. #}
+{% if settings.logo_source == 'brand' %}
+  {% set logo_name = brand.name(b, settings.logo_text)|trim %}
+{% else %}
+  {% set logo_name = settings.logo_text ?: brand.name(b, '')|trim %}
+{% endif %}
+
+{# The collection's logo description only describes the collection's logo — an
+   uploaded one is named by this block's own text. #}
+{% set logo_alt = settings.logo_source == 'brand' ? brand.alt(b, logo_name)|trim : logo_name %}
+
+{# ---------------------------------------------------------------------------
+   Reusable fragments. Imported from this same file so every layout below can
+   call them as ui.<name>() — macros don't see the outer context, so anything
+   they need is passed in explicitly.
+   --------------------------------------------------------------------------- #}
+{% import _self as ui %}
+
+{% macro logo(src, name, height) %}
+  <a href="/" class="flex shrink-0 items-center gap-3 no-underline">
+    {% if src %}
+      <img src="{{ src }}" alt="{{ name }}" style="height: {{ height ?? 36 }}px" class="w-auto" />
+    {% else %}
+      <span class="font-heading text-xl tracking-tight">{{ name }}</span>
+    {% endif %}
+  </a>
+{% endmacro %}
+
+{% macro nav_item(item, numbered, index) %}
+  {% if item.items %}
+    <details class="group relative" data-dropdown>
+      <summary class="nav-link flex cursor-pointer list-none items-center gap-1 opacity-70 transition hover:opacity-100">
+        {{ item.label }}
+        <svg class="h-3 w-3 transition group-open:rotate-180" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+          <path d="M2 4.5 6 8.5 10 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </summary>
+      <ul class="card absolute top-full left-0 mt-2 min-w-44 list-none p-2">
+        {% for child in item.items %}
+          {% if child.active %}
+            <li>
+              <a
+                href="{{ child.href }}"
+                class="nav-link block rounded-theme px-3 py-2 opacity-70 transition hover:opacity-100"
+                {% if child.opens_new_tab %}target="_blank" rel="noopener"{% endif %}
+              >{{ child.label }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </details>
+  {% else %}
+    <a
+      href="{{ item.href }}"
+      class="nav-link inline-flex items-baseline gap-2 opacity-70 transition hover:opacity-100"
+      {% if item.opens_new_tab %}target="_blank" rel="noopener"{% endif %}
+    >
+      {% if numbered %}<span class="text-xs tabular-nums opacity-40">{{ index }}</span>{% endif %}
+      {{ item.label }}
+    </a>
+  {% endif %}
+{% endmacro %}
+
+{% macro buttons(ctas, size) %}
+  {% for cta in ctas %}
+    <a
+      href="{{ cta.url }}"
+      target="{{ cta.target }}"
+      class="btn {{ loop.first ? 'btn-primary' : 'btn-outline' }} {{ size }}"
+    >{{ cta.text }}</a>
+  {% endfor %}
+{% endmacro %}
+
+{% macro mobile_nav(items, ctas) %}
+  <details class="group md:hidden" data-dropdown>
+    <summary class="flex cursor-pointer list-none items-center rounded-theme border border-line p-2" aria-label="Toggle menu">
+      <svg class="h-5 w-5 group-open:hidden" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+      </svg>
+      <svg class="hidden h-5 w-5 group-open:block" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+      </svg>
+    </summary>
+    <div class="bg-bg text-ink absolute inset-x-0 top-full border-b border-line px-6 py-4">
+      {% if items|length %}
+        <ul class="list-none space-y-1">
+          {% for item in items %}
+            <li>
+              <a
+                href="{{ item.href }}"
+                class="block py-2 text-base font-medium no-underline"
+                {% if item.opens_new_tab %}target="_blank" rel="noopener"{% endif %}
+              >{{ item.label }}</a>
+              {% if item.items %}
+                <ul class="list-none pl-4">
+                  {% for child in item.items %}
+                    {% if child.active %}
+                      <li><a href="{{ child.href }}" class="block py-1.5 text-sm no-underline opacity-70">{{ child.label }}</a></li>
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      {% for cta in ctas %}
+        <a href="{{ cta.url }}" target="{{ cta.target }}" class="btn {{ loop.first ? 'btn-primary' : 'btn-outline' }} mt-3 w-full">{{ cta.text }}</a>
+      {% endfor %}
+    </div>
+  </details>
+{% endmacro %}
+
+{# ---------------------------------------------------------------------------
+   Side rail — a fixed left column, not a bar. Collapses to a normal top bar
+   below `lg` so small screens still get a usable header.
+   --------------------------------------------------------------------------- #}
+{% if layout == 'rail' %}
+  {# Set on :root, not on the rail itself — the body padding rule in the head
+     section has to be able to read it. #}
+  <style>:root { --rail-width: {{ settings.rail_width ?? 270 }}px; }</style>
+
+  <header
+    class="site-rail {{ tone_class }} z-40 flex flex-col justify-between lg:fixed lg:inset-y-0 lg:left-0 {{ settings.border ? 'lg:border-r border-line' : '' }}"
+  >
+    <div class="flex items-center justify-between p-6 lg:block">
+      {% if settings.show_logo %}{{ ui.logo(logo_src, logo_alt, settings.logo_height) }}{% endif %}
+      {% if show_nav and items|length %}{{ ui.mobile_nav(items, ctas) }}{% endif %}
+    </div>
+
+    {% if show_nav and items|length %}
+      <nav class="hidden p-6 lg:block">
+        <ul class="list-none space-y-2">
+          {% for item in items %}
+            <li>{{ ui.nav_item(item, settings.show_numbers, loop.index) }}</li>
+          {% endfor %}
+        </ul>
+
+        {% if ctas|length %}
+          <div class="mt-6 flex flex-col gap-2">{{ ui.buttons(ctas, 'btn-sm') }}</div>
+        {% endif %}
+
+        {% if settings.rail_footer %}
+          <p class="mt-6 text-xs leading-relaxed opacity-50">{{ settings.rail_footer }}</p>
+        {% endif %}
+      </nav>
+    {% endif %}
+  </header>
+
+{# ---------------------------------------------------------------------------
+   Floating — a rounded bar sitting over the top of the hero.
+   --------------------------------------------------------------------------- #}
+{% elseif layout == 'floating' %}
+  <header class="{{ settings.sticky ? 'sticky top-0' : 'relative' }} z-40 px-4 pt-4">
+    <div class="wrap {{ tone_class }} {{ settings.border ? 'border border-line' : '' }} flex items-center justify-between gap-6 rounded-theme px-5 py-3">
+      {% if settings.show_logo %}{{ ui.logo(logo_src, logo_alt, settings.logo_height) }}{% endif %}
+
+      {% if show_nav %}
+        <nav class="hidden items-center gap-7 md:flex">
+          {% for item in items %}{{ ui.nav_item(item, settings.show_numbers, loop.index) }}{% endfor %}
+          {{ ui.buttons(ctas, 'btn-sm') }}
+        </nav>
+        {{ ui.mobile_nav(items, ctas) }}
+      {% endif %}
+    </div>
+  </header>
+
+{# ---------------------------------------------------------------------------
+   Poster — centred nav only, widely spaced, no logo bar.
+   --------------------------------------------------------------------------- #}
+{% elseif layout == 'poster' %}
+  <header class="{{ tone_class }} {{ settings.sticky ? 'sticky top-0' : 'relative' }} z-40 {{ settings.border ? 'border-b border-line' : '' }}">
+    <div class="wrap flex flex-col items-center gap-4 py-5">
+      {% if settings.show_logo %}{{ ui.logo(logo_src, logo_alt, settings.logo_height) }}{% endif %}
+
+      {% if show_nav and items|length %}
+        <nav class="flex flex-wrap items-center justify-center gap-x-10 gap-y-3 text-accent">
+          {% for item in items %}
+            <a
+              href="{{ item.href }}"
+              class="font-heading text-lg tracking-[0.12em] uppercase no-underline transition hover:opacity-70 sm:text-xl"
+              {% if item.opens_new_tab %}target="_blank" rel="noopener"{% endif %}
+            >{{ item.label }}</a>
+          {% endfor %}
+        </nav>
+      {% endif %}
+
+      {% if ctas|length %}
+        <div class="flex flex-wrap justify-center gap-2">{{ ui.buttons(ctas, 'btn-sm') }}</div>
+      {% endif %}
+    </div>
+  </header>
+
+{# ---------------------------------------------------------------------------
+   Inline / centred / split / minimal — variations on a top bar.
+   --------------------------------------------------------------------------- #}
+{% else %}
+  <header
+    class="{{ tone_class }} {{ settings.sticky ? 'sticky top-0 z-40' : 'relative z-40' }} {{ settings.border ? 'border-b border-line' : '' }}"
+  >
+    <div class="wrap flex items-center gap-6 py-4 {{ layout == 'centered' ? 'flex-col' : 'justify-between' }}">
+
+      {% if layout == 'split' %}
+        {# Nav on the left, logo dead centre, buttons on the right. #}
+        <nav class="hidden flex-1 items-center gap-7 md:flex">
+          {% for item in items %}{{ ui.nav_item(item, settings.show_numbers, loop.index) }}{% endfor %}
+        </nav>
+
+        {% if settings.show_logo %}{{ ui.logo(logo_src, logo_alt, settings.logo_height) }}{% endif %}
+
+        <div class="hidden flex-1 items-center justify-end gap-3 md:flex">{{ ui.buttons(ctas, 'btn-sm') }}</div>
+        {% if show_nav %}{{ ui.mobile_nav(items, ctas) }}{% endif %}
+
+      {% else %}
+        {% if settings.show_logo %}{{ ui.logo(logo_src, logo_alt, settings.logo_height) }}{% endif %}
+
+        {% if show_nav %}
+          <nav class="hidden items-center gap-7 md:flex">
+            {% for item in items %}{{ ui.nav_item(item, settings.show_numbers, loop.index) }}{% endfor %}
+            {{ ui.buttons(ctas, 'btn-sm') }}
+          </nav>
+          {{ ui.mobile_nav(items, ctas) }}
+        {% endif %}
+      {% endif %}
+    </div>
+  </header>
+{% endif %}
+{% endcanopy %}
+
+

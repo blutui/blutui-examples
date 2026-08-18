@@ -1,0 +1,330 @@
+{% canopy config %}
+{
+    "title": "Discography (Collection)",
+    "name": "discography",
+    "settings": [
+        {
+            "name": "layout",
+            "type": "select",
+            "label": "Layout",
+            "tab": "Content",
+            "options": [
+                { "value": "grid", "label": "Grid — artwork cards" },
+                { "value": "list", "label": "List — one release per row" },
+                { "value": "strip", "label": "Strip — swipeable row of artwork" },
+                { "value": "featured", "label": "Featured — the newest release, large" }
+            ],
+            "default": "grid"
+        },
+        { "name": "eyebrow", "type": "text", "label": "Eyebrow", "tab": "Content", "default": "Discography" },
+        { "name": "heading", "type": "heading", "label": "Heading", "tab": "Content", "default": { "value": "Music", "element": "h2" }, "elements": [{ "value": "h2", "label": "H2" }, { "value": "h3", "label": "H3" }] },
+        { "name": "intro", "type": "textarea", "label": "Intro", "tab": "Content", "default": "" },
+        { "name": "empty_text", "type": "text", "label": "Text shown when there's nothing to list", "tab": "Content", "default": "Nothing here yet — new music soon." },
+        { "name": "footer_cta", "type": "url", "label": "Button below the list", "tab": "Content", "default": { "url": "", "text": "All releases", "target": "_self" } },
+        {
+            "name": "collection_handle",
+            "type": "select",
+            "label": "Collection",
+            "tab": "Releases",
+            "options": [
+                { "value": "releases", "label": "Releases" }
+            ],
+            "default": "releases"
+        },
+        {
+            "name": "sort",
+            "type": "select",
+            "label": "Order",
+            "tab": "Releases",
+            "options": [
+                { "value": "newest", "label": "Newest first" },
+                { "value": "oldest", "label": "Oldest first" },
+                { "value": "manual", "label": "Manual order field" },
+                { "value": "title", "label": "Title, A–Z" }
+            ],
+            "default": "newest"
+        },
+        {
+            "name": "filter_type",
+            "type": "select",
+            "label": "Only show this type",
+            "tab": "Releases",
+            "options": [
+                { "value": "all", "label": "All types" },
+                { "value": "Album", "label": "Albums" },
+                { "value": "EP", "label": "EPs" },
+                { "value": "Single", "label": "Singles" },
+                { "value": "Live", "label": "Live" },
+                { "value": "Remix", "label": "Remixes" }
+            ],
+            "default": "all"
+        },
+        { "name": "featured_only", "type": "checkbox", "label": "Only show featured releases", "tab": "Releases", "default": false },
+        { "name": "limit", "type": "number", "label": "Maximum releases (0 = no limit)", "tab": "Releases", "min": 0, "max": 100, "default": 0 },
+        { "name": "date_format", "type": "text", "label": "Date format", "tab": "Releases", "default": "F Y" },
+        {
+            "name": "columns",
+            "type": "select",
+            "label": "Grid columns",
+            "tab": "Releases",
+            "options": [
+                { "value": "2", "label": "Two" },
+                { "value": "3", "label": "Three" },
+                { "value": "4", "label": "Four" }
+            ],
+            "default": "3"
+        },
+        { "name": "show_artwork", "type": "checkbox", "label": "Show the artwork", "tab": "Visibility", "default": true },
+        { "name": "show_type", "type": "checkbox", "label": "Show the release type", "tab": "Visibility", "default": true },
+        { "name": "show_date", "type": "checkbox", "label": "Show the release date", "tab": "Visibility", "default": true },
+        { "name": "show_description", "type": "checkbox", "label": "Show the description", "tab": "Visibility", "default": true },
+        { "name": "show_links", "type": "checkbox", "label": "Show the streaming links", "tab": "Visibility", "default": true },
+        {
+            "name": "tone",
+            "type": "select",
+            "label": "Background",
+            "tab": "Style",
+            "options": [
+                { "value": "default", "label": "Page background" },
+                { "value": "surface", "label": "Card colour" },
+                { "value": "accent", "label": "Accent" },
+                { "value": "invert", "label": "Inverted" },
+                { "value": "custom", "label": "Custom colours" }
+            ],
+            "default": "default"
+        },
+        { "name": "bg_color", "type": "color", "label": "Custom background", "tab": "Style", "group": "Custom colours", "default": "#0b0b12" },
+        { "name": "text_color", "type": "color", "label": "Custom text", "tab": "Style", "group": "Custom colours", "default": "#f4f4f6" },
+        {
+            "name": "spacing",
+            "type": "select",
+            "label": "Vertical spacing",
+            "tab": "Style",
+            "options": [
+                { "value": "none", "label": "None" },
+                { "value": "sm", "label": "Small" },
+                { "value": "md", "label": "Medium" },
+                { "value": "lg", "label": "Large" },
+                { "value": "xl", "label": "Extra large" }
+            ],
+            "default": "lg"
+        },
+        {
+            "name": "align",
+            "type": "radio",
+            "label": "Header alignment",
+            "tab": "Style",
+            "options": [
+                { "value": "left", "label": "Left" },
+                { "value": "center", "label": "Centre" }
+            ],
+            "default": "left"
+        },
+        { "name": "anchor", "type": "text", "label": "Anchor ID (for menu links)", "tab": "Style", "default": "listen" }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+{#
+  Releases pulled from a Collection. The collection handle is a select, the
+  same way the Contact block picks a form — the difference is that
+  cms.collection() takes a variable, so this one genuinely switches source
+  rather than needing a branch per handle.
+
+  To offer another collection, add it to the `collection_handle` options; it
+  needs the same field names (title, artwork, release_date, type, description,
+  spotify, apple, bandcamp, youtube, buy_url, featured, order).
+#}
+{% set tones = {
+    'default': 'bg-bg text-ink',
+    'surface': 'bg-surface text-ink',
+    'accent': 'bg-accent text-on-accent',
+    'invert': 'bg-ink text-bg'
+} %}
+{% set pads = { 'none': 'py-0', 'sm': 'py-10 sm:py-12', 'md': 'py-16 sm:py-20', 'lg': 'py-24 sm:py-28', 'xl': 'py-32 sm:py-40' } %}
+{% set cols = { '2': 'sm:grid-cols-2', '3': 'sm:grid-cols-2 lg:grid-cols-3', '4': 'sm:grid-cols-2 lg:grid-cols-4' } %}
+
+{% set tone_class = settings.tone == 'custom' ? '' : (tones[settings.tone] ?? tones['default']) %}
+{% set tone_style = settings.tone == 'custom' ? 'background-color:' ~ settings.bg_color ~ ';color:' ~ settings.text_color ~ ';' : '' %}
+{% set pad_class = pads[settings.spacing] ?? pads['lg'] %}
+{% set col_class = cols[settings.columns] ?? cols['3'] %}
+{% set align_class = settings.align == 'center' ? 'text-center mx-auto max-w-2xl' : '' %}
+{% set el = settings.heading.element ?? 'h2' %}
+{% set layout = settings.layout ?? 'grid' %}
+
+{# A handle with no matching collection returns null, and piping null into
+   |filter throws — which Canopy swallows, blanking the whole section. #}
+{% set items = cms.collection(settings.collection_handle ?? 'releases') ?? [] %}
+
+{% if settings.filter_type != 'all' %}
+  {% set items = items|filter(i => i.type == settings.filter_type) %}
+{% endif %}
+{% if settings.featured_only %}
+  {% set items = items|filter(i => i.featured == 'Yes') %}
+{% endif %}
+
+{% if settings.sort == 'manual' %}
+  {% set items = items|sort((a, b) => (a.order ?? 0) <=> (b.order ?? 0)) %}
+{% elseif settings.sort == 'oldest' %}
+  {% set items = items|sort((a, b) => (a.release_date|date('U')) <=> (b.release_date|date('U'))) %}
+{% elseif settings.sort == 'title' %}
+  {% set items = items|sort((a, b) => a.title <=> b.title) %}
+{% else %}
+  {% set items = items|sort((a, b) => (b.release_date|date('U')) <=> (a.release_date|date('U'))) %}
+{% endif %}
+
+{% if layout == 'featured' %}
+  {% set items = items|slice(0, 1) %}
+{% elseif settings.limit > 0 %}
+  {% set items = items|slice(0, settings.limit) %}
+{% endif %}
+
+{% import _self as ui %}
+
+{% macro artwork(item, klass) %}
+  {% if item.artwork %}
+    <img
+      src="{{ item.artwork | image_url({ width: 800, format: 'webp' }) }}"
+      alt="{{ item.title }}"
+      class="{{ klass }}"
+      loading="lazy"
+    />
+  {% else %}
+    {# Placeholder keeps the grid even when artwork hasn't been uploaded yet. #}
+    <div class="{{ klass }} flex items-center justify-center border border-line bg-surface" aria-hidden="true">
+      <span class="font-heading text-3xl opacity-20">{{ item.title|slice(0, 1) }}</span>
+    </div>
+  {% endif %}
+{% endmacro %}
+
+{% macro meta(item, settings) %}
+  {% set bits = [] %}
+  {% if settings.show_type and item.type %}{% set bits = bits|merge([item.type]) %}{% endif %}
+  {% if settings.show_date and item.release_date %}
+    {% set bits = bits|merge([item.release_date|date(settings.date_format ?? 'F Y')]) %}
+  {% endif %}
+  {% if bits|length %}
+    <p class="text-xs font-semibold tracking-[0.14em] uppercase opacity-50">{{ bits|join(' · ') }}</p>
+  {% endif %}
+{% endmacro %}
+
+{% macro links(item) %}
+  {% set all = [
+      { 'url': item.spotify, 'text': 'Spotify' },
+      { 'url': item.apple, 'text': 'Apple Music' },
+      { 'url': item.bandcamp, 'text': 'Bandcamp' },
+      { 'url': item.youtube, 'text': 'YouTube' },
+      { 'url': item.buy_url, 'text': 'Buy' }
+  ] | filter(l => l.url) %}
+  {% if all|length %}
+    <div class="mt-4 flex flex-wrap gap-2">
+      {% for link in all %}
+        <a href="{{ link.url }}" target="_blank" rel="noopener" class="pill">{{ link.text }}</a>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endmacro %}
+
+<section
+  {% if settings.anchor %}id="{{ settings.anchor }}"{% endif %}
+  class="{{ tone_class }}"
+  {% if tone_style %}style="{{ tone_style }}"{% endif %}
+>
+  <div class="wrap {{ pad_class }}">
+
+    <div class="{{ align_class }}">
+      {% if settings.eyebrow %}<span class="eyebrow text-accent">{{ settings.eyebrow }}</span>{% endif %}
+      <{{ el }} class="mt-3 text-4xl text-balance sm:text-5xl">{{ settings.heading.value }}</{{ el }}>
+      {% if settings.intro %}<p class="mt-4 text-lg opacity-70">{{ settings.intro }}</p>{% endif %}
+    </div>
+
+    {% if items|length %}
+
+      {# ---------------- Featured — one release, large ---------------- #}
+      {% if layout == 'featured' %}
+        {% set item = items|first %}
+        <div class="mt-12 grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          {% if settings.show_artwork %}
+            {{ ui.artwork(item, 'aspect-square w-full rounded-theme object-cover') }}
+          {% endif %}
+          <div>
+            {{ ui.meta(item, settings) }}
+            <p class="font-heading mt-3 text-4xl leading-tight sm:text-6xl">{{ item.title }}</p>
+            {% if settings.show_description and item.description %}
+              <p class="mt-5 text-lg leading-relaxed opacity-70">{{ item.description }}</p>
+            {% endif %}
+            {% if settings.show_links %}{{ ui.links(item) }}{% endif %}
+          </div>
+        </div>
+
+      {# ---------------- List ---------------- #}
+      {% elseif layout == 'list' %}
+        <ul class="mt-12 list-none">
+          {% for item in items %}
+            <li class="flex flex-col gap-5 border-b border-line py-6 first:border-t sm:flex-row sm:items-center">
+              {% if settings.show_artwork %}
+                {{ ui.artwork(item, 'h-24 w-24 shrink-0 rounded-theme object-cover') }}
+              {% endif %}
+              <div class="min-w-0 flex-1">
+                {{ ui.meta(item, settings) }}
+                <p class="font-heading mt-1 text-xl leading-tight sm:text-2xl">{{ item.title }}</p>
+                {% if settings.show_description and item.description %}
+                  <p class="mt-2 text-sm opacity-60">{{ item.description }}</p>
+                {% endif %}
+                {% if settings.show_links %}{{ ui.links(item) }}{% endif %}
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+
+      {# ---------------- Strip — horizontal scroll ---------------- #}
+      {% elseif layout == 'strip' %}
+        <div class="scroll-strip mt-12">
+          {% for item in items %}
+            <div>
+              {% if settings.show_artwork %}
+                {{ ui.artwork(item, 'aspect-square w-full rounded-theme object-cover') }}
+              {% endif %}
+              <div class="mt-4">
+                {{ ui.meta(item, settings) }}
+                <p class="font-heading mt-1 text-lg leading-tight">{{ item.title }}</p>
+                {% if settings.show_links %}{{ ui.links(item) }}{% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+      {# ---------------- Grid ---------------- #}
+      {% else %}
+        <div class="mt-12 grid gap-8 {{ col_class }}">
+          {% for item in items %}
+            <div>
+              {% if settings.show_artwork %}
+                {{ ui.artwork(item, 'aspect-square w-full rounded-theme object-cover') }}
+              {% endif %}
+              <div class="mt-4">
+                {{ ui.meta(item, settings) }}
+                <p class="font-heading mt-1 text-xl leading-tight">{{ item.title }}</p>
+                {% if settings.show_description and item.description %}
+                  <p class="mt-2 text-sm opacity-60">{{ item.description }}</p>
+                {% endif %}
+                {% if settings.show_links %}{{ ui.links(item) }}{% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if settings.footer_cta.url %}
+        <div class="mt-12 {{ settings.align == 'center' ? 'text-center' : '' }}">
+          <a href="{{ settings.footer_cta.url }}" target="{{ settings.footer_cta.target }}" class="btn btn-outline">{{ settings.footer_cta.text }}</a>
+        </div>
+      {% endif %}
+
+    {% else %}
+      <p class="mt-10 text-lg opacity-60">{{ settings.empty_text }}</p>
+    {% endif %}
+  </div>
+</section>
+{% endcanopy %}

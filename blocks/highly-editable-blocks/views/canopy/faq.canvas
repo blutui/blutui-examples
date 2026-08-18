@@ -1,0 +1,135 @@
+{% canopy config %}
+{
+    "title": "FAQ",
+    "name": "faq",
+    "settings": [
+        {
+            "name": "layout",
+            "type": "radio",
+            "label": "Layout",
+            "tab": "Content",
+            "options": [
+                { "value": "accordion", "label": "Accordion — click to expand" },
+                { "value": "columns", "label": "Columns — everything visible" },
+                { "value": "split", "label": "Split — heading left, questions right" }
+            ],
+            "default": "accordion"
+        },
+        { "name": "eyebrow", "type": "text", "label": "Eyebrow", "tab": "Content", "default": "" },
+        { "name": "heading", "type": "heading", "label": "Heading", "tab": "Content", "default": { "value": "Good to know", "element": "h2" }, "elements": [{ "value": "h2", "label": "H2" }, { "value": "h3", "label": "H3" }] },
+        { "name": "intro", "type": "textarea", "label": "Intro", "tab": "Content", "default": "" },
+        {
+            "name": "items",
+            "type": "list",
+            "label": "Questions — one per item, separated by | : Question | Answer",
+            "tab": "Content",
+            "default": [
+                "What time do doors open? | Doors are usually 7pm with support at 8pm, but always check with the venue on the night.",
+                "Are the shows all ages? | Most are 14+ with under 16s accompanied by an adult. Age limits are listed on each ticket page.",
+                "Do you ship vinyl internationally? | Yes — worldwide shipping is available from the store, with tracking on every order.",
+                "How do I get presale access? | Sign up to the mailing list. Codes go out the Monday before general sale."
+            ]
+        },
+        { "name": "open_first", "type": "checkbox", "label": "Open the first question by default", "tab": "Content", "default": true },
+        {
+            "name": "tone",
+            "type": "select",
+            "label": "Background",
+            "tab": "Style",
+            "options": [
+                { "value": "default", "label": "Page background" },
+                { "value": "surface", "label": "Card colour" },
+                { "value": "accent", "label": "Accent" },
+                { "value": "invert", "label": "Inverted" },
+                { "value": "custom", "label": "Custom colours" }
+            ],
+            "default": "default"
+        },
+        { "name": "bg_color", "type": "color", "label": "Custom background", "tab": "Style", "group": "Custom colours", "default": "#15151f" },
+        { "name": "text_color", "type": "color", "label": "Custom text", "tab": "Style", "group": "Custom colours", "default": "#f4f4f6" },
+        {
+            "name": "spacing",
+            "type": "select",
+            "label": "Vertical spacing",
+            "tab": "Style",
+            "options": [
+                { "value": "none", "label": "None" },
+                { "value": "sm", "label": "Small" },
+                { "value": "md", "label": "Medium" },
+                { "value": "lg", "label": "Large" },
+                { "value": "xl", "label": "Extra large" }
+            ],
+            "default": "lg"
+        },
+        { "name": "anchor", "type": "text", "label": "Anchor ID (for menu links)", "tab": "Style", "default": "faq" }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+{% set tones = {
+    'default': 'bg-bg text-ink',
+    'surface': 'bg-surface text-ink',
+    'accent': 'bg-accent text-on-accent',
+    'invert': 'bg-ink text-bg'
+} %}
+{% set pads = { 'none': 'py-0', 'sm': 'py-10 sm:py-12', 'md': 'py-16 sm:py-20', 'lg': 'py-24 sm:py-28', 'xl': 'py-32 sm:py-40' } %}
+
+{% set tone_class = settings.tone == 'custom' ? '' : (tones[settings.tone] ?? tones['default']) %}
+{% set tone_style = settings.tone == 'custom' ? 'background-color:' ~ settings.bg_color ~ ';color:' ~ settings.text_color ~ ';' : '' %}
+{% set pad_class = pads[settings.spacing] ?? pads['lg'] %}
+{% set el = settings.heading.element ?? 'h2' %}
+{% set rows = settings.items | filter(i => i|trim is not empty) %}
+
+<section
+  {% if settings.anchor %}id="{{ settings.anchor }}"{% endif %}
+  class="{{ tone_class }}"
+  {% if tone_style %}style="{{ tone_style }}"{% endif %}
+>
+  <div class="wrap {{ pad_class }}">
+    <div class="{{ settings.layout == 'split' ? 'grid gap-10 lg:grid-cols-12 lg:gap-16' : '' }}">
+
+      <div class="{{ settings.layout == 'split' ? 'lg:col-span-5' : 'mb-10 max-w-2xl' }}">
+        {% if settings.eyebrow %}<span class="eyebrow text-accent">{{ settings.eyebrow }}</span>{% endif %}
+        <{{ el }} class="mt-3 text-4xl text-balance sm:text-5xl">{{ settings.heading.value }}</{{ el }}>
+        {% if settings.intro %}<p class="mt-4 text-lg opacity-70">{{ settings.intro }}</p>{% endif %}
+      </div>
+
+      <div class="{{ settings.layout == 'split' ? 'lg:col-span-7' : '' }}">
+        {% if settings.layout == 'columns' %}
+          <div class="grid gap-x-12 gap-y-8 sm:grid-cols-2">
+            {% for row in rows %}
+              {% set p = row|split('|') %}
+              <div>
+                <h3 class="text-lg">{{ (p[0] ?? '')|trim }}</h3>
+                <p class="mt-2 leading-relaxed opacity-70">{{ (p[1] ?? '')|trim }}</p>
+              </div>
+            {% endfor %}
+          </div>
+
+        {% else %}
+          <div>
+            {% for row in rows %}
+              {% set p = row|split('|') %}
+              <details
+                class="group border-b border-line first:border-t"
+                {% if settings.open_first and loop.first %}open{% endif %}
+              >
+                <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-left">
+                  <span class="font-heading text-lg">{{ (p[0] ?? '')|trim }}</span>
+                  <span class="relative h-4 w-4 shrink-0 opacity-60" aria-hidden="true">
+                    <span class="absolute top-1/2 left-0 h-px w-4 -translate-y-1/2 bg-current"></span>
+                    <span class="absolute top-0 left-1/2 h-4 w-px -translate-x-1/2 bg-current transition group-open:scale-y-0"></span>
+                  </span>
+                </summary>
+                <p class="pb-5 leading-relaxed opacity-70">{{ (p[1] ?? '')|trim }}</p>
+              </details>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endcanopy %}
+
