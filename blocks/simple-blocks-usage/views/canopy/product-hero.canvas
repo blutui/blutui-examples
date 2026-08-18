@@ -1,0 +1,71 @@
+{% canopy config %}
+{
+    "title": "Product hero",
+    "name": "product_hero",
+    "settings": [
+        { "name": "heading", "type": "heading", "label": "Headline", "tab": "Content",
+          "elements": [{ "value": "h1", "label": "Heading 1" }, { "value": "h2", "label": "Heading 2" }],
+          "default": { "value": "Meet the newest member of the Schweppes family.", "element": "h1" } },
+        { "name": "description", "type": "richtext", "label": "Description", "tab": "Content",
+          "default": "<p>A crisp, sparkling mineral water with a seriously Kiwi twist. We've taken the clean, refreshing fizz you expect from Schweppes and given it a flavour hit of ripe kiwifruit and zesty lime.</p><p>It's bright. It's juicy. It's refreshing.</p><p>And it's absolutely not boring.</p>" },
+        { "name": "can", "type": "file", "label": "Can image", "accept": "image/*", "tab": "Media",
+          "description": "Shown three times as an overlapping pack shot on large screens." },
+        { "name": "backdrop", "type": "file", "label": "Backdrop image", "accept": "image/*", "tab": "Media" },
+        { "name": "show_scroll_cue", "type": "checkbox", "label": "Show scroll cue", "tab": "Style", "default": true }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+{% set can = settings.can.path|default(asset('images/kiwi-lime-can.png')) %}
+{% set backdrop = settings.backdrop.path|default(asset('images/hero-backdrop.png')) %}
+{% set can_src = can | image_url({ width: 900, format: 'webp' }) %}
+
+<section class="relative isolate bg-olive">
+  <img
+    src="{{ backdrop | image_url({ width: 1600, format: 'webp' }) }}"
+    alt=""
+    aria-hidden="true"
+    class="absolute inset-0 h-full w-full object-cover opacity-20"
+  />
+
+  <div class="shell relative grid items-center gap-10 py-16 lg:min-h-[612px] lg:grid-cols-2 lg:gap-0 lg:py-[99px]">
+    <div class="max-w-[680px]">
+      <{{ settings.heading.element }}
+        class="font-display text-[40px] font-bold leading-[0.9] tracking-[0.5px] text-off-white sm:text-[52px] lg:text-[68px]"
+      >
+        {{ settings.heading.value }}
+      </{{ settings.heading.element }}>
+
+      {% if settings.description %}
+        <div class="mt-[27px] space-y-4 text-[16px] font-semibold leading-tight tracking-[0.5px] text-white lg:text-[20px]">
+          {{ settings.description|raw }}
+        </div>
+      {% endif %}
+    </div>
+
+    {# Below lg the pack shot sits in flow; on lg it becomes the overlapping trio
+       that spills past the bottom of the hero, as drawn in the design. #}
+    <div class="flex justify-center lg:hidden">
+      <img src="{{ can_src }}" alt="" aria-hidden="true" class="h-[340px] w-auto object-contain" />
+    </div>
+  </div>
+
+  <div class="pointer-events-none absolute inset-x-0 bottom-0 hidden lg:block" aria-hidden="true">
+    <div class="relative mx-auto h-0 w-full max-w-[1440px]">
+      <img src="{{ can_src }}" alt="" class="absolute bottom-[-106px] left-[51.3%] w-[28.6%] object-contain" />
+      <img src="{{ can_src }}" alt="" class="absolute bottom-[-106px] left-[68.2%] w-[28.6%] object-contain" />
+      <img src="{{ can_src }}" alt="" class="absolute bottom-[-130px] left-[59%] w-[31.6%] object-contain" />
+    </div>
+  </div>
+
+
+  {% if settings.show_scroll_cue %}
+    <div class="absolute inset-x-0 bottom-5 flex justify-center" aria-hidden="true">
+      <svg class="scroll-cue h-[16px] w-[33px]" viewBox="0 0 32.909 16.5" fill="none">
+        <path d="M16.4545 16.5L0 0h32.909L16.4545 16.5Z" fill="#5BA63D" />
+      </svg>
+    </div>
+  {% endif %}
+</section>
+{% endcanopy %}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{% block title %}{{ settings.site_name }}{% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.bunny.net" />
+    <link
+      href="https://fonts.bunny.net/css?family=libre-baskerville:700|montserrat:300,300i,400,400i,500,600,700&display=swap"
+      rel="stylesheet"
+    />
+
+    {{ asset('styles/global.css') | stylesheet_tag }}
+
+    {{ canopy.head('main') }}
+
+    {% block styles %}{% endblock %}
+  </head>
+  <body class="bg-white font-sans text-ink antialiased">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-heritage focus:px-4 focus:py-2 focus:text-white"
+    >
+      Skip to content
+    </a>
+
+    {{ include('components/header.html') }}
+
+    <main id="main">{% block body %}{% endblock %}</main>
+
+    {{ include('components/footer.html') }}
+
+    {{ asset('js/app.js') | script_tag }}
+
+    {{ canopy.scripts('main') }}
+  </body>
+</html>

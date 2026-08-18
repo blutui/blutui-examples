@@ -1,0 +1,16 @@
+{% extends 'templates/default.html' %}
+
+{#
+  Product detail page. Renders the fixed sequence of sections from the Figma
+  product design; each block ships with its content as defaults and stays
+  editable in the Canopy editor.
+#}
+
+{% block body %}
+  {{ canopy.blocks('main', [
+    'product_hero',
+    'tasting_notes',
+    'image_band',
+    'nutrition'
+  ]) }}
+{% endblock %}

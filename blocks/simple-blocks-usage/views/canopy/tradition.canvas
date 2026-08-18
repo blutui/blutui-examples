@@ -1,0 +1,41 @@
+{% canopy config %}
+{
+    "title": "Tradition strapline",
+    "name": "tradition",
+    "settings": [
+        { "name": "text", "type": "text", "label": "Strapline",
+          "default": "A sparkling tradition since 1783." },
+        { "name": "signature", "type": "file", "label": "Signature image", "accept": "image/*",
+          "description": "The J. Schweppe signature lockup shown beneath the strapline." },
+        { "name": "background", "type": "file", "label": "Background image", "accept": "image/*" }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+{% set background = settings.background.path|default(asset('images/silver-background.jpg')) %}
+{% set signature = settings.signature.path|default(asset('images/schweppes-sign-ltpurple.png')) %}
+
+<section class="relative isolate overflow-hidden bg-silver">
+  <img
+    src="{{ background | image_url({ width: 1600, format: 'webp' }) }}"
+    alt=""
+    aria-hidden="true"
+    class="absolute inset-0 h-full w-full object-cover"
+  />
+
+  <div class="shell relative flex flex-col items-center gap-[25px] py-16 text-center lg:py-[100px]">
+    {% if settings.text %}
+      <p class="max-w-[800px] text-[20px] font-light leading-snug tracking-[3px] text-plum lg:text-[30px]">
+        {{ settings.text }}
+      </p>
+    {% endif %}
+
+    <img
+      src="{{ signature | image_url({ width: 640, format: 'webp' }) }}"
+      alt="J. Schweppe"
+      class="h-[56px] w-auto object-contain lg:h-[80px]"
+    />
+  </div>
+</section>
+{% endcanopy %}

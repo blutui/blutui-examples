@@ -1,0 +1,48 @@
+{#
+  Site header — logo plus the `main` menu managed in the dashboard.
+
+  The bar is deliberately shallow and the logo is absolutely positioned so it
+  overhangs the bar and sits over the section below. The header carries a
+  z-index so that overhang paints above the following section's background.
+#}
+{% set nav = cms.menu('main') %}
+
+<header class="relative z-20 bg-white">
+  <div class="relative mx-auto flex h-[64px] w-full max-w-[1440px] items-center justify-end px-6 lg:h-[72px] lg:px-10">
+    <a
+      href="/"
+      class="absolute left-6 top-[8px] block lg:left-10 lg:top-[12px]"
+      aria-label="Schweppes — home"
+    >
+      <img
+        src="{{ asset('images/schweppes-logo-color.png') | image_url({ width: 270, format: 'webp' }) }}"
+        alt="Schweppes"
+        width="135"
+        height="115"
+        class="h-[84px] w-auto object-contain lg:h-[112px]"
+      />
+    </a>
+
+    <nav aria-label="Primary">
+      <ul class="flex flex-wrap items-start justify-end gap-x-[25px] gap-y-3">
+        {% for item in nav.items %}
+          {% if item.active %}
+            <li>
+              <a
+                href="{{ item.href }}"
+                class="group inline-block text-[13px] uppercase leading-none tracking-wide text-ink lg:text-[17px]"
+                {% if item.opens_new_tab %}target="_blank" rel="noopener"{% endif %}
+              >
+                {{ item.label }}
+                <span
+                  class="mt-[6px] block h-[5px] w-full scale-x-0 bg-ink transition-transform duration-200 group-hover:scale-x-100 group-focus-visible:scale-x-100"
+                  aria-hidden="true"
+                ></span>
+              </a>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </nav>
+  </div>
+</header>

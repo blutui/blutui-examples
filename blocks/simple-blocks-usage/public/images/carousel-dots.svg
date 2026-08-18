@@ -1,0 +1,17 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="300" height="20" viewBox="0 0 300 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Carousel dots" clip-path="url(#clip0_47_164)">
+<circle id="Dot (active)" cx="10" cy="10" r="9" fill="white" stroke="#5BA63D" stroke-width="2"/>
+<circle id="Dot" cx="50" cy="10" r="10" fill="#5BA63D"/>
+<circle id="Dot_2" cx="90" cy="10" r="10" fill="#5BA63D"/>
+<circle id="Dot_3" cx="130" cy="10" r="10" fill="#5BA63D"/>
+<circle id="Dot_4" cx="170" cy="10" r="10" fill="#5BA63D"/>
+<circle id="Dot_5" cx="210" cy="10" r="10" fill="#5BA63D"/>
+<circle id="Dot_6" cx="250" cy="10" r="10" fill="#5BA63D"/>
+<circle id="Dot_7" cx="290" cy="10" r="10" fill="#5BA63D"/>
+</g>
+<defs>
+<clipPath id="clip0_47_164">
+<rect width="300" height="20" fill="white"/>
+</clipPath>
+</defs>
+</svg>

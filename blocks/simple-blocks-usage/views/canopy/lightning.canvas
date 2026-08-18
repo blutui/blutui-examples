@@ -1,0 +1,22 @@
+{% canopy config %}
+{
+    "title": "Lightning in a Bottle",
+    "name": "lightning",
+    "settings": [
+        { "name": "lead", "type": "textarea", "label": "Lead line",
+          "default": "Customers referred to Schweppes as" },
+        { "name": "emphasis", "type": "text", "label": "Emphasis line",
+          "default": "Lightning in a bottle" },
+        { "name": "tail", "type": "textarea", "label": "Closing line",
+          "default": "because it was the first bottle of its kind to retain carbonation." },
+        { "name": "image", "type": "file", "label": "Bottle image", "accept": "image/*" },
+        { "name": "band_image", "type": "file", "label": "Top band image", "accept": "image/*" }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+{% set story_style = { theme: 'light', image_side: 'left', media_style: 'contained', show_band: true, emphasis_size: 'large' } %}
+{% set story_image = asset('images/old-schweppes-bottle-gray.png') %}
+{{ include('components/story-section.html') }}
+{% endcanopy %}

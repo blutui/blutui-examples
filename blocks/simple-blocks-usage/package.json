@@ -1,0 +1,24 @@
+{
+  "name": "blueprint-blutui-tailwindcss-js",
+  "version": "1.0.0",
+  "description": "Bare bones Canvas with Tailwind CSS + Parcel.js for Blutui",
+  "private": true,
+  "source": [
+    "./src/js/app.js",
+    "./src/styles/global.css"
+  ],
+  "targets": {
+    "default": {
+      "distDir": "./public"
+    }
+  },
+  "scripts": {
+    "dev": "parcel watch --no-hmr --no-source-maps",
+    "build": "parcel build --no-source-maps"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "parcel": "^2.16.4",
+    "tailwindcss": "^4.3.3"
+  }
+}

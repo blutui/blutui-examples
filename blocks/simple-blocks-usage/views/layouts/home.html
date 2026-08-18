@@ -1,0 +1,22 @@
+{% extends 'templates/default.html' %}
+
+{#
+  Homepage. The block area renders this fixed sequence of sections, matching the
+  Figma design top to bottom. Each block ships with the design content as its
+  defaults and stays editable in the Canopy editor.
+#}
+
+{% block body %}
+  {{ canopy.blocks('main', [
+    'hero',
+    'products',
+    'recipes',
+    'tradition',
+    'heritage',
+    'lightning',
+    'warrant',
+    'exhibition',
+    'advertising',
+    'today'
+  ]) }}
+{% endblock %}

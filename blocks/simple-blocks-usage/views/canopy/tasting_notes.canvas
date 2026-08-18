@@ -1,0 +1,44 @@
+{% canopy config %}
+{
+    "title": "Tasting notes",
+    "name": "tasting_notes",
+    "settings": [
+        { "name": "heading", "type": "heading", "label": "Section heading",
+          "elements": [{ "value": "h2", "label": "Heading 2" }, { "value": "h3", "label": "Heading 3" }],
+          "default": { "value": "It's a deliciously refreshing experience", "element": "h2" } }
+    ],
+    "children": {
+        "allow": ["tasting_notes/note"],
+        "default": [
+            { "block": "tasting_notes/note", "data": {
+                "label": "First sip",
+                "lead": "Hello, lime.",
+                "body": "A burst of bright, zesty citrus arrives first, instantly waking up your tastebuds." } },
+            { "block": "tasting_notes/note", "data": {
+                "label": "Second sip",
+                "lead": "Enter the kiwi.",
+                "body": "Juicy kiwifruit flavour brings a fresh, lightly sweet character that balances the lime." } },
+            { "block": "tasting_notes/note", "data": {
+                "label": "The finish",
+                "lead": "Crisp. Clean. Moreish.",
+                "body": "The fizz lifts everything, leaving a refreshing finish that makes the next sip almost inevitable." } }
+        ]
+    }
+}
+{% endcanopy %}
+
+{% canopy template %}
+<section class="bg-white py-16 lg:py-[156px]">
+  <div class="shell">
+    <{{ settings.heading.element }}
+      class="text-center font-display text-[26px] font-bold uppercase leading-[0.9] tracking-[0.28px] text-heritage lg:text-[36px]"
+    >
+      {{ settings.heading.value }}
+    </{{ settings.heading.element }}>
+
+    <div class="mt-12 grid gap-[23px] md:grid-cols-3 lg:mt-[104px]">
+      {{ canopy.children() }}
+    </div>
+  </div>
+</section>
+{% endcanopy %}

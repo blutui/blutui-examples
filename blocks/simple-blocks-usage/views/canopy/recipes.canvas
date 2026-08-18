@@ -1,0 +1,79 @@
+{% canopy config %}
+{
+    "title": "Recipes feature",
+    "name": "recipes",
+    "settings": [
+        { "name": "anchor", "type": "text", "label": "Anchor id", "tab": "Style",
+          "help": "Used for in-page links, e.g. /#recipes. Lowercase, no spaces.",
+          "default": "recipes" },
+        { "name": "display_heading", "type": "text", "label": "Display heading", "tab": "Content",
+          "default": "Sparkling" },
+        { "name": "heading", "type": "heading", "label": "Heading", "tab": "Content",
+          "elements": [{ "value": "h2", "label": "Heading 2" }, { "value": "h3", "label": "Heading 3" }],
+          "default": { "value": "Recipes", "element": "h2" } },
+        { "name": "body", "type": "textarea", "label": "Body", "tab": "Content",
+          "default": "Try mixing Schweppes with your favorite alcohol or mixer with one of these refreshing recipes." },
+        { "name": "cta", "type": "url", "label": "Call to action", "tab": "Content",
+          "default": { "url": "/recipes", "text": "Learn more", "target": "_self" } },
+        { "name": "image", "type": "file", "label": "Drink image", "accept": "image/*", "tab": "Media" },
+        { "name": "background", "type": "file", "label": "Background image", "accept": "image/*", "tab": "Media" }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+{% set drink = settings.image.path|default(asset('images/home-buzzer.png')) %}
+{% set background = settings.background.path|default(asset('images/bg-home-recipes.jpg')) %}
+
+<section
+  id="{{ settings.anchor|lower|replace({' ': '-'}) }}" class="relative isolate overflow-hidden bg-plum">
+  <img
+    src="{{ background | image_url({ width: 1600, format: 'webp' }) }}"
+    alt=""
+    aria-hidden="true"
+    class="absolute inset-0 h-full w-full object-cover"
+  />
+
+  <div class="shell relative grid items-center gap-10 py-14 lg:grid-cols-2 lg:gap-[30px] lg:py-[0px]">
+    <div class="flex justify-center lg:justify-start">
+      <img
+        src="{{ drink | image_url({ width: 880, format: 'webp' }) }}"
+        alt="{{ settings.display_heading }} {{ settings.heading.value }}"
+        class="h-[380px] w-auto object-contain lg:h-[650px]"
+      />
+    </div>
+
+    <div class="max-w-[573px]">
+      {% if settings.display_heading %}
+        <p class="font-display text-[42px] font-bold uppercase leading-none tracking-[0.5px] text-white lg:text-[68px]">
+          {{ settings.display_heading }}
+        </p>
+      {% endif %}
+
+      <{{ settings.heading.element }}
+        class="mt-[14px] text-[28px] font-semibold leading-none text-white lg:text-[40px]"
+      >
+        {{ settings.heading.value }}
+      </{{ settings.heading.element }}>
+
+      {% if settings.body %}
+        <p class="mt-[14px] text-[19px] font-light leading-snug tracking-[0.5px] text-white lg:text-[28px]">
+          {{ settings.body }}
+        </p>
+      {% endif %}
+
+      {% if settings.cta.url %}
+        <a
+          href="{{ settings.cta.url }}"
+          target="{{ settings.cta.target }}"
+          class="pill-cta mt-[22px] bg-gold px-8 py-3 transition-transform hover:-translate-y-0.5"
+        >
+          <span class="text-[15px] font-bold italic uppercase tracking-[1px] text-gold-ink">
+            {{ settings.cta.text }}
+          </span>
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endcanopy %}

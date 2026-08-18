@@ -1,0 +1,25 @@
+{% canopy config %}
+{
+    "title": "Tasting note",
+    "name": "note",
+    "settings": [
+        { "name": "label", "type": "text", "label": "Stage", "default": "First sip" },
+        { "name": "lead", "type": "text", "label": "Lead line", "default": "Hello, lime." },
+        { "name": "body", "type": "textarea", "label": "Body",
+          "default": "A burst of bright, zesty citrus arrives first, instantly waking up your tastebuds." }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+<div class="max-w-[356px] text-heritage">
+  {% if settings.label %}
+    <p class="text-[22px] font-light uppercase leading-snug tracking-[0.5px] lg:text-[28px]">{{ settings.label }}</p>
+  {% endif %}
+
+  <div class="mt-[19px] text-[19px] leading-relaxed lg:text-[25px]">
+    {% if settings.lead %}<p class="uppercase">{{ settings.lead }}</p>{% endif %}
+    {% if settings.body %}<p>{{ settings.body }}</p>{% endif %}
+  </div>
+</div>
+{% endcanopy %}

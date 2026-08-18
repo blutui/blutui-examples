@@ -1,0 +1,78 @@
+{% canopy config %}
+{
+    "title": "Nutritional information",
+    "name": "nutrition",
+    "settings": [
+        { "name": "heading", "type": "heading", "label": "Section heading", "tab": "Content",
+          "elements": [{ "value": "h2", "label": "Heading 2" }, { "value": "h3", "label": "Heading 3" }],
+          "default": { "value": "Nutritional Information", "element": "h2" } },
+        { "name": "disclaimer", "type": "textarea", "label": "Disclaimer", "tab": "Content",
+          "default": "Indicative product formulation. Final values should be confirmed against the approved product formulation and regulatory label before publication." },
+        { "name": "footnote", "type": "textarea", "label": "Footnote", "tab": "Content",
+          "default": "*Illustrative values only. Confirm final sodium and all nutrition claims from the finished formulation and laboratory analysis." },
+        { "name": "image", "type": "file", "label": "Product image", "accept": "image/*", "tab": "Content" },
+
+        { "name": "column_nutrient", "type": "text", "label": "Column 1 heading", "tab": "Table", "default": "Nutrient" },
+        { "name": "column_serving", "type": "text", "label": "Column 2 heading", "tab": "Table", "default": "Per serving" },
+        { "name": "column_hundred", "type": "text", "label": "Column 3 heading", "tab": "Table", "default": "Per 100ml" }
+    ],
+    "children": {
+        "allow": ["nutrition/row"],
+        "default": [
+            { "block": "nutrition/row", "data": { "nutrient": "Serving size", "serving": "375ml", "hundred": "100ml" } },
+            { "block": "nutrition/row", "data": { "nutrient": "Energy", "serving": "0 kJ / 0 Cal", "hundred": "0 kJ / 0 Cal" } },
+            { "block": "nutrition/row", "data": { "nutrient": "Protein", "serving": "0g", "hundred": "0g" } },
+            { "block": "nutrition/row", "data": { "nutrient": "Fat, total", "serving": "0g", "hundred": "0g" } },
+            { "block": "nutrition/row", "data": { "nutrient": "Saturated fat", "serving": "0g", "hundred": "0g" } },
+            { "block": "nutrition/row", "data": { "nutrient": "Carbohydrate", "serving": "0g", "hundred": "0g" } },
+            { "block": "nutrition/row", "data": { "nutrient": "Sugars", "serving": "0g", "hundred": "0g" } },
+            { "block": "nutrition/row", "data": { "nutrient": "Dietary fibre", "serving": "0g", "hundred": "0g" } },
+            { "block": "nutrition/row", "data": { "nutrient": "Sodium", "serving": "6mg*", "hundred": "2mg*" } }
+        ]
+    }
+}
+{% endcanopy %}
+
+{% canopy template %}
+{% set product = settings.image.path|default(asset('images/kiwi-lime-can.png')) %}
+
+<section class="bg-white py-14 lg:py-[112px]">
+  <div class="shell flex flex-col items-center gap-10 lg:flex-row lg:justify-center lg:gap-[72px]">
+    <img
+      src="{{ product | image_url({ width: 560, format: 'webp' }) }}"
+      alt=""
+      aria-hidden="true"
+      class="h-[280px] w-auto shrink-0 object-contain lg:h-[408px]"
+    />
+
+    <div class="w-full max-w-[526px] text-heritage">
+      <{{ settings.heading.element }} class="text-[18px] font-semibold leading-tight tracking-[0.5px] lg:text-[20px]">
+        {{ settings.heading.value }}
+      </{{ settings.heading.element }}>
+
+      {% if settings.disclaimer %}
+        <p class="mt-[11px] text-[12px] italic leading-relaxed">{{ settings.disclaimer }}</p>
+      {% endif %}
+
+      <div class="mt-[31px] overflow-x-auto">
+        <table class="w-full min-w-[420px] text-left">
+          <thead>
+            <tr class="text-[16px] font-light leading-none tracking-[0.5px]">
+              <th scope="col" class="w-1/3 pb-[10px] font-light">{{ settings.column_nutrient }}</th>
+              <th scope="col" class="w-1/3 pb-[10px] font-light">{{ settings.column_serving }}</th>
+              <th scope="col" class="w-1/3 pb-[10px] font-light">{{ settings.column_hundred }}</th>
+            </tr>
+          </thead>
+          <tbody class="text-[15px] leading-relaxed">
+            {{ canopy.children() }}
+          </tbody>
+        </table>
+      </div>
+
+      {% if settings.footnote %}
+        <p class="mt-[31px] text-[12px] italic leading-relaxed">{{ settings.footnote }}</p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endcanopy %}

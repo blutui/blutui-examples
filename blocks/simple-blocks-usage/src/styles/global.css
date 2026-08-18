@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+/* Canvas templates live outside the Parcel entry graph, so point Tailwind at them. */
+@source "../../views";
+
+@theme {
+  --font-sans: "Montserrat", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: "Libre Baskerville", ui-serif, Georgia, serif;
+
+  --color-ink: #3a3a3a;
+  --color-body: #696969;
+  --color-heritage: #5ba63d;
+  --color-plum: #672146;
+  --color-warrant: #1d4489;
+  --color-silver: #cbd0d1;
+  --color-footer: #dcddde;
+  --color-off-white: #fdfdfd;
+  --color-gold: #fee05f;
+  --color-gold-ink: #737d81;
+  --color-olive: #4e6701;
+}
+
+/* In-page navigation ------------------------------------------------------ */
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Section rhythm ---------------------------------------------------------- */
+
+.shell {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .shell {
+    padding-inline: 135px;
+  }
+}
+
+/* The angled "Learn more" pill from the design ---------------------------- */
+
+.pill-cta {
+  display: inline-block;
+  transform: skewX(-12deg);
+  border-radius: 4px;
+}
+
+.pill-cta > span {
+  display: block;
+  transform: skewX(12deg);
+}
+
+.scroll-cue {
+  animation: scroll-bob 2.2s ease-in-out infinite;
+}
+
+@keyframes scroll-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-cue {
+    animation: none;
+  }
+}
