@@ -1,0 +1,57 @@
+{#
+  Shared logo / name helpers, backed by the `brand` Collection.
+
+  The collection is used as a singleton — the first entry wins — so the artist
+  name and every logo variant live in one place instead of being re-uploaded on
+  each block.
+
+  Usage in a block template:
+
+    {% import 'components/brand' as brand %}
+    {% set b = (cms.collection('brand') ?? [])|first %}
+    {% set logo = brand.logo_url(b, settings.logo_variant)|trim %}
+
+    {% if logo %}
+      <img src="{{ logo }}" alt="{{ brand.alt(b, settings.logo_text)|trim }}" />
+    {% else %}
+      {{ brand.name(b, settings.logo_text) }}
+    {% endif %}
+
+  Macros can only return strings, which is why these hand back a URL or a name
+  rather than an object — always `|trim` the result before testing it, since a
+  macro's output carries the surrounding whitespace.
+
+  Do NOT write `... ?? {}` to default the entry to an empty hash. An empty hash
+  literal after `??` is a compile-time error in Canvas, and Canopy swallows it
+  into a blank section with no message. `b` being null is fine: reading a field
+  off it yields an empty string, and every macro here tolerates it.
+#}
+
+{#
+  Resolve a logo variant to a URL, falling back to the primary logo when the
+  requested variant hasn't been uploaded. Returns an empty string if the brand
+  collection has no logo at all, which is the signal to render text instead.
+
+  Width only — no format conversion — because logos are often SVG and
+  re-encoding them to webp would throw away the resolution independence.
+#}
+{% macro logo_url(b, variant) %}
+  {%- set variants = {
+      'primary': b.logo,
+      'light': b.logo_light ?: b.logo,
+      'dark': b.logo_dark ?: b.logo,
+      'wordmark': b.wordmark ?: b.logo,
+      'symbol': b.symbol ?: b.logo
+  } -%}
+  {%- set file = variants[variant] ?? b.logo -%}
+  {%- if file -%}{{ file | image_url({ width: 900 }) }}{%- endif -%}
+{% endmacro %}
+
+{# The artist name, from the collection where set, otherwise the block's own. #}
+{% macro name(b, fallback) %}{{- b.name ?: (fallback ?: '') -}}{% endmacro %}
+
+{# Alt text for a logo image: explicit description, then name, then fallback. #}
+{% macro alt(b, fallback) %}{{- b.logo_alt ?: (b.name ?: (fallback ?: '')) -}}{% endmacro %}
+
+{# Tagline, from the collection where set, otherwise the block's own. #}
+{% macro tagline(b, fallback) %}{{- b.tagline ?: (fallback ?: '') -}}{% endmacro %}

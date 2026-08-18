@@ -1,0 +1,263 @@
+{% canopy config %}
+{
+    "title": "Site Footer",
+    "name": "footer",
+    "settings": [
+        {
+            "name": "layout",
+            "type": "select",
+            "label": "Layout",
+            "tab": "Content",
+            "options": [
+                { "value": "big", "label": "Big — oversized name, links, socials" },
+                { "value": "columns", "label": "Columns — logo, nav, socials" },
+                { "value": "poster", "label": "Poster — name fills the width" },
+                { "value": "stacked", "label": "Stacked — centred, sign-up first" },
+                { "value": "corners", "label": "Corners — legal left, links right" },
+                { "value": "minimal", "label": "Minimal — one line" }
+            ],
+            "default": "big"
+        },
+        {
+            "name": "logo_source",
+            "type": "radio",
+            "label": "Name / logo",
+            "tab": "Content",
+            "group": "Logo",
+            "options": [
+                { "value": "brand", "label": "From the Brand collection" },
+                { "value": "upload", "label": "Upload one here" },
+                { "value": "text", "label": "Text only" }
+            ],
+            "default": "brand"
+        },
+        {
+            "name": "logo_variant",
+            "type": "select",
+            "label": "Which version",
+            "tab": "Content",
+            "group": "Logo",
+            "options": [
+                { "value": "primary", "label": "Primary logo" },
+                { "value": "light", "label": "Light — for dark backgrounds" },
+                { "value": "dark", "label": "Dark — for light backgrounds" },
+                { "value": "wordmark", "label": "Wordmark" },
+                { "value": "symbol", "label": "Symbol / icon" }
+            ],
+            "default": "primary"
+        },
+        { "name": "logo", "type": "file", "label": "Logo image", "accept": "image/*", "tab": "Content", "group": "Logo" },
+        { "name": "logo_text", "type": "text", "label": "Name", "tab": "Content", "group": "Logo", "default": "ARTIST NAME" },
+        { "name": "tagline", "type": "textarea", "label": "Tagline", "tab": "Content", "default": "New album out now. Catch us on tour." },
+        { "name": "menu_handle", "type": "text", "label": "Menu handle", "tab": "Content", "default": "footer" },
+        { "name": "legal", "type": "text", "label": "Legal line", "tab": "Content", "default": "© Artist Name. All rights reserved." },
+        { "name": "credit", "type": "url", "label": "Credit link", "tab": "Content", "default": { "url": "", "text": "", "target": "_blank" } },
+        { "name": "cta", "type": "url", "label": "Footer button", "tab": "Content", "default": { "url": "", "text": "Sign up", "target": "_self" } },
+        { "name": "show_logo", "type": "checkbox", "label": "Show the name / logo", "tab": "Visibility", "default": true },
+        { "name": "show_tagline", "type": "checkbox", "label": "Show the tagline", "tab": "Visibility", "default": true },
+        { "name": "show_nav", "type": "checkbox", "label": "Show the navigation", "tab": "Visibility", "default": true },
+        { "name": "show_socials", "type": "checkbox", "label": "Show the social links", "tab": "Visibility", "default": true },
+        { "name": "show_legal", "type": "checkbox", "label": "Show the legal line", "tab": "Visibility", "default": true },
+        { "name": "show_cta", "type": "checkbox", "label": "Show the footer button", "tab": "Visibility", "default": false },
+        { "name": "spotify", "type": "url", "label": "Spotify", "tab": "Social", "group": "Social links", "default": { "url": "", "text": "Spotify", "target": "_blank" } },
+        { "name": "apple", "type": "url", "label": "Apple Music", "tab": "Social", "group": "Social links", "default": { "url": "", "text": "Apple Music", "target": "_blank" } },
+        { "name": "youtube", "type": "url", "label": "YouTube", "tab": "Social", "group": "Social links", "default": { "url": "", "text": "YouTube", "target": "_blank" } },
+        { "name": "instagram", "type": "url", "label": "Instagram", "tab": "Social", "group": "Social links", "default": { "url": "", "text": "Instagram", "target": "_blank" } },
+        { "name": "tiktok", "type": "url", "label": "TikTok", "tab": "Social", "group": "Social links", "default": { "url": "", "text": "TikTok", "target": "_blank" } },
+        { "name": "bandcamp", "type": "url", "label": "Bandcamp", "tab": "Social", "group": "Social links", "default": { "url": "", "text": "Bandcamp", "target": "_blank" } },
+        { "name": "soundcloud", "type": "url", "label": "SoundCloud", "tab": "Social", "group": "Social links", "default": { "url": "", "text": "SoundCloud", "target": "_blank" } },
+        {
+            "name": "tone",
+            "type": "select",
+            "label": "Background",
+            "tab": "Style",
+            "options": [
+                { "value": "default", "label": "Page background" },
+                { "value": "surface", "label": "Card colour" },
+                { "value": "accent", "label": "Accent" },
+                { "value": "accent-2", "label": "Second accent" },
+                { "value": "invert", "label": "Inverted" }
+            ],
+            "default": "surface"
+        },
+        { "name": "border", "type": "checkbox", "label": "Show top border", "tab": "Style", "default": true },
+        {
+            "name": "social_style",
+            "type": "radio",
+            "label": "Social link style",
+            "tab": "Style",
+            "options": [
+                { "value": "pill", "label": "Pills" },
+                { "value": "plain", "label": "Plain text" }
+            ],
+            "default": "pill"
+        }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+{% set tones = {
+    'default': 'bg-bg text-ink',
+    'surface': 'bg-surface text-ink',
+    'accent': 'bg-accent text-on-accent',
+    'accent-2': 'bg-accent-2 text-on-accent-2',
+    'invert': 'bg-ink text-bg'
+} %}
+{% set tone_class = tones[settings.tone] ?? tones['surface'] %}
+{% set nav = cms.menu(settings.menu_handle ?? 'footer') %}
+{% set items = (settings.show_nav and nav and nav.items) ? nav.items | filter(i => i.active) : [] %}
+{% set socials = settings.show_socials
+    ? [settings.spotify, settings.apple, settings.youtube, settings.instagram, settings.tiktok, settings.bandcamp, settings.soundcloud] | filter(s => s.url)
+    : [] %}
+{% set layout = settings.layout ?? 'big' %}
+{% set has_cta = settings.show_cta and settings.cta.url %}
+
+{# ---- Name / logo, from the Brand collection or from this block ----
+   See views/components/brand.html. `b` is null when the collection is empty;
+   never default it with `?? {}`, which is a compile-time error in Canvas. #}
+{% import 'components/brand' as brand %}
+{% set b = (cms.collection('brand') ?? [])|first %}
+
+{% if settings.logo_source == 'upload' %}
+  {% set logo_src = settings.logo.path ?? '' %}
+{% elseif settings.logo_source == 'text' %}
+  {% set logo_src = '' %}
+{% else %}
+  {% set logo_src = brand.logo_url(b, settings.logo_variant)|trim %}
+{% endif %}
+
+{% if settings.logo_source == 'brand' %}
+  {% set logo_name = brand.name(b, settings.logo_text)|trim %}
+  {% set tagline = brand.tagline(b, settings.tagline)|trim %}
+{% else %}
+  {% set logo_name = settings.logo_text ?: brand.name(b, '')|trim %}
+  {% set tagline = settings.tagline %}
+{% endif %}
+
+{% import _self as ui %}
+
+{% macro name_mark(src, name, size) %}
+  {% if src %}
+    <img src="{{ src }}" alt="{{ name }}" class="h-10 w-auto" />
+  {% else %}
+    <p class="font-heading {{ size }} leading-none">{{ name }}</p>
+  {% endif %}
+{% endmacro %}
+
+{% macro social_links(socials, style) %}
+  {% for link in socials %}
+    <a
+      href="{{ link.url }}"
+      target="{{ link.target }}"
+      rel="noopener"
+      class="{{ style == 'plain' ? 'nav-link opacity-70 hover:opacity-100' : 'pill' }}"
+    >{{ link.text }}</a>
+  {% endfor %}
+{% endmacro %}
+
+{% macro nav_links(items, klass) %}
+  {% for item in items %}
+    <a
+      href="{{ item.href }}"
+      class="{{ klass }}"
+      {% if item.opens_new_tab %}target="_blank" rel="noopener"{% endif %}
+    >{{ item.label }}</a>
+  {% endfor %}
+{% endmacro %}
+
+<footer class="{{ tone_class }} {{ settings.border ? 'border-t border-line' : '' }}">
+  <div class="wrap {{ layout == 'corners' ? 'py-6' : 'py-14 sm:py-20' }}">
+
+    {# ---------------- Poster — the name at maximum size ---------------- #}
+    {% if layout == 'poster' %}
+      {% if settings.show_logo %}
+        <p class="font-heading text-[13vw] leading-[0.85] break-words">{{ logo_name }}</p>
+      {% endif %}
+
+      <div class="mt-10 flex flex-col gap-6 border-t border-line pt-8 md:flex-row md:items-center md:justify-between">
+        <div class="flex flex-wrap gap-x-6 gap-y-2">
+          {{ ui.nav_links(items, 'nav-link opacity-70 hover:opacity-100') }}
+        </div>
+        <div class="flex flex-wrap gap-2">{{ ui.social_links(socials, settings.social_style) }}</div>
+      </div>
+
+    {# ---------------- Stacked — centred, button first ---------------- #}
+    {% elseif layout == 'stacked' %}
+      <div class="flex flex-col items-center gap-6 text-center">
+        {% if settings.show_logo %}{{ ui.name_mark(logo_src, logo_name, 'text-4xl sm:text-6xl') }}{% endif %}
+        {% if settings.show_tagline and tagline %}
+          <p class="max-w-xl text-base opacity-70">{{ tagline }}</p>
+        {% endif %}
+        {% if has_cta %}
+          <a href="{{ settings.cta.url }}" target="{{ settings.cta.target }}" class="btn btn-primary">{{ settings.cta.text }}</a>
+        {% endif %}
+        {% if socials|length %}
+          <div class="flex flex-wrap justify-center gap-2">{{ ui.social_links(socials, settings.social_style) }}</div>
+        {% endif %}
+        {% if items|length %}
+          <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 border-t border-line pt-6">
+            {{ ui.nav_links(items, 'nav-link opacity-70 hover:opacity-100') }}
+          </div>
+        {% endif %}
+      </div>
+
+    {# ---------------- Big — oversized name beside the socials ---------------- #}
+    {% elseif layout == 'big' %}
+      <div class="flex flex-col gap-10 border-b border-line pb-10 md:flex-row md:items-end md:justify-between">
+        <div class="max-w-xl">
+          {% if settings.show_logo %}{{ ui.name_mark(logo_src, logo_name, 'text-5xl sm:text-7xl lg:text-8xl') }}{% endif %}
+          {% if settings.show_tagline and tagline %}
+            <p class="mt-5 text-base opacity-70">{{ tagline }}</p>
+          {% endif %}
+          {% if has_cta %}
+            <a href="{{ settings.cta.url }}" target="{{ settings.cta.target }}" class="btn btn-primary mt-6">{{ settings.cta.text }}</a>
+          {% endif %}
+        </div>
+        {% if socials|length %}
+          <div class="flex flex-wrap gap-2">{{ ui.social_links(socials, settings.social_style) }}</div>
+        {% endif %}
+      </div>
+
+    {# ---------------- Columns ---------------- #}
+    {% elseif layout == 'columns' %}
+      <div class="grid gap-10 border-b border-line pb-10 sm:grid-cols-3">
+        <div>
+          {% if settings.show_logo %}{{ ui.name_mark(logo_src, logo_name, 'text-2xl') }}{% endif %}
+          {% if settings.show_tagline and tagline %}
+            <p class="mt-3 text-sm opacity-70">{{ tagline }}</p>
+          {% endif %}
+          {% if has_cta %}
+            <a href="{{ settings.cta.url }}" target="{{ settings.cta.target }}" class="btn btn-primary btn-sm mt-5">{{ settings.cta.text }}</a>
+          {% endif %}
+        </div>
+        <div class="flex flex-col items-start gap-2">
+          {{ ui.nav_links(items, 'nav-link opacity-70 hover:opacity-100') }}
+        </div>
+        <div class="flex flex-col items-start gap-2">
+          {{ ui.social_links(socials, 'plain') }}
+        </div>
+      </div>
+    {% endif %}
+
+    {# ---------------- Bottom bar ----------------
+       `corners` and `minimal` are only this bar; the others get it underneath
+       whatever they rendered above. #}
+    <div
+      class="flex flex-col gap-4 text-sm opacity-60 sm:flex-row sm:items-center sm:justify-between {{ layout in ['corners', 'minimal'] ? '' : 'pt-8' }}"
+    >
+      {% if settings.show_legal %}<p>{{ settings.legal }}</p>{% endif %}
+
+      {% if layout in ['corners', 'minimal'] %}
+        <div class="flex flex-wrap gap-x-5 gap-y-2">
+          {{ ui.nav_links(items, 'nav-link hover:opacity-100') }}
+          {{ ui.social_links(socials, 'plain') }}
+        </div>
+      {% elseif settings.credit.url %}
+        <a href="{{ settings.credit.url }}" target="{{ settings.credit.target }}" rel="noopener" class="nav-link">{{ settings.credit.text }}</a>
+      {% endif %}
+    </div>
+  </div>
+</footer>
+{% endcanopy %}
+

@@ -1,0 +1,442 @@
+{% canopy config %}
+{
+    "title": "Articles & Press (Collection)",
+    "name": "articles",
+    "settings": [
+        {
+            "name": "layout",
+            "type": "select",
+            "label": "Layout",
+            "tab": "Content",
+            "options": [
+                { "value": "grid", "label": "Grid — cards with images" },
+                { "value": "magazine", "label": "Magazine — lead story, then a list" },
+                { "value": "list", "label": "List — one per row" },
+                { "value": "press", "label": "Press — dated rows, expandable, with PDFs" },
+                { "value": "featured", "label": "Featured — one story, large" }
+            ],
+            "default": "grid"
+        },
+        { "name": "eyebrow", "type": "text", "label": "Eyebrow", "tab": "Content", "default": "News" },
+        { "name": "heading", "type": "heading", "label": "Heading", "tab": "Content", "default": { "value": "Latest", "element": "h2" }, "elements": [{ "value": "h2", "label": "H2" }, { "value": "h3", "label": "H3" }] },
+        { "name": "intro", "type": "textarea", "label": "Intro", "tab": "Content", "default": "" },
+        { "name": "show_header", "type": "checkbox", "label": "Show the heading", "tab": "Content", "default": true },
+        { "name": "cta_label", "type": "text", "label": "Read link label", "tab": "Content", "default": "Read" },
+        { "name": "expand_label", "type": "text", "label": "Expand label (press layout)", "tab": "Content", "default": "Read the full release" },
+        { "name": "empty_text", "type": "text", "label": "Text shown when there's nothing to list", "tab": "Content", "default": "Nothing published yet." },
+        { "name": "footer_cta", "type": "url", "label": "Button below the list", "tab": "Content", "default": { "url": "", "text": "", "target": "_self" } },
+        {
+            "name": "collection_handle",
+            "type": "select",
+            "label": "Collection",
+            "tab": "Stories",
+            "options": [
+                { "value": "articles", "label": "Articles" },
+                { "value": "press_releases", "label": "Press Releases" }
+            ],
+            "default": "articles"
+        },
+        {
+            "name": "sort",
+            "type": "select",
+            "label": "Order",
+            "tab": "Stories",
+            "options": [
+                { "value": "newest", "label": "Newest first" },
+                { "value": "oldest", "label": "Oldest first" },
+                { "value": "manual", "label": "Manual order field" },
+                { "value": "title", "label": "Headline, A–Z" }
+            ],
+            "default": "newest"
+        },
+        {
+            "name": "filter_type",
+            "type": "select",
+            "label": "Only show this type",
+            "tab": "Stories",
+            "options": [
+                { "value": "all", "label": "All types" },
+                { "value": "News", "label": "News" },
+                { "value": "Interview", "label": "Interview" },
+                { "value": "Review", "label": "Review" },
+                { "value": "Feature", "label": "Feature" },
+                { "value": "Announcement", "label": "Announcement" },
+                { "value": "Release", "label": "Release" },
+                { "value": "Statement", "label": "Statement" },
+                { "value": "Media kit", "label": "Media kit" }
+            ],
+            "default": "all"
+        },
+        { "name": "featured_only", "type": "checkbox", "label": "Only show featured items", "tab": "Stories", "default": false },
+        { "name": "limit", "type": "number", "label": "Maximum items (0 = no limit)", "tab": "Stories", "min": 0, "max": 100, "default": 0 },
+        { "name": "date_format", "type": "text", "label": "Date format", "tab": "Stories", "default": "j M Y" },
+        { "name": "show_image", "type": "checkbox", "label": "Show the image", "tab": "Visibility", "default": true },
+        { "name": "show_source", "type": "checkbox", "label": "Show the publication", "tab": "Visibility", "default": true },
+        { "name": "show_author", "type": "checkbox", "label": "Show the author", "tab": "Visibility", "default": false },
+        { "name": "show_date", "type": "checkbox", "label": "Show the date", "tab": "Visibility", "default": true },
+        { "name": "show_type", "type": "checkbox", "label": "Show the type badge", "tab": "Visibility", "default": false },
+        { "name": "show_excerpt", "type": "checkbox", "label": "Show the excerpt", "tab": "Visibility", "default": true },
+        { "name": "show_body", "type": "checkbox", "label": "Show the full text where there's no link", "tab": "Visibility", "default": true },
+        { "name": "show_files", "type": "checkbox", "label": "Show the PDF download", "tab": "Visibility", "default": true },
+        { "name": "show_contact", "type": "checkbox", "label": "Show the press contact", "tab": "Visibility", "default": false },
+        {
+            "name": "columns",
+            "type": "select",
+            "label": "Grid columns",
+            "tab": "Appearance",
+            "options": [
+                { "value": "2", "label": "Two" },
+                { "value": "3", "label": "Three" },
+                { "value": "4", "label": "Four" }
+            ],
+            "default": "3"
+        },
+        {
+            "name": "ratio",
+            "type": "select",
+            "label": "Image shape",
+            "tab": "Appearance",
+            "options": [
+                { "value": "landscape", "label": "Landscape" },
+                { "value": "square", "label": "Square" },
+                { "value": "wide", "label": "Widescreen" },
+                { "value": "portrait", "label": "Portrait" }
+            ],
+            "default": "landscape"
+        },
+        {
+            "name": "card_style",
+            "type": "radio",
+            "label": "Item style",
+            "tab": "Appearance",
+            "options": [
+                { "value": "plain", "label": "Plain" },
+                { "value": "card", "label": "Card" }
+            ],
+            "default": "plain"
+        },
+        {
+            "name": "tone",
+            "type": "select",
+            "label": "Background",
+            "tab": "Style",
+            "options": [
+                { "value": "default", "label": "Page background" },
+                { "value": "surface", "label": "Card colour" },
+                { "value": "accent", "label": "Accent" },
+                { "value": "invert", "label": "Inverted" },
+                { "value": "custom", "label": "Custom colours" }
+            ],
+            "default": "default"
+        },
+        { "name": "bg_color", "type": "color", "label": "Custom background", "tab": "Style", "group": "Custom colours", "default": "#15151f" },
+        { "name": "text_color", "type": "color", "label": "Custom text", "tab": "Style", "group": "Custom colours", "default": "#f4f4f6" },
+        {
+            "name": "spacing",
+            "type": "select",
+            "label": "Vertical spacing",
+            "tab": "Style",
+            "options": [
+                { "value": "none", "label": "None" },
+                { "value": "sm", "label": "Small" },
+                { "value": "md", "label": "Medium" },
+                { "value": "lg", "label": "Large" },
+                { "value": "xl", "label": "Extra large" }
+            ],
+            "default": "lg"
+        },
+        {
+            "name": "align",
+            "type": "radio",
+            "label": "Header alignment",
+            "tab": "Style",
+            "options": [
+                { "value": "left", "label": "Left" },
+                { "value": "center", "label": "Centre" }
+            ],
+            "default": "left"
+        },
+        { "name": "anchor", "type": "text", "label": "Anchor ID (for menu links)", "tab": "Style", "default": "news" }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+{#
+  One block for two collections: `articles` (news and press coverage) and
+  `press_releases`. They share the fields the layouts read — title, excerpt,
+  image, source, date, url, body, type — and the press layout additionally
+  picks up the PDF and press contact that only press releases carry.
+
+  An item with an external link points at it; one without shows its own text
+  in an expandable panel, so a release can live on the page without needing a
+  detail route.
+
+  Guard the lookup with `?? []` — an unknown handle returns null, and piping
+  null into |filter throws, which Canopy swallows into a blank section.
+#}
+{% set tones = {
+    'default': 'bg-bg text-ink',
+    'surface': 'bg-surface text-ink',
+    'accent': 'bg-accent text-on-accent',
+    'invert': 'bg-ink text-bg'
+} %}
+{% set pads = { 'none': 'py-0', 'sm': 'py-10 sm:py-12', 'md': 'py-16 sm:py-20', 'lg': 'py-24 sm:py-28', 'xl': 'py-32 sm:py-40' } %}
+{% set cols = { '2': 'sm:grid-cols-2', '3': 'sm:grid-cols-2 lg:grid-cols-3', '4': 'sm:grid-cols-2 lg:grid-cols-4' } %}
+{% set ratios = { 'landscape': 'aspect-3/2', 'square': 'aspect-square', 'wide': 'aspect-video', 'portrait': 'aspect-4/5' } %}
+
+{% set tone_class = settings.tone == 'custom' ? '' : (tones[settings.tone] ?? tones['default']) %}
+{% set tone_style = settings.tone == 'custom' ? 'background-color:' ~ settings.bg_color ~ ';color:' ~ settings.text_color ~ ';' : '' %}
+{% set pad_class = pads[settings.spacing] ?? pads['lg'] %}
+{% set col_class = cols[settings.columns] ?? cols['3'] %}
+{% set align_class = settings.align == 'center' ? 'text-center mx-auto max-w-2xl' : '' %}
+{% set el = settings.heading.element ?? 'h2' %}
+{% set layout = settings.layout ?? 'grid' %}
+
+{% set cfg = {
+    'ratio': ratios[settings.ratio] ?? ratios['landscape'],
+    'card': settings.card_style == 'card' ? 'card p-5' : '',
+    'cta_label': settings.cta_label ?: 'Read',
+    'expand_label': settings.expand_label ?: 'Read more',
+    'date_format': settings.date_format ?: 'j M Y',
+    'show_image': settings.show_image,
+    'show_source': settings.show_source,
+    'show_author': settings.show_author,
+    'show_date': settings.show_date,
+    'show_type': settings.show_type,
+    'show_excerpt': settings.show_excerpt,
+    'show_body': settings.show_body,
+    'show_files': settings.show_files,
+    'show_contact': settings.show_contact
+} %}
+
+{% set items = cms.collection(settings.collection_handle ?? 'articles') ?? [] %}
+
+{% if settings.filter_type != 'all' %}
+  {% set items = items|filter(i => i.type == settings.filter_type) %}
+{% endif %}
+{% if settings.featured_only %}
+  {% set items = items|filter(i => i.featured == 'Yes') %}
+{% endif %}
+
+{% if settings.sort == 'title' %}
+  {% set items = items|sort((a, b) => a.title <=> b.title) %}
+{% elseif settings.sort == 'manual' %}
+  {% set items = items|sort((a, b) => (a.order ?? 0) <=> (b.order ?? 0)) %}
+{% elseif settings.sort == 'oldest' %}
+  {% set items = items|sort((a, b) => (a.date|date('U')) <=> (b.date|date('U'))) %}
+{% else %}
+  {% set items = items|sort((a, b) => (b.date|date('U')) <=> (a.date|date('U'))) %}
+{% endif %}
+
+{% if layout == 'featured' %}
+  {% set items = items|slice(0, 1) %}
+{% elseif settings.limit > 0 %}
+  {% set items = items|slice(0, settings.limit) %}
+{% endif %}
+
+{% import _self as ui %}
+
+{% macro image(item, cfg, ratio) %}
+  {% if cfg.show_image and item.image %}
+    <img
+      src="{{ item.image | image_url({ width: 1200, format: 'webp' }) }}"
+      alt="{{ item.title }}"
+      loading="lazy"
+      class="{{ ratio }} w-full rounded-theme object-cover"
+    />
+  {% endif %}
+{% endmacro %}
+
+{% macro meta(item, cfg) %}
+  {% set bits = [
+      cfg.show_source ? (item.source ?? '') : '',
+      cfg.show_author ? (item.author ?? '') : '',
+      (cfg.show_date and item.date) ? item.date|date(cfg.date_format) : ''
+  ] | filter(b => b is not empty) %}
+  {% if bits|length or (cfg.show_type and item.type) %}
+    <p class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs tracking-[0.12em] uppercase opacity-50">
+      {% if cfg.show_type and item.type %}
+        <span class="rounded-theme border border-line px-2 py-0.5 not-italic">{{ item.type }}</span>
+      {% endif %}
+      {% for bit in bits %}<span>{{ bit }}</span>{% endfor %}
+    </p>
+  {% endif %}
+{% endmacro %}
+
+{% macro links(item, cfg) %}
+  <div class="mt-4 flex flex-wrap items-center gap-4">
+    {% if item.url %}
+      <a href="{{ item.url }}" target="_blank" rel="noopener" class="text-sm font-semibold text-accent no-underline hover:underline">{{ cfg.cta_label }} &rarr;</a>
+    {% endif %}
+    {% if cfg.show_files and item.file %}
+      <a href="{{ item.file }}" download class="text-sm font-semibold no-underline opacity-70 hover:underline hover:opacity-100">PDF</a>
+    {% endif %}
+  </div>
+{% endmacro %}
+
+{% macro contact(item, cfg) %}
+  {% if cfg.show_contact and (item.contact_name or item.contact_email) %}
+    <p class="mt-3 text-xs opacity-50">
+      Press enquiries: {{ item.contact_name }}
+      {% if item.contact_email %}
+        <a href="mailto:{{ item.contact_email }}" class="underline">{{ item.contact_email }}</a>
+      {% endif %}
+    </p>
+  {% endif %}
+{% endmacro %}
+
+<section
+  {% if settings.anchor %}id="{{ settings.anchor }}"{% endif %}
+  class="{{ tone_class }}"
+  {% if tone_style %}style="{{ tone_style }}"{% endif %}
+>
+  <div class="wrap {{ pad_class }}">
+
+    {% if settings.show_header %}
+      <div class="{{ align_class }}">
+        {% if settings.eyebrow %}<span class="eyebrow text-accent">{{ settings.eyebrow }}</span>{% endif %}
+        <{{ el }} class="mt-3 text-4xl text-balance sm:text-5xl">{{ settings.heading.value }}</{{ el }}>
+        {% if settings.intro %}<p class="mt-4 text-lg opacity-70">{{ settings.intro }}</p>{% endif %}
+      </div>
+    {% endif %}
+
+    {% if items|length %}
+
+      {# ---------------- Featured — one story, large ---------------- #}
+      {% if layout == 'featured' %}
+        {% set item = items|first %}
+        <div class="mt-12 grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          {{ ui.image(item, cfg, cfg.ratio) }}
+          <div>
+            {{ ui.meta(item, cfg) }}
+            <p class="font-heading mt-3 text-3xl leading-tight text-balance sm:text-4xl">{{ item.title }}</p>
+            {% if cfg.show_excerpt and item.excerpt %}
+              <p class="mt-4 text-lg leading-relaxed opacity-70">{{ item.excerpt }}</p>
+            {% endif %}
+            {% if cfg.show_body and item.body and not item.url %}
+              <div class="rich mt-4">{{ item.body|raw }}</div>
+            {% endif %}
+            {{ ui.links(item, cfg) }}
+            {{ ui.contact(item, cfg) }}
+          </div>
+        </div>
+
+      {# ---------------- Press — dated rows, expandable ---------------- #}
+      {% elseif layout == 'press' %}
+        <ul class="mt-12 list-none">
+          {% for item in items %}
+            <li class="border-b border-line py-6 first:border-t">
+              <div class="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:gap-8">
+                {% if cfg.show_date and item.date %}
+                  <span class="shrink-0 text-sm font-semibold tracking-wide text-accent uppercase sm:w-32">{{ item.date|date(cfg.date_format) }}</span>
+                {% endif %}
+                <div class="min-w-0 flex-1">
+                  <p class="font-heading text-xl leading-tight">{{ item.title }}</p>
+                  {% if cfg.show_excerpt and item.excerpt %}
+                    <p class="mt-2 opacity-70">{{ item.excerpt }}</p>
+                  {% endif %}
+
+                  {% if cfg.show_body and item.body %}
+                    <details class="group mt-3">
+                      <summary class="cursor-pointer text-sm font-semibold text-accent marker:content-none">
+                        {{ cfg.expand_label }}
+                        <span class="inline-block transition-transform group-open:rotate-90" aria-hidden="true">&rsaquo;</span>
+                      </summary>
+                      <div class="rich mt-4 max-w-3xl">{{ item.body|raw }}</div>
+                    </details>
+                  {% endif %}
+
+                  {{ ui.links(item, cfg) }}
+                  {{ ui.contact(item, cfg) }}
+                </div>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+
+      {# ---------------- List ---------------- #}
+      {% elseif layout == 'list' %}
+        <ul class="mt-12 list-none">
+          {% for item in items %}
+            <li class="flex flex-col gap-6 border-b border-line py-8 first:border-t sm:flex-row">
+              {% if cfg.show_image and item.image %}
+                <div class="w-full shrink-0 sm:w-52">{{ ui.image(item, cfg, 'aspect-3/2') }}</div>
+              {% endif %}
+              <div class="min-w-0 flex-1">
+                {{ ui.meta(item, cfg) }}
+                <p class="font-heading mt-2 text-2xl leading-tight">{{ item.title }}</p>
+                {% if cfg.show_excerpt and item.excerpt %}
+                  <p class="mt-2 opacity-70">{{ item.excerpt }}</p>
+                {% endif %}
+                {{ ui.links(item, cfg) }}
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+
+      {# ---------------- Magazine — lead story, then the rest ---------------- #}
+      {% elseif layout == 'magazine' %}
+        {% set lead = items|first %}
+        {% set rest = items|slice(1) %}
+
+        <div class="mt-12 grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          {{ ui.image(lead, cfg, cfg.ratio) }}
+          <div>
+            {{ ui.meta(lead, cfg) }}
+            <p class="font-heading mt-3 text-3xl leading-tight text-balance sm:text-4xl">{{ lead.title }}</p>
+            {% if cfg.show_excerpt and lead.excerpt %}
+              <p class="mt-4 text-lg leading-relaxed opacity-70">{{ lead.excerpt }}</p>
+            {% endif %}
+            {{ ui.links(lead, cfg) }}
+          </div>
+        </div>
+
+        {% if rest|length %}
+          <ul class="mt-14 list-none">
+            {% for item in rest %}
+              <li class="flex flex-col gap-2 border-b border-line py-5 first:border-t sm:flex-row sm:items-baseline sm:gap-8">
+                <div class="min-w-0 flex-1">
+                  <p class="font-heading text-lg leading-tight">{{ item.title }}</p>
+                  {{ ui.meta(item, cfg) }}
+                </div>
+                {% if item.url %}
+                  <a href="{{ item.url }}" target="_blank" rel="noopener" class="shrink-0 text-sm font-semibold no-underline hover:underline">{{ cfg.cta_label }} &rarr;</a>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+      {# ---------------- Grid ---------------- #}
+      {% else %}
+        <div class="mt-12 grid gap-8 {{ col_class }}">
+          {% for item in items %}
+            <article class="flex flex-col {{ cfg.card }}">
+              {{ ui.image(item, cfg, cfg.ratio) }}
+              <div class="mt-4 flex flex-1 flex-col">
+                {{ ui.meta(item, cfg) }}
+                <p class="font-heading mt-2 text-xl leading-tight">{{ item.title }}</p>
+                {% if cfg.show_excerpt and item.excerpt %}
+                  <p class="mt-2 text-sm opacity-60">{{ item.excerpt }}</p>
+                {% endif %}
+                <div class="mt-auto">{{ ui.links(item, cfg) }}</div>
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if settings.footer_cta.url %}
+        <div class="mt-12 {{ settings.align == 'center' ? 'text-center' : '' }}">
+          <a href="{{ settings.footer_cta.url }}" target="{{ settings.footer_cta.target }}" class="btn btn-outline">{{ settings.footer_cta.text }}</a>
+        </div>
+      {% endif %}
+
+    {% else %}
+      <p class="mt-10 text-lg opacity-60">{{ settings.empty_text }}</p>
+    {% endif %}
+  </div>
+</section>
+{% endcanopy %}
+

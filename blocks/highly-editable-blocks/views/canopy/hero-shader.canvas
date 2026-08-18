@@ -1,0 +1,332 @@
+{% canopy config %}
+{
+    "title": "Hero (Animated Shader)",
+    "name": "hero-shader",
+    "settings": [
+        {
+            "name": "preset",
+            "type": "select",
+            "label": "Shader",
+            "tab": "Shader",
+            "options": [
+                { "value": "mesh", "label": "Liquid mesh — flowing colour, marbled" },
+                { "value": "warp", "label": "Warp — smoky, swirling bands" },
+                { "value": "grain", "label": "Grain gradient — risograph-style" },
+                { "value": "rays", "label": "God rays — light from the centre" },
+                { "value": "swirl", "label": "Swirl — twisting concentric bands" },
+                { "value": "dither", "label": "Dither — lo-fi two-tone print" }
+            ],
+            "default": "mesh"
+        },
+        { "name": "color_1", "type": "color", "label": "Colour 1", "tab": "Shader", "group": "Colours", "default": "#7c5cff" },
+        { "name": "color_2", "type": "color", "label": "Colour 2", "tab": "Shader", "group": "Colours", "default": "#ff2d95" },
+        { "name": "color_3", "type": "color", "label": "Colour 3", "tab": "Shader", "group": "Colours", "default": "#00f0ff" },
+        { "name": "color_4", "type": "color", "label": "Colour 4", "tab": "Shader", "group": "Colours", "default": "#0b0b12" },
+        { "name": "color_5", "type": "color", "label": "Colour 5", "tab": "Shader", "group": "Colours", "default": "#000000" },
+        { "name": "use_color_3", "type": "checkbox", "label": "Use colour 3", "tab": "Shader", "group": "Colours", "default": true },
+        { "name": "use_color_4", "type": "checkbox", "label": "Use colour 4", "tab": "Shader", "group": "Colours", "default": true },
+        { "name": "use_color_5", "type": "checkbox", "label": "Use colour 5", "tab": "Shader", "group": "Colours", "default": false },
+        { "name": "color_back", "type": "color", "label": "Backdrop (God rays, Swirl, Dither, Grain)", "tab": "Shader", "group": "Colours", "default": "#000000" },
+        {
+            "name": "shape",
+            "type": "select",
+            "label": "Pattern variation",
+            "tab": "Shader",
+            "group": "Motion",
+            "options": [
+                { "value": "default", "label": "Default for this shader" },
+                { "value": "wave", "label": "Wave (Grain)" },
+                { "value": "dots", "label": "Dots (Grain)" },
+                { "value": "truchet", "label": "Truchet (Grain)" },
+                { "value": "corners", "label": "Corners (Grain)" },
+                { "value": "ripple", "label": "Ripple (Grain, Dither)" },
+                { "value": "blob", "label": "Blob (Grain)" },
+                { "value": "sphere", "label": "Sphere (Grain, Dither)" },
+                { "value": "simplex", "label": "Simplex noise (Dither)" },
+                { "value": "swirl", "label": "Swirl (Dither)" },
+                { "value": "checks", "label": "Checks (Warp)" },
+                { "value": "stripes", "label": "Stripes (Warp)" },
+                { "value": "edge", "label": "Edge (Warp)" }
+            ],
+            "default": "default"
+        },
+        { "name": "speed", "type": "number", "label": "Speed (0 = still)", "tab": "Shader", "group": "Motion", "min": 0, "max": 3, "step": "0.1", "default": 0.6 },
+        { "name": "scale", "type": "number", "label": "Zoom", "tab": "Shader", "group": "Motion", "min": 0.1, "max": 4, "step": "0.1", "default": 1 },
+        { "name": "rotation", "type": "number", "label": "Rotation (degrees)", "tab": "Shader", "group": "Motion", "min": 0, "max": 360, "default": 0 },
+        { "name": "intensity", "type": "number", "label": "Intensity (%)", "tab": "Shader", "group": "Motion", "min": 0, "max": 100, "default": 60 },
+        { "name": "distortion", "type": "number", "label": "Distortion (%)", "tab": "Shader", "group": "Motion", "min": 0, "max": 100, "default": 40 },
+        { "name": "softness", "type": "number", "label": "Softness (%)", "tab": "Shader", "group": "Motion", "min": 0, "max": 100, "default": 60 },
+        { "name": "grain", "type": "number", "label": "Grain (%)", "tab": "Shader", "group": "Motion", "min": 0, "max": 100, "default": 15 },
+        { "name": "pixel_size", "type": "number", "label": "Dither pixel size", "tab": "Shader", "group": "Motion", "min": 1, "max": 20, "default": 3 },
+        { "name": "bands", "type": "number", "label": "Swirl band count", "tab": "Shader", "group": "Motion", "min": 0, "max": 15, "default": 4 },
+        {
+            "name": "layout",
+            "type": "radio",
+            "label": "Layout",
+            "tab": "Content",
+            "options": [
+                { "value": "centered", "label": "Centred" },
+                { "value": "corner", "label": "Bottom left" },
+                { "value": "card", "label": "Floating panel, bottom left" }
+            ],
+            "default": "centered"
+        },
+        { "name": "eyebrow", "type": "text", "label": "Eyebrow", "tab": "Content", "default": "New single" },
+        { "name": "heading", "type": "heading", "label": "Heading", "tab": "Content", "default": { "value": "From Zero", "element": "h1" }, "elements": [{ "value": "h1", "label": "H1" }, { "value": "h2", "label": "H2" }, { "value": "p", "label": "No heading (plain text)" }] },
+        { "name": "subheading", "type": "textarea", "label": "Sub heading", "tab": "Content", "default": "Out everywhere now." },
+        { "name": "primary_cta", "type": "url", "label": "Primary button", "tab": "Content", "default": { "url": "#listen", "text": "Listen now", "target": "_self" } },
+        { "name": "secondary_cta", "type": "url", "label": "Secondary button", "tab": "Content", "default": { "url": "#tour", "text": "Get tickets", "target": "_self" } },
+        {
+            "name": "heading_type",
+            "type": "radio",
+            "label": "Heading",
+            "tab": "Content",
+            "group": "Heading",
+            "options": [
+                { "value": "text", "label": "Text" },
+                { "value": "image", "label": "Artwork — upload a logo or title treatment" },
+                { "value": "brand", "label": "Artwork — from the Brand collection" }
+            ],
+            "default": "text"
+        },
+        { "name": "heading_image", "type": "file", "label": "Heading artwork", "accept": "image/*", "tab": "Content", "group": "Heading", "help_text": "Replaces the heading text. The heading text is still used as the alt text." },
+        { "name": "heading_image_width", "type": "number", "label": "Artwork width (px)", "tab": "Content", "group": "Heading", "min": 120, "max": 1200, "default": 480 },
+        {
+            "name": "heading_variant",
+            "type": "select",
+            "label": "Which Brand version",
+            "tab": "Content",
+            "group": "Heading",
+            "options": [
+                { "value": "wordmark", "label": "Wordmark" },
+                { "value": "primary", "label": "Primary logo" },
+                { "value": "light", "label": "Light — for dark backgrounds" },
+                { "value": "dark", "label": "Dark — for light backgrounds" },
+                { "value": "symbol", "label": "Symbol / icon" }
+            ],
+            "default": "wordmark"
+        },
+        { "name": "show_eyebrow", "type": "checkbox", "label": "Show the eyebrow", "tab": "Visibility", "default": true },
+        { "name": "show_heading", "type": "checkbox", "label": "Show the heading", "tab": "Visibility", "default": true },
+        { "name": "show_subheading", "type": "checkbox", "label": "Show the sub heading", "tab": "Visibility", "default": true },
+        { "name": "show_buttons", "type": "checkbox", "label": "Show the buttons", "tab": "Visibility", "default": true },
+        { "name": "show_shader", "type": "checkbox", "label": "Show the animated background", "tab": "Visibility", "default": true },
+        {
+            "name": "height",
+            "type": "select",
+            "label": "Height",
+            "tab": "Style",
+            "options": [
+                { "value": "medium", "label": "Medium (60% of screen)" },
+                { "value": "large", "label": "Large (80% of screen)" },
+                { "value": "full", "label": "Full screen" }
+            ],
+            "default": "large"
+        },
+        {
+            "name": "overlay",
+            "type": "select",
+            "label": "Darken behind the text",
+            "tab": "Style",
+            "options": [
+                { "value": "none", "label": "None" },
+                { "value": "light", "label": "Light" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "gradient", "label": "Gradient from bottom" }
+            ],
+            "default": "light"
+        },
+        {
+            "name": "size",
+            "type": "select",
+            "label": "Heading size",
+            "tab": "Style",
+            "options": [
+                { "value": "lg", "label": "Large" },
+                { "value": "xl", "label": "Extra large" },
+                { "value": "display", "label": "Display — fills the width" }
+            ],
+            "default": "xl"
+        },
+        { "name": "inset", "type": "checkbox", "label": "Inset with rounded corners", "tab": "Style", "default": false },
+        { "name": "anchor", "type": "text", "label": "Anchor ID (for menu links)", "tab": "Style", "default": "" }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+{#
+  Animated shader hero, powered by Paper Shaders (paper.design).
+
+  The settings are serialised into a data-shader attribute and picked up by
+  src/js/shader-bg.js. The mount element also needs `data-paper-shader` —
+  that's the selector the library's own stylesheet uses to position its canvas.
+
+  The mount div carries a CSS gradient built from the same colours, so the
+  hero still looks intentional before the script runs, if WebGL is
+  unavailable, or if JavaScript is off entirely.
+#}
+{% set heights = { 'medium': 'min-h-[60vh]', 'large': 'min-h-[80vh]', 'full': 'min-h-screen' } %}
+{% set overlays = {
+    'none': '',
+    'light': 'bg-black/25',
+    'medium': 'bg-black/45',
+    'gradient': 'bg-gradient-to-t from-black/80 via-black/30 to-transparent'
+} %}
+{% set sizes = {
+    'lg': 'text-4xl sm:text-5xl lg:text-6xl',
+    'xl': 'text-5xl sm:text-6xl lg:text-7xl',
+    'display': 'text-6xl sm:text-8xl lg:text-9xl'
+} %}
+{# Row flex, so items-* is the vertical axis and justify-* the horizontal one.
+   With flex-col these would swap and "bottom left" would render top right. #}
+{% set positions = {
+    'centered': 'items-center justify-center text-center',
+    'corner': 'items-end justify-start text-left',
+    'card': 'items-end justify-start text-left'
+} %}
+
+{% set layout = settings.layout ?? 'centered' %}
+{% set height_class = heights[settings.height] ?? heights['large'] %}
+{% set overlay_class = overlays[settings.overlay] ?? overlays['light'] %}
+{% set size_class = sizes[settings.size] ?? sizes['xl'] %}
+{% set position_class = positions[layout] ?? positions['centered'] %}
+{% set el = settings.heading.element ?? 'h1' %}
+{% set ctas = [settings.primary_cta, settings.secondary_cta] | filter(c => c.url) %}
+
+{# Heading as artwork — see the Hero block for the same pattern. `b` is null
+   when the brand collection is empty, which is safe to read from; never
+   default it with `?? {}` (compile-time error in Canvas). #}
+{% import 'components/brand' as brand %}
+{% set b = (cms.collection('brand') ?? [])|first %}
+
+{% if settings.heading_type == 'image' %}
+  {% set heading_img = settings.heading_image.path ?? '' %}
+{% elseif settings.heading_type == 'brand' %}
+  {% set heading_img = brand.logo_url(b, settings.heading_variant)|trim %}
+{% else %}
+  {% set heading_img = '' %}
+{% endif %}
+
+{% set heading_w = settings.heading_image_width ?? 480 %}
+
+{% import _self as ui %}
+
+{% macro heading(el, text, img, width, wrap, text_klass) %}
+  {% if img %}
+    <img src="{{ img }}" alt="{{ text }}" style="width: {{ width }}px" class="h-auto max-w-full {{ wrap }}" />
+  {% else %}
+    <{{ el }} class="{{ wrap }} {{ text_klass }}">{{ text }}</{{ el }}>
+  {% endif %}
+{% endmacro %}
+
+{# Colours 1 and 2 are always on; 3–5 are opt-in so an editor can dial a
+   palette down to two tones without clearing the pickers. #}
+{% set colors = [settings.color_1, settings.color_2] %}
+{% if settings.use_color_3 %}{% set colors = colors|merge([settings.color_3]) %}{% endif %}
+{% if settings.use_color_4 %}{% set colors = colors|merge([settings.color_4]) %}{% endif %}
+{% if settings.use_color_5 %}{% set colors = colors|merge([settings.color_5]) %}{% endif %}
+
+{% set shader_config = {
+    'preset': settings.preset ?? 'mesh',
+    'colors': colors,
+    'color_back': settings.color_back,
+    'shape': settings.shape == 'default' ? null : settings.shape,
+    'speed': settings.speed ?? 0.6,
+    'scale': settings.scale ?? 1,
+    'rotation': settings.rotation ?? 0,
+    'intensity': (settings.intensity ?? 60) / 100,
+    'distortion': (settings.distortion ?? 40) / 100,
+    'softness': (settings.softness ?? 60) / 100,
+    'grain': (settings.grain ?? 15) / 100,
+    'pixel_size': settings.pixel_size ?? 3,
+    'bands': settings.bands ?? 4
+} %}
+
+{# Static stand-in for the shader: the same colours as a plain CSS gradient. #}
+{% set fallback = 'linear-gradient(135deg, ' ~ colors|join(', ') ~ ')' %}
+
+<section
+  {% if settings.anchor %}id="{{ settings.anchor }}"{% endif %}
+  class="relative isolate overflow-hidden text-white {{ settings.inset ? 'wrap my-6 rounded-theme' : '' }}"
+>
+  {% if settings.show_shader %}
+    <div
+      data-paper-shader
+      data-shader="{{ shader_config|json_encode }}"
+      class="absolute inset-0 -z-10"
+      style="background-image: {{ fallback }}"
+      aria-hidden="true"
+    ></div>
+  {% else %}
+    <div class="absolute inset-0 -z-10" style="background-image: {{ fallback }}" aria-hidden="true"></div>
+  {% endif %}
+
+  {% if overlay_class %}
+    <div class="absolute inset-0 -z-10 {{ overlay_class }}" aria-hidden="true"></div>
+  {% endif %}
+
+  <div class="wrap flex py-20 sm:py-28 {{ position_class }} {{ height_class }}">
+    {% if layout == 'card' %}
+      <div class="glass max-w-md p-7 sm:p-9">
+        {% if settings.show_eyebrow and settings.eyebrow %}
+          <span class="eyebrow">{{ settings.eyebrow }}</span>
+        {% endif %}
+
+        {% if settings.show_heading %}
+          {{ ui.heading(el, settings.heading.value, heading_img, heading_w, 'mt-3', 'text-balance ' ~ (settings.size == 'display' ? sizes['lg'] : size_class)) }}
+        {% endif %}
+
+        {% if settings.show_subheading and settings.subheading %}
+          <p class="mt-4 text-base leading-relaxed opacity-85">{{ settings.subheading }}</p>
+        {% endif %}
+
+        {% if settings.show_buttons and ctas|length %}
+          <div class="mt-7 flex flex-col gap-2">
+            {% for cta in ctas %}
+              <a href="{{ cta.url }}" target="{{ cta.target }}" class="btn {{ loop.first ? 'btn-primary' : 'btn-outline' }} w-full">{{ cta.text }}</a>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+    {% else %}
+      <div class="{{ layout == 'centered' ? 'flex w-full flex-col items-center' : 'max-w-2xl' }}">
+        {% if settings.show_eyebrow and settings.eyebrow %}
+          <span class="eyebrow">{{ settings.eyebrow }}</span>
+        {% endif %}
+
+        {% if settings.show_heading %}
+          {{ ui.heading(el, settings.heading.value, heading_img, heading_w, 'mt-4', 'max-w-[16ch] text-balance ' ~ size_class) }}
+        {% endif %}
+
+        {% if settings.show_subheading and settings.subheading %}
+          <p class="mt-6 max-w-2xl text-lg leading-relaxed opacity-85">{{ settings.subheading }}</p>
+        {% endif %}
+
+        {% if settings.show_buttons and ctas|length %}
+          <div class="mt-9 flex flex-wrap gap-3 {{ layout == 'centered' ? 'justify-center' : '' }}">
+            {% for cta in ctas %}
+              <a href="{{ cta.url }}" target="{{ cta.target }}" class="btn {{ loop.first ? 'btn-primary' : 'btn-outline' }}">{{ cta.text }}</a>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{#
+  The script is loaded here, from the template section, rather than from a
+  dedicated scripts section. Two reasons:
+
+  1. Those sections are emitted verbatim without evaluating Canvas, so asset()
+     inside one lands on the page as literal text.
+  2. Canopy splits this file by scanning for its section tags as plain text —
+     writing one inside a comment starts a real section. Don't name them here.
+
+  If a page has two shader heroes this tag appears twice; the script guards
+  against initialising more than once.
+#}
+{{ asset('js/shader-bg.js') | script_tag }}
+{% endcanopy %}

@@ -1,0 +1,20 @@
+{% extends 'templates/default' %}
+
+{#
+  Standard inner page — same block system as the landing page, but with a
+  title header rendered above the blocks. Use for About, Contact, Privacy, etc.
+#}
+
+{% block title %}{{ page.title ?? settings.site_name }}{% endblock %}
+
+{% block body %}
+  <header class="wrap pt-24 pb-10 sm:pt-32">
+    <h1 class="text-4xl sm:text-6xl">{{ page.title ?? settings.site_name }}</h1>
+    {% if page.description %}
+      <p class="mt-4 max-w-2xl text-lg text-muted">{{ page.description }}</p>
+    {% endif %}
+  </header>
+
+  {{ canopy.blocks('main') }}
+{% endblock %}
+

@@ -1,0 +1,322 @@
+{% canopy config %}
+{
+    "title": "Social Links",
+    "name": "social",
+    "settings": [
+        {
+            "name": "layout",
+            "type": "select",
+            "label": "Layout",
+            "tab": "Content",
+            "options": [
+                { "value": "row", "label": "Row — links side by side" },
+                { "value": "tiles", "label": "Tiles — big squares" },
+                { "value": "cards", "label": "Cards — name and note in a grid" },
+                { "value": "list", "label": "List — one per row" },
+                { "value": "display", "label": "Display — oversized type" }
+            ],
+            "default": "row"
+        },
+        { "name": "eyebrow", "type": "text", "label": "Eyebrow", "tab": "Content", "default": "" },
+        { "name": "heading", "type": "heading", "label": "Heading", "tab": "Content", "default": { "value": "Follow", "element": "h2" }, "elements": [{ "value": "h2", "label": "H2" }, { "value": "h3", "label": "H3" }] },
+        { "name": "intro", "type": "textarea", "label": "Intro", "tab": "Content", "default": "" },
+        { "name": "show_header", "type": "checkbox", "label": "Show the heading", "tab": "Content", "default": true },
+        { "name": "empty_text", "type": "text", "label": "Text shown when there are no links", "tab": "Content", "default": "Add your social links in the Links tab." },
+        {
+            "name": "links",
+            "type": "list",
+            "label": "Links — one per item, separated by | : Name | Link | Note",
+            "tab": "Links",
+            "default": [
+                "Spotify | https://open.spotify.com | 1.2M monthly listeners",
+                "Instagram | https://instagram.com | @theband",
+                "YouTube | https://youtube.com |",
+                "TikTok | https://tiktok.com |",
+                "Bandcamp | https://bandcamp.com | Everything, including the rarities",
+                "Apple Music | https://music.apple.com |"
+            ]
+        },
+        { "name": "show_note", "type": "checkbox", "label": "Show the note", "tab": "Links", "default": true },
+        { "name": "show_monogram", "type": "checkbox", "label": "Show the initial as a badge", "tab": "Links", "default": true },
+        { "name": "new_tab", "type": "checkbox", "label": "Open links in a new tab", "tab": "Links", "default": true },
+        {
+            "name": "link_style",
+            "type": "select",
+            "label": "Link style",
+            "tab": "Appearance",
+            "options": [
+                { "value": "pill", "label": "Pill" },
+                { "value": "outline", "label": "Outlined box" },
+                { "value": "solid", "label": "Solid" },
+                { "value": "plain", "label": "Plain text" }
+            ],
+            "default": "pill"
+        },
+        {
+            "name": "size",
+            "type": "select",
+            "label": "Size",
+            "tab": "Appearance",
+            "options": [
+                { "value": "sm", "label": "Small" },
+                { "value": "md", "label": "Medium" },
+                { "value": "lg", "label": "Large" }
+            ],
+            "default": "md"
+        },
+        {
+            "name": "columns",
+            "type": "select",
+            "label": "Columns",
+            "tab": "Appearance",
+            "options": [
+                { "value": "2", "label": "Two" },
+                { "value": "3", "label": "Three" },
+                { "value": "4", "label": "Four" },
+                { "value": "6", "label": "Six" }
+            ],
+            "default": "3"
+        },
+        { "name": "uppercase", "type": "checkbox", "label": "Uppercase the names", "tab": "Appearance", "default": false },
+        {
+            "name": "tone",
+            "type": "select",
+            "label": "Background",
+            "tab": "Style",
+            "options": [
+                { "value": "default", "label": "Page background" },
+                { "value": "surface", "label": "Card colour" },
+                { "value": "accent", "label": "Accent" },
+                { "value": "invert", "label": "Inverted" },
+                { "value": "custom", "label": "Custom colours" }
+            ],
+            "default": "default"
+        },
+        { "name": "bg_color", "type": "color", "label": "Custom background", "tab": "Style", "group": "Custom colours", "default": "#15151f" },
+        { "name": "text_color", "type": "color", "label": "Custom text", "tab": "Style", "group": "Custom colours", "default": "#f4f4f6" },
+        {
+            "name": "spacing",
+            "type": "select",
+            "label": "Vertical spacing",
+            "tab": "Style",
+            "options": [
+                { "value": "none", "label": "None" },
+                { "value": "sm", "label": "Small" },
+                { "value": "md", "label": "Medium" },
+                { "value": "lg", "label": "Large" },
+                { "value": "xl", "label": "Extra large" }
+            ],
+            "default": "md"
+        },
+        {
+            "name": "align",
+            "type": "radio",
+            "label": "Alignment",
+            "tab": "Style",
+            "options": [
+                { "value": "left", "label": "Left" },
+                { "value": "center", "label": "Centre" }
+            ],
+            "default": "left"
+        },
+        { "name": "anchor", "type": "text", "label": "Anchor ID (for menu links)", "tab": "Style", "default": "" }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+{#
+  Every platform the band is on, as a pipe-separated list rather than a fixed
+  set of fields — a new platform is a new line, not a template change.
+
+  The badge is the platform's initial rather than a brand glyph. It always
+  matches whatever an editor types, needs no icon library, and takes the
+  theme's colours; the Footer block covers the case where real brand names in
+  a fixed order are wanted instead.
+#}
+{% set tones = {
+    'default': 'bg-bg text-ink',
+    'surface': 'bg-surface text-ink',
+    'accent': 'bg-accent text-on-accent',
+    'invert': 'bg-ink text-bg'
+} %}
+{% set pads = { 'none': 'py-0', 'sm': 'py-10 sm:py-12', 'md': 'py-16 sm:py-20', 'lg': 'py-24 sm:py-28', 'xl': 'py-32 sm:py-40' } %}
+{% set cols = {
+    '2': 'sm:grid-cols-2',
+    '3': 'sm:grid-cols-2 lg:grid-cols-3',
+    '4': 'grid-cols-2 lg:grid-cols-4',
+    '6': 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-6'
+} %}
+{% set sizes = {
+    'sm': { 'text': 'text-sm', 'pad': 'px-4 py-2', 'badge': 'h-8 w-8 text-xs', 'display': 'text-2xl sm:text-3xl' },
+    'md': { 'text': 'text-base', 'pad': 'px-5 py-3', 'badge': 'h-10 w-10 text-sm', 'display': 'text-4xl sm:text-5xl' },
+    'lg': { 'text': 'text-lg', 'pad': 'px-6 py-4', 'badge': 'h-12 w-12 text-base', 'display': 'text-5xl sm:text-7xl' }
+} %}
+{% set link_styles = {
+    'pill': 'rounded-full border border-current/30 hover:border-current/70',
+    'outline': 'rounded-theme border border-current/30 hover:border-current/70',
+    'solid': 'rounded-theme bg-accent text-on-accent hover:opacity-90',
+    'plain': 'rounded-theme hover:opacity-70'
+} %}
+
+{% set tone_class = settings.tone == 'custom' ? '' : (tones[settings.tone] ?? tones['default']) %}
+{% set tone_style = settings.tone == 'custom' ? 'background-color:' ~ settings.bg_color ~ ';color:' ~ settings.text_color ~ ';' : '' %}
+{% set pad_class = pads[settings.spacing] ?? pads['lg'] %}
+{% set col_class = cols[settings.columns] ?? cols['3'] %}
+{% set size = sizes[settings.size] ?? sizes['md'] %}
+{% set style_class = link_styles[settings.link_style] ?? link_styles['pill'] %}
+{% set align_class = settings.align == 'center' ? 'text-center mx-auto max-w-2xl' : '' %}
+{% set name_class = settings.uppercase ? 'uppercase tracking-wide' : '' %}
+{% set el = settings.heading.element ?? 'h2' %}
+{% set layout = settings.layout ?? 'row' %}
+{% set target = settings.new_tab ? '_blank' : '_self' %}
+
+{% set links = [] %}
+{% for row in settings.links|filter(l => l|trim is not empty) %}
+  {% set p = row|split('|') %}
+  {% set name = (p[0] ?? '')|trim %}
+  {% if name and (p[1] ?? '')|trim %}
+    {% set links = links|merge([{
+        'name': name,
+        'url': (p[1] ?? '')|trim,
+        'note': (p[2] ?? '')|trim,
+        'initial': name|slice(0, 1)|upper
+    }]) %}
+  {% endif %}
+{% endfor %}
+
+{% import _self as ui %}
+
+{% macro badge(link, klass, show) %}
+  {% if show %}
+    <span class="{{ klass }} flex shrink-0 items-center justify-center rounded-full border border-current/30 font-semibold" aria-hidden="true">{{ link.initial }}</span>
+  {% endif %}
+{% endmacro %}
+
+<section
+  {% if settings.anchor %}id="{{ settings.anchor }}"{% endif %}
+  class="{{ tone_class }}"
+  {% if tone_style %}style="{{ tone_style }}"{% endif %}
+>
+  <div class="wrap {{ pad_class }}">
+
+    {% if settings.show_header %}
+      <div class="{{ align_class }} mb-8">
+        {% if settings.eyebrow %}<span class="eyebrow text-accent">{{ settings.eyebrow }}</span>{% endif %}
+        <{{ el }} class="mt-3 text-4xl text-balance sm:text-5xl">{{ settings.heading.value }}</{{ el }}>
+        {% if settings.intro %}<p class="mt-4 text-lg opacity-70">{{ settings.intro }}</p>{% endif %}
+      </div>
+    {% endif %}
+
+    {% if links|length %}
+
+      {# ---------------- Tiles — big squares ---------------- #}
+      {% if layout == 'tiles' %}
+        <div class="grid gap-3 {{ col_class }}">
+          {% for link in links %}
+            <a
+              href="{{ link.url }}"
+              target="{{ target }}"
+              rel="noopener"
+              class="flex aspect-square flex-col items-center justify-center gap-3 p-4 text-center no-underline transition {{ style_class }}"
+            >
+              {{ ui.badge(link, size.badge, settings.show_monogram) }}
+              <span class="font-heading {{ size.text }} {{ name_class }} leading-tight">{{ link.name }}</span>
+              {% if settings.show_note and link.note %}
+                <span class="text-xs opacity-60">{{ link.note }}</span>
+              {% endif %}
+            </a>
+          {% endfor %}
+        </div>
+
+      {# ---------------- Cards ---------------- #}
+      {% elseif layout == 'cards' %}
+        <div class="grid gap-4 {{ col_class }}">
+          {% for link in links %}
+            <a
+              href="{{ link.url }}"
+              target="{{ target }}"
+              rel="noopener"
+              class="flex items-center gap-4 {{ size.pad }} no-underline transition {{ style_class }}"
+            >
+              {{ ui.badge(link, size.badge, settings.show_monogram) }}
+              <span class="min-w-0 flex-1">
+                <span class="font-heading block {{ size.text }} {{ name_class }} leading-tight">{{ link.name }}</span>
+                {% if settings.show_note and link.note %}
+                  <span class="block text-xs opacity-60">{{ link.note }}</span>
+                {% endif %}
+              </span>
+              <span aria-hidden="true" class="shrink-0 opacity-40">&rarr;</span>
+            </a>
+          {% endfor %}
+        </div>
+
+      {# ---------------- List — one per row ---------------- #}
+      {% elseif layout == 'list' %}
+        <ul class="list-none">
+          {% for link in links %}
+            <li class="border-b border-line first:border-t">
+              <a
+                href="{{ link.url }}"
+                target="{{ target }}"
+                rel="noopener"
+                class="group flex items-center gap-4 py-4 no-underline transition hover:pl-2"
+              >
+                {{ ui.badge(link, size.badge, settings.show_monogram) }}
+                <span class="font-heading {{ size.text }} {{ name_class }}">{{ link.name }}</span>
+                {% if settings.show_note and link.note %}
+                  <span class="text-sm opacity-50">{{ link.note }}</span>
+                {% endif %}
+                <span aria-hidden="true" class="ml-auto opacity-40 transition group-hover:opacity-100">&rarr;</span>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+
+      {# ---------------- Display — oversized type ---------------- #}
+      {% elseif layout == 'display' %}
+        <ul class="list-none {{ settings.align == 'center' ? 'text-center' : '' }}">
+          {% for link in links %}
+            <li>
+              <a
+                href="{{ link.url }}"
+                target="{{ target }}"
+                rel="noopener"
+                class="font-heading block py-2 no-underline opacity-80 transition hover:opacity-100 {{ size.display }} {{ name_class }}"
+              >
+                {{ link.name }}
+                {% if settings.show_note and link.note %}
+                  <span class="ml-3 align-middle text-xs font-normal tracking-normal opacity-50 normal-case">{{ link.note }}</span>
+                {% endif %}
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+
+      {# ---------------- Row ---------------- #}
+      {% else %}
+        <div class="flex flex-wrap gap-3 {{ settings.align == 'center' ? 'justify-center' : '' }}">
+          {% for link in links %}
+            <a
+              href="{{ link.url }}"
+              target="{{ target }}"
+              rel="noopener"
+              class="inline-flex items-center gap-3 {{ size.pad }} no-underline transition {{ style_class }}"
+            >
+              {{ ui.badge(link, size.badge, settings.show_monogram) }}
+              <span class="font-semibold {{ size.text }} {{ name_class }}">{{ link.name }}</span>
+              {% if settings.show_note and link.note %}
+                <span class="text-xs opacity-50">{{ link.note }}</span>
+              {% endif %}
+            </a>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+    {% else %}
+      <p class="text-lg opacity-60">{{ settings.empty_text }}</p>
+    {% endif %}
+  </div>
+</section>
+{% endcanopy %}
+

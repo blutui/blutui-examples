@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Page not found — {{ settings.site_name }}</title>
+
+    <link rel="preconnect" href="https://fonts.bunny.net" />
+    <link rel="preconnect" href="https://fonts.bunny.net" crossorigin />
+
+    {{ asset('styles/global.css') | stylesheet_tag }}
+
+    {# Picks up the site-wide colours and fonts from the Site Theme block. #}
+    {{ canopy.head('theme') }}
+  </head>
+  <body class="font-body bg-bg text-ink antialiased">
+    {{ canopy.blocks('theme', { shared: true }) }}
+
+    <main class="wrap flex min-h-screen flex-col items-center justify-center py-24 text-center">
+      <span class="eyebrow text-accent">Error 404</span>
+      <h1 class="mt-4 text-5xl text-balance sm:text-7xl">This page has left the building</h1>
+      <p class="mt-6 max-w-md text-lg text-muted">
+        The link might be out of date, or the page may have moved. Head back to the start and try again.
+      </p>
+      <a href="/" class="btn btn-primary mt-9">Back to home</a>
+    </main>
+
+    {{ asset('js/app.js') | script_tag }}
+  </body>
+</html>

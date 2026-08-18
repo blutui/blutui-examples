@@ -1,0 +1,352 @@
+{% canopy config %}
+{
+    "title": "Merch (Collection)",
+    "name": "merch",
+    "settings": [
+        {
+            "name": "layout",
+            "type": "select",
+            "label": "Layout",
+            "tab": "Content",
+            "options": [
+                { "value": "grid", "label": "Grid — product cards" },
+                { "value": "strip", "label": "Strip — swipeable row" },
+                { "value": "list", "label": "List — one product per row" },
+                { "value": "featured", "label": "Featured — one product, large" }
+            ],
+            "default": "grid"
+        },
+        { "name": "eyebrow", "type": "text", "label": "Eyebrow", "tab": "Content", "default": "Store" },
+        { "name": "heading", "type": "heading", "label": "Heading", "tab": "Content", "default": { "value": "Merch", "element": "h2" }, "elements": [{ "value": "h2", "label": "H2" }, { "value": "h3", "label": "H3" }] },
+        { "name": "intro", "type": "textarea", "label": "Intro", "tab": "Content", "default": "" },
+        { "name": "cta_label", "type": "text", "label": "Buy button label", "tab": "Content", "default": "Buy" },
+        { "name": "empty_text", "type": "text", "label": "Text shown when there's nothing to list", "tab": "Content", "default": "The store is empty right now — check back soon." },
+        { "name": "footer_cta", "type": "url", "label": "Button below the list", "tab": "Content", "default": { "url": "", "text": "Visit the store", "target": "_blank" } },
+        {
+            "name": "collection_handle",
+            "type": "select",
+            "label": "Collection",
+            "tab": "Products",
+            "options": [
+                { "value": "merch", "label": "Merch" }
+            ],
+            "default": "merch"
+        },
+        {
+            "name": "sort",
+            "type": "select",
+            "label": "Order",
+            "tab": "Products",
+            "options": [
+                { "value": "manual", "label": "Manual order field" },
+                { "value": "newest", "label": "Newest first" },
+                { "value": "title", "label": "Name, A–Z" }
+            ],
+            "default": "manual"
+        },
+        {
+            "name": "filter_type",
+            "type": "select",
+            "label": "Only show this type",
+            "tab": "Products",
+            "options": [
+                { "value": "all", "label": "All types" },
+                { "value": "Apparel", "label": "Apparel" },
+                { "value": "Vinyl", "label": "Vinyl" },
+                { "value": "CD", "label": "CD" },
+                { "value": "Cassette", "label": "Cassette" },
+                { "value": "Print", "label": "Print" },
+                { "value": "Accessory", "label": "Accessory" },
+                { "value": "Bundle", "label": "Bundle" }
+            ],
+            "default": "all"
+        },
+        { "name": "featured_only", "type": "checkbox", "label": "Only show featured items", "tab": "Products", "default": false },
+        { "name": "hide_sold_out", "type": "checkbox", "label": "Hide sold-out items", "tab": "Products", "default": false },
+        { "name": "limit", "type": "number", "label": "Maximum products (0 = no limit)", "tab": "Products", "min": 0, "max": 100, "default": 0 },
+        {
+            "name": "columns",
+            "type": "select",
+            "label": "Grid columns",
+            "tab": "Products",
+            "options": [
+                { "value": "2", "label": "Two" },
+                { "value": "3", "label": "Three" },
+                { "value": "4", "label": "Four" }
+            ],
+            "default": "3"
+        },
+        { "name": "show_image", "type": "checkbox", "label": "Show the product image", "tab": "Visibility", "default": true },
+        { "name": "show_type", "type": "checkbox", "label": "Show the product type", "tab": "Visibility", "default": false },
+        { "name": "show_price", "type": "checkbox", "label": "Show the price", "tab": "Visibility", "default": true },
+        { "name": "show_description", "type": "checkbox", "label": "Show the description", "tab": "Visibility", "default": false },
+        { "name": "show_status", "type": "checkbox", "label": "Show the availability badge", "tab": "Visibility", "default": true },
+        { "name": "show_buttons", "type": "checkbox", "label": "Show the buy buttons", "tab": "Visibility", "default": true },
+        {
+            "name": "tone",
+            "type": "select",
+            "label": "Background",
+            "tab": "Style",
+            "options": [
+                { "value": "default", "label": "Page background" },
+                { "value": "surface", "label": "Card colour" },
+                { "value": "accent", "label": "Accent" },
+                { "value": "invert", "label": "Inverted" },
+                { "value": "custom", "label": "Custom colours" }
+            ],
+            "default": "default"
+        },
+        { "name": "bg_color", "type": "color", "label": "Custom background", "tab": "Style", "group": "Custom colours", "default": "#0b0b12" },
+        { "name": "text_color", "type": "color", "label": "Custom text", "tab": "Style", "group": "Custom colours", "default": "#f4f4f6" },
+        {
+            "name": "spacing",
+            "type": "select",
+            "label": "Vertical spacing",
+            "tab": "Style",
+            "options": [
+                { "value": "none", "label": "None" },
+                { "value": "sm", "label": "Small" },
+                { "value": "md", "label": "Medium" },
+                { "value": "lg", "label": "Large" },
+                { "value": "xl", "label": "Extra large" }
+            ],
+            "default": "lg"
+        },
+        {
+            "name": "align",
+            "type": "radio",
+            "label": "Header alignment",
+            "tab": "Style",
+            "options": [
+                { "value": "left", "label": "Left" },
+                { "value": "center", "label": "Centre" }
+            ],
+            "default": "left"
+        },
+        { "name": "anchor", "type": "text", "label": "Anchor ID (for menu links)", "tab": "Style", "default": "merch" }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+{#
+  Products from the `merch` Collection. Same shape as the Discography block:
+  the collection is an editor-selectable option because cms.collection() takes
+  a variable handle.
+
+  Guard the lookup with `?? []` — an unknown handle returns null, and piping
+  null into |filter throws, which Canopy swallows into a blank section.
+#}
+{% set tones = {
+    'default': 'bg-bg text-ink',
+    'surface': 'bg-surface text-ink',
+    'accent': 'bg-accent text-on-accent',
+    'invert': 'bg-ink text-bg'
+} %}
+{% set pads = { 'none': 'py-0', 'sm': 'py-10 sm:py-12', 'md': 'py-16 sm:py-20', 'lg': 'py-24 sm:py-28', 'xl': 'py-32 sm:py-40' } %}
+{% set cols = { '2': 'sm:grid-cols-2', '3': 'sm:grid-cols-2 lg:grid-cols-3', '4': 'sm:grid-cols-2 lg:grid-cols-4' } %}
+
+{% set tone_class = settings.tone == 'custom' ? '' : (tones[settings.tone] ?? tones['default']) %}
+{% set tone_style = settings.tone == 'custom' ? 'background-color:' ~ settings.bg_color ~ ';color:' ~ settings.text_color ~ ';' : '' %}
+{% set pad_class = pads[settings.spacing] ?? pads['lg'] %}
+{% set col_class = cols[settings.columns] ?? cols['3'] %}
+{% set align_class = settings.align == 'center' ? 'text-center mx-auto max-w-2xl' : '' %}
+{% set el = settings.heading.element ?? 'h2' %}
+{% set layout = settings.layout ?? 'grid' %}
+
+{% set items = cms.collection(settings.collection_handle ?? 'merch') ?? [] %}
+
+{% if settings.filter_type != 'all' %}
+  {% set items = items|filter(i => i.type == settings.filter_type) %}
+{% endif %}
+{% if settings.featured_only %}
+  {% set items = items|filter(i => i.featured == 'Yes') %}
+{% endif %}
+{% if settings.hide_sold_out %}
+  {% set items = items|filter(i => i.status != 'Sold out') %}
+{% endif %}
+
+{% if settings.sort == 'title' %}
+  {% set items = items|sort((a, b) => a.title <=> b.title) %}
+{% elseif settings.sort == 'newest' %}
+  {% set items = items|sort((a, b) => (b.created_at|date('U')) <=> (a.created_at|date('U'))) %}
+{% else %}
+  {% set items = items|sort((a, b) => (a.order ?? 0) <=> (b.order ?? 0)) %}
+{% endif %}
+
+{% if layout == 'featured' %}
+  {% set items = items|slice(0, 1) %}
+{% elseif settings.limit > 0 %}
+  {% set items = items|slice(0, settings.limit) %}
+{% endif %}
+
+{% import _self as ui %}
+
+{% macro image(item, klass) %}
+  {% if item.image %}
+    <div class="group/img relative overflow-hidden rounded-theme">
+      <img
+        src="{{ item.image | image_url({ width: 800, format: 'webp' }) }}"
+        alt="{{ item.title }}"
+        class="{{ klass }}"
+        loading="lazy"
+      />
+      {% if item.image_hover %}
+        {# Second shot fades in on hover. Hidden from assistive tech — it's the
+           same product, so announcing it twice adds nothing. #}
+        <img
+          src="{{ item.image_hover | image_url({ width: 800, format: 'webp' }) }}"
+          alt=""
+          aria-hidden="true"
+          class="{{ klass }} absolute inset-0 opacity-0 transition-opacity duration-300 group-hover/img:opacity-100"
+          loading="lazy"
+        />
+      {% endif %}
+    </div>
+  {% else %}
+    <div class="{{ klass }} flex items-center justify-center rounded-theme border border-line bg-surface" aria-hidden="true">
+      <span class="font-heading text-3xl opacity-20">{{ item.title|slice(0, 1) }}</span>
+    </div>
+  {% endif %}
+{% endmacro %}
+
+{% macro price(item, settings) %}
+  {% if settings.show_price and item.price %}
+    <p class="mt-1 text-sm font-semibold">
+      {{ item.price }}
+      {% if item.compare_price %}
+        <span class="ml-1 font-normal line-through opacity-40">{{ item.compare_price }}</span>
+      {% endif %}
+    </p>
+  {% endif %}
+{% endmacro %}
+
+{% macro status(item, settings) %}
+  {% if settings.show_status and item.status and item.status != 'In stock' %}
+    <span class="inline-block rounded-theme border border-line px-2.5 py-1 text-xs font-semibold tracking-wide uppercase opacity-60">{{ item.status }}</span>
+  {% endif %}
+{% endmacro %}
+
+{% macro buy(item, settings, klass) %}
+  {% if settings.show_buttons and item.url and item.status != 'Sold out' %}
+    <a href="{{ item.url }}" target="_blank" rel="noopener" class="btn btn-primary btn-sm {{ klass }}">{{ settings.cta_label }}</a>
+  {% endif %}
+{% endmacro %}
+
+<section
+  {% if settings.anchor %}id="{{ settings.anchor }}"{% endif %}
+  class="{{ tone_class }}"
+  {% if tone_style %}style="{{ tone_style }}"{% endif %}
+>
+  <div class="wrap {{ pad_class }}">
+
+    <div class="{{ align_class }}">
+      {% if settings.eyebrow %}<span class="eyebrow text-accent">{{ settings.eyebrow }}</span>{% endif %}
+      <{{ el }} class="mt-3 text-4xl text-balance sm:text-5xl">{{ settings.heading.value }}</{{ el }}>
+      {% if settings.intro %}<p class="mt-4 text-lg opacity-70">{{ settings.intro }}</p>{% endif %}
+    </div>
+
+    {% if items|length %}
+
+      {# ---------------- Featured — one product, large ---------------- #}
+      {% if layout == 'featured' %}
+        {% set item = items|first %}
+        <div class="mt-12 grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          {% if settings.show_image %}{{ ui.image(item, 'aspect-square w-full object-cover') }}{% endif %}
+          <div>
+            {% if settings.show_type and item.type %}
+              <p class="text-xs font-semibold tracking-[0.14em] uppercase opacity-50">{{ item.type }}</p>
+            {% endif %}
+            <p class="font-heading mt-2 text-4xl leading-tight sm:text-5xl">{{ item.title }}</p>
+            {{ ui.price(item, settings) }}
+            {% if settings.show_description and item.description %}
+              <p class="mt-4 text-lg leading-relaxed opacity-70">{{ item.description }}</p>
+            {% endif %}
+            <div class="mt-6 flex flex-wrap items-center gap-3">
+              {{ ui.buy(item, settings, '') }}
+              {{ ui.status(item, settings) }}
+            </div>
+          </div>
+        </div>
+
+      {# ---------------- List ---------------- #}
+      {% elseif layout == 'list' %}
+        <ul class="mt-12 list-none">
+          {% for item in items %}
+            <li class="flex flex-col gap-5 border-b border-line py-6 first:border-t sm:flex-row sm:items-center">
+              {% if settings.show_image %}
+                <div class="w-24 shrink-0">{{ ui.image(item, 'aspect-square w-full object-cover') }}</div>
+              {% endif %}
+              <div class="min-w-0 flex-1">
+                {% if settings.show_type and item.type %}
+                  <p class="text-xs font-semibold tracking-[0.14em] uppercase opacity-50">{{ item.type }}</p>
+                {% endif %}
+                <p class="font-heading text-xl leading-tight">{{ item.title }}</p>
+                {{ ui.price(item, settings) }}
+                {% if settings.show_description and item.description %}
+                  <p class="mt-2 text-sm opacity-60">{{ item.description }}</p>
+                {% endif %}
+              </div>
+              <div class="flex shrink-0 items-center gap-3">
+                {{ ui.status(item, settings) }}
+                {{ ui.buy(item, settings, '') }}
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+
+      {# ---------------- Strip — horizontal scroll ---------------- #}
+      {% elseif layout == 'strip' %}
+        <div class="scroll-strip mt-12">
+          {% for item in items %}
+            <div>
+              {% if settings.show_image %}{{ ui.image(item, 'aspect-square w-full object-cover') }}{% endif %}
+              <div class="mt-4">
+                <p class="font-heading text-lg leading-tight">{{ item.title }}</p>
+                {{ ui.price(item, settings) }}
+                <div class="mt-3 flex flex-wrap items-center gap-2">
+                  {{ ui.buy(item, settings, '') }}
+                  {{ ui.status(item, settings) }}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+      {# ---------------- Grid ---------------- #}
+      {% else %}
+        <div class="mt-12 grid gap-8 {{ col_class }}">
+          {% for item in items %}
+            <div class="flex flex-col">
+              {% if settings.show_image %}{{ ui.image(item, 'aspect-square w-full object-cover') }}{% endif %}
+              <div class="mt-4 flex flex-1 flex-col">
+                {% if settings.show_type and item.type %}
+                  <p class="text-xs font-semibold tracking-[0.14em] uppercase opacity-50">{{ item.type }}</p>
+                {% endif %}
+                <p class="font-heading text-lg leading-tight">{{ item.title }}</p>
+                {{ ui.price(item, settings) }}
+                {% if settings.show_description and item.description %}
+                  <p class="mt-2 text-sm opacity-60">{{ item.description }}</p>
+                {% endif %}
+                <div class="mt-auto flex flex-wrap items-center gap-2 pt-4">
+                  {{ ui.buy(item, settings, '') }}
+                  {{ ui.status(item, settings) }}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if settings.footer_cta.url %}
+        <div class="mt-12 {{ settings.align == 'center' ? 'text-center' : '' }}">
+          <a href="{{ settings.footer_cta.url }}" target="{{ settings.footer_cta.target }}" rel="noopener" class="btn btn-outline">{{ settings.footer_cta.text }}</a>
+        </div>
+      {% endif %}
+
+    {% else %}
+      <p class="mt-10 text-lg opacity-60">{{ settings.empty_text }}</p>
+    {% endif %}
+  </div>
+</section>
+{% endcanopy %}

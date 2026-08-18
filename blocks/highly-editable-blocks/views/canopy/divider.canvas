@@ -1,0 +1,77 @@
+{% canopy config %}
+{
+    "title": "Divider / Spacer",
+    "name": "divider",
+    "settings": [
+        {
+            "name": "style",
+            "type": "radio",
+            "label": "Style",
+            "options": [
+                { "value": "space", "label": "Empty space" },
+                { "value": "line", "label": "Full-width line" },
+                { "value": "inset", "label": "Line inside the content width" },
+                { "value": "label", "label": "Line with a label" }
+            ],
+            "default": "line"
+        },
+        { "name": "label", "type": "text", "label": "Label", "default": "" },
+        {
+            "name": "spacing",
+            "type": "select",
+            "label": "Height",
+            "options": [
+                { "value": "xs", "label": "Extra small" },
+                { "value": "sm", "label": "Small" },
+                { "value": "md", "label": "Medium" },
+                { "value": "lg", "label": "Large" },
+                { "value": "xl", "label": "Extra large" }
+            ],
+            "default": "md"
+        },
+        {
+            "name": "tone",
+            "type": "select",
+            "label": "Background",
+            "options": [
+                { "value": "default", "label": "Page background" },
+                { "value": "surface", "label": "Card colour" },
+                { "value": "accent", "label": "Accent" },
+                { "value": "invert", "label": "Inverted" }
+            ],
+            "default": "default"
+        }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+{% set tones = {
+    'default': 'bg-bg text-ink',
+    'surface': 'bg-surface text-ink',
+    'accent': 'bg-accent text-on-accent',
+    'invert': 'bg-ink text-bg'
+} %}
+{% set pads = { 'xs': 'py-4', 'sm': 'py-8', 'md': 'py-14', 'lg': 'py-20', 'xl': 'py-32' } %}
+{% set tone_class = tones[settings.tone] ?? tones['default'] %}
+{% set pad_class = pads[settings.spacing] ?? pads['md'] %}
+
+<div class="{{ tone_class }} {{ pad_class }}" aria-hidden="{{ settings.style == 'label' and settings.label ? 'false' : 'true' }}">
+  {% if settings.style == 'line' %}
+    <hr class="border-t border-line" />
+
+  {% elseif settings.style == 'inset' %}
+    <div class="wrap"><hr class="border-t border-line" /></div>
+
+  {% elseif settings.style == 'label' %}
+    <div class="wrap flex items-center gap-4">
+      <hr class="flex-1 border-t border-line" />
+      {% if settings.label %}
+        <span class="eyebrow shrink-0">{{ settings.label }}</span>
+        <hr class="flex-1 border-t border-line" />
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
+{% endcanopy %}
+

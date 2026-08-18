@@ -1,0 +1,477 @@
+{% canopy config %}
+{
+    "title": "Site Theme",
+    "name": "theme",
+    "settings": [
+        {
+            "name": "palette",
+            "type": "select",
+            "label": "Colour preset",
+            "tab": "Colours",
+            "options": [
+                { "value": "midnight", "label": "Midnight — dark neutral, electric violet" },
+                { "value": "noir", "label": "Noir — pure black and white, red flash" },
+                { "value": "acid", "label": "Acid — near-black, lime and magenta" },
+                { "value": "sunset", "label": "Sunset — deep plum, coral and gold" },
+                { "value": "poster", "label": "Poster — black, screen-print red and yellow" },
+                { "value": "neon", "label": "Neon — black, hot pink and cyan" },
+                { "value": "ultraviolet", "label": "Ultraviolet — deep purple, mint" },
+                { "value": "ember", "label": "Ember — charcoal, burnt orange" },
+                { "value": "sea", "label": "Sea — deep teal, aqua" },
+                { "value": "slate", "label": "Slate — cool grey, soft blue" },
+                { "value": "chrome", "label": "Chrome — gunmetal, silver" },
+                { "value": "bone", "label": "Bone — warm off-white, ink" },
+                { "value": "cream", "label": "Cream — light editorial, red" },
+                { "value": "custom", "label": "Custom — use the pickers below" }
+            ],
+            "default": "midnight"
+        },
+        { "name": "custom_bg", "type": "color", "label": "Page background", "tab": "Colours", "group": "Custom palette", "default": "#0b0b12" },
+        { "name": "custom_surface", "type": "color", "label": "Card / surface", "tab": "Colours", "group": "Custom palette", "default": "#15151f" },
+        { "name": "custom_ink", "type": "color", "label": "Text", "tab": "Colours", "group": "Custom palette", "default": "#f4f4f6" },
+        { "name": "custom_muted", "type": "color", "label": "Muted text", "tab": "Colours", "group": "Custom palette", "default": "#9a9aa8" },
+        { "name": "custom_accent", "type": "color", "label": "Accent", "tab": "Colours", "group": "Custom palette", "default": "#7c5cff" },
+        { "name": "custom_on_accent", "type": "color", "label": "Text on accent", "tab": "Colours", "group": "Custom palette", "default": "#ffffff" },
+        { "name": "custom_accent_2", "type": "color", "label": "Second accent", "tab": "Colours", "group": "Custom palette", "default": "#4ad8ff" },
+        { "name": "custom_on_accent_2", "type": "color", "label": "Text on second accent", "tab": "Colours", "group": "Custom palette", "default": "#06121a" },
+        { "name": "custom_line", "type": "color", "label": "Borders", "tab": "Colours", "group": "Custom palette", "default": "#2a2a38" },
+        {
+            "name": "heading_font",
+            "type": "select",
+            "label": "Heading font",
+            "tab": "Typography",
+            "options": [
+                { "value": "figtree", "label": "Sans — Figtree" },
+                { "value": "inter", "label": "Sans — Inter" },
+                { "value": "dm-sans", "label": "Sans — DM Sans" },
+                { "value": "space-grotesk", "label": "Sans — Space Grotesk" },
+                { "value": "sora", "label": "Sans — Sora" },
+                { "value": "outfit", "label": "Sans — Outfit" },
+                { "value": "manrope", "label": "Sans — Manrope" },
+                { "value": "familjen-grotesk", "label": "Sans — Familjen Grotesk" },
+                { "value": "bricolage-grotesque", "label": "Sans — Bricolage Grotesque" },
+                { "value": "league-spartan", "label": "Sans — League Spartan" },
+                { "value": "syne", "label": "Display — Syne, quirky" },
+                { "value": "unbounded", "label": "Display — Unbounded, wide geometric" },
+                { "value": "archivo-black", "label": "Display — Archivo Black, fat grotesque" },
+                { "value": "alfa-slab-one", "label": "Display — Alfa Slab One, heavy slab" },
+                { "value": "rubik-mono-one", "label": "Display — Rubik Mono One, blocky" },
+                { "value": "climate-crisis", "label": "Display — Climate Crisis, extreme" },
+                { "value": "syncopate", "label": "Display — Syncopate, wide caps" },
+                { "value": "krona-one", "label": "Display — Krona One, poster caps" },
+                { "value": "chakra-petch", "label": "Display — Chakra Petch, techno" },
+                { "value": "anton", "label": "Condensed — Anton, heavy poster" },
+                { "value": "bebas-neue", "label": "Condensed — Bebas Neue, tall caps" },
+                { "value": "oswald", "label": "Condensed — Oswald, gig poster" },
+                { "value": "antonio", "label": "Condensed — Antonio, tight" },
+                { "value": "teko", "label": "Condensed — Teko, squared" },
+                { "value": "barlow-condensed", "label": "Condensed — Barlow Condensed" },
+                { "value": "big-shoulders-display", "label": "Condensed — Big Shoulders" },
+                { "value": "staatliches", "label": "Condensed — Staatliches, stencil caps" },
+                { "value": "playfair-display", "label": "Serif — Playfair Display" },
+                { "value": "instrument-serif", "label": "Serif — Instrument Serif" },
+                { "value": "dm-serif-display", "label": "Serif — DM Serif Display" },
+                { "value": "bodoni-moda", "label": "Serif — Bodoni Moda, high contrast" },
+                { "value": "fraunces", "label": "Serif — Fraunces, soft" },
+                { "value": "lora", "label": "Serif — Lora" },
+                { "value": "libre-baskerville", "label": "Serif — Libre Baskerville" },
+                { "value": "ibm-plex-mono", "label": "Mono — IBM Plex Mono" },
+                { "value": "jetbrains-mono", "label": "Mono — JetBrains Mono" }
+            ],
+            "default": "space-grotesk"
+        },
+        {
+            "name": "body_font",
+            "type": "select",
+            "label": "Body font",
+            "tab": "Typography",
+            "options": [
+                { "value": "inter", "label": "Sans — Inter" },
+                { "value": "figtree", "label": "Sans — Figtree" },
+                { "value": "dm-sans", "label": "Sans — DM Sans" },
+                { "value": "space-grotesk", "label": "Sans — Space Grotesk" },
+                { "value": "sora", "label": "Sans — Sora" },
+                { "value": "outfit", "label": "Sans — Outfit" },
+                { "value": "manrope", "label": "Sans — Manrope" },
+                { "value": "work-sans", "label": "Sans — Work Sans" },
+                { "value": "chivo", "label": "Sans — Chivo" },
+                { "value": "instrument-sans", "label": "Sans — Instrument Sans" },
+                { "value": "source-sans-3", "label": "Sans — Source Sans 3" },
+                { "value": "familjen-grotesk", "label": "Sans — Familjen Grotesk" },
+                { "value": "barlow-condensed", "label": "Condensed — Barlow Condensed" },
+                { "value": "lora", "label": "Serif — Lora" },
+                { "value": "libre-baskerville", "label": "Serif — Libre Baskerville" },
+                { "value": "playfair-display", "label": "Serif — Playfair Display" },
+                { "value": "ibm-plex-mono", "label": "Mono — IBM Plex Mono" },
+                { "value": "jetbrains-mono", "label": "Mono — JetBrains Mono" }
+            ],
+            "default": "inter"
+        },
+        {
+            "name": "heading_style",
+            "type": "select",
+            "label": "Heading style",
+            "tab": "Typography",
+            "options": [
+                { "value": "normal", "label": "Normal" },
+                { "value": "tight", "label": "Tight — negative tracking" },
+                { "value": "tighter", "label": "Very tight — poster stacking" },
+                { "value": "uppercase", "label": "Uppercase" },
+                { "value": "uppercase-tight", "label": "Uppercase, tight" },
+                { "value": "wide", "label": "Uppercase, widely spaced" }
+            ],
+            "default": "tight"
+        },
+        {
+            "name": "heading_weight",
+            "type": "select",
+            "label": "Heading weight",
+            "tab": "Typography",
+            "options": [
+                { "value": "auto", "label": "Automatic (match the font)" },
+                { "value": "400", "label": "Regular" },
+                { "value": "600", "label": "Semibold" },
+                { "value": "700", "label": "Bold" },
+                { "value": "800", "label": "Extrabold" },
+                { "value": "900", "label": "Black" }
+            ],
+            "default": "auto"
+        },
+        {
+            "name": "heading_leading",
+            "type": "select",
+            "label": "Heading line height",
+            "tab": "Typography",
+            "options": [
+                { "value": "0.85", "label": "Crushed — stacked poster lines" },
+                { "value": "0.95", "label": "Tight" },
+                { "value": "1.05", "label": "Normal" },
+                { "value": "1.2", "label": "Relaxed" }
+            ],
+            "default": "1.05"
+        },
+        {
+            "name": "display_scale",
+            "type": "select",
+            "label": "Display size",
+            "tab": "Typography",
+            "options": [
+                { "value": "0.85", "label": "Smaller" },
+                { "value": "1", "label": "Default" },
+                { "value": "1.15", "label": "Bigger" },
+                { "value": "1.35", "label": "Huge" }
+            ],
+            "default": "1"
+        },
+        {
+            "name": "nav_case",
+            "type": "radio",
+            "label": "Navigation and label case",
+            "tab": "Typography",
+            "options": [
+                { "value": "none", "label": "As typed" },
+                { "value": "uppercase", "label": "Uppercase" }
+            ],
+            "default": "none"
+        },
+        {
+            "name": "radius",
+            "type": "select",
+            "label": "Corner rounding",
+            "tab": "Style",
+            "options": [
+                { "value": "0px", "label": "Square" },
+                { "value": "0.375rem", "label": "Slight" },
+                { "value": "0.75rem", "label": "Rounded" },
+                { "value": "1.25rem", "label": "Very rounded" },
+                { "value": "2rem", "label": "Pill" }
+            ],
+            "default": "0.75rem"
+        },
+        {
+            "name": "container",
+            "type": "select",
+            "label": "Content width",
+            "tab": "Style",
+            "options": [
+                { "value": "64rem", "label": "Narrow" },
+                { "value": "72rem", "label": "Default" },
+                { "value": "80rem", "label": "Wide" },
+                { "value": "96rem", "label": "Extra wide" },
+                { "value": "100%", "label": "Full bleed" }
+            ],
+            "default": "72rem"
+        },
+        {
+            "name": "button_style",
+            "type": "select",
+            "label": "Button style",
+            "tab": "Style",
+            "group": "Buttons",
+            "options": [
+                { "value": "solid", "label": "Solid — filled with the accent" },
+                { "value": "outline", "label": "Outline — accent border only" },
+                { "value": "brutal", "label": "Brutal — hard offset shadow" },
+                { "value": "ghost", "label": "Ghost — text with an underline" }
+            ],
+            "default": "solid"
+        },
+        {
+            "name": "button_shape",
+            "type": "radio",
+            "label": "Button shape",
+            "tab": "Style",
+            "group": "Buttons",
+            "options": [
+                { "value": "theme", "label": "Match corner rounding" },
+                { "value": "pill", "label": "Pill" },
+                { "value": "square", "label": "Square" }
+            ],
+            "default": "theme"
+        },
+        {
+            "name": "button_case",
+            "type": "radio",
+            "label": "Button text case",
+            "tab": "Style",
+            "group": "Buttons",
+            "options": [
+                { "value": "none", "label": "As typed" },
+                { "value": "uppercase", "label": "Uppercase" }
+            ],
+            "default": "none"
+        },
+        {
+            "name": "texture",
+            "type": "select",
+            "label": "Page texture",
+            "tab": "Style",
+            "group": "Texture",
+            "options": [
+                { "value": "none", "label": "None" },
+                { "value": "grain", "label": "Film grain" },
+                { "value": "scanlines", "label": "Scanlines" },
+                { "value": "vignette", "label": "Vignette — darkened edges" }
+            ],
+            "default": "none"
+        },
+        { "name": "texture_strength", "type": "number", "label": "Texture strength (%)", "tab": "Style", "group": "Texture", "min": 1, "max": 100, "default": 25 }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+{#
+  Site-wide theme. Renders a <style> block of CSS custom properties that every
+  other block reads through Tailwind utilities (bg-bg, text-ink, bg-accent,
+  font-heading, rounded-theme, ...). Defaults for all of these also live in
+  :root in src/styles/global.css, so the site looks finished before an editor
+  adds this block.
+
+  Only `bunny` weights that the family actually publishes are requested —
+  asking Bunny Fonts for a weight a family doesn't have returns nothing for
+  that family, silently dropping the font.
+#}
+{% set fonts = {
+    'figtree':               { 'bunny': 'figtree:400,500,700,800',            'stack': "Figtree, ui-sans-serif, system-ui, sans-serif", 'weight': '800' },
+    'inter':                 { 'bunny': 'inter:400,500,600,700',              'stack': "Inter, ui-sans-serif, system-ui, sans-serif", 'weight': '700' },
+    'dm-sans':               { 'bunny': 'dm-sans:400,500,700',                'stack': "'DM Sans', ui-sans-serif, system-ui, sans-serif", 'weight': '700' },
+    'space-grotesk':         { 'bunny': 'space-grotesk:400,500,700',          'stack': "'Space Grotesk', ui-sans-serif, system-ui, sans-serif", 'weight': '700' },
+    'sora':                  { 'bunny': 'sora:400,500,700,800',               'stack': "Sora, ui-sans-serif, system-ui, sans-serif", 'weight': '700' },
+    'outfit':                { 'bunny': 'outfit:400,500,700,900',             'stack': "Outfit, ui-sans-serif, system-ui, sans-serif", 'weight': '700' },
+    'manrope':               { 'bunny': 'manrope:400,500,700,800',            'stack': "Manrope, ui-sans-serif, system-ui, sans-serif", 'weight': '800' },
+    'work-sans':             { 'bunny': 'work-sans:400,500,600,700',          'stack': "'Work Sans', ui-sans-serif, system-ui, sans-serif", 'weight': '700' },
+    'chivo':                 { 'bunny': 'chivo:400,500,700,900',              'stack': "Chivo, ui-sans-serif, system-ui, sans-serif", 'weight': '700' },
+    'instrument-sans':       { 'bunny': 'instrument-sans:400,500,600,700',    'stack': "'Instrument Sans', ui-sans-serif, system-ui, sans-serif", 'weight': '700' },
+    'source-sans-3':         { 'bunny': 'source-sans-3:400,600,700,900',      'stack': "'Source Sans 3', ui-sans-serif, system-ui, sans-serif", 'weight': '700' },
+    'familjen-grotesk':      { 'bunny': 'familjen-grotesk:400,500,600,700',   'stack': "'Familjen Grotesk', ui-sans-serif, system-ui, sans-serif", 'weight': '700' },
+    'bricolage-grotesque':   { 'bunny': 'bricolage-grotesque:400,600,700,800','stack': "'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif", 'weight': '800' },
+    'league-spartan':        { 'bunny': 'league-spartan:400,600,700,900',     'stack': "'League Spartan', ui-sans-serif, system-ui, sans-serif", 'weight': '900' },
+    'syne':                  { 'bunny': 'syne:400,600,700,800',               'stack': "Syne, ui-sans-serif, system-ui, sans-serif", 'weight': '800' },
+    'unbounded':             { 'bunny': 'unbounded:400,600,800,900',          'stack': "Unbounded, ui-sans-serif, system-ui, sans-serif", 'weight': '800' },
+    'archivo-black':         { 'bunny': 'archivo-black:400',                  'stack': "'Archivo Black', ui-sans-serif, system-ui, sans-serif", 'weight': '400' },
+    'alfa-slab-one':         { 'bunny': 'alfa-slab-one:400',                  'stack': "'Alfa Slab One', ui-serif, Georgia, serif", 'weight': '400' },
+    'rubik-mono-one':        { 'bunny': 'rubik-mono-one:400',                 'stack': "'Rubik Mono One', ui-sans-serif, system-ui, sans-serif", 'weight': '400' },
+    'climate-crisis':        { 'bunny': 'climate-crisis:400',                 'stack': "'Climate Crisis', ui-sans-serif, system-ui, sans-serif", 'weight': '400' },
+    'syncopate':             { 'bunny': 'syncopate:400,700',                  'stack': "Syncopate, ui-sans-serif, system-ui, sans-serif", 'weight': '700' },
+    'krona-one':             { 'bunny': 'krona-one:400',                      'stack': "'Krona One', ui-sans-serif, system-ui, sans-serif", 'weight': '400' },
+    'chakra-petch':          { 'bunny': 'chakra-petch:400,500,600,700',       'stack': "'Chakra Petch', ui-sans-serif, system-ui, sans-serif", 'weight': '700' },
+    'anton':                 { 'bunny': 'anton:400',                          'stack': "Anton, ui-sans-serif, system-ui, sans-serif", 'weight': '400' },
+    'bebas-neue':            { 'bunny': 'bebas-neue:400',                     'stack': "'Bebas Neue', ui-sans-serif, system-ui, sans-serif", 'weight': '400' },
+    'oswald':                { 'bunny': 'oswald:400,500,600,700',             'stack': "Oswald, ui-sans-serif, system-ui, sans-serif", 'weight': '600' },
+    'antonio':               { 'bunny': 'antonio:400,500,600,700',            'stack': "Antonio, ui-sans-serif, system-ui, sans-serif", 'weight': '700' },
+    'teko':                  { 'bunny': 'teko:400,500,600,700',               'stack': "Teko, ui-sans-serif, system-ui, sans-serif", 'weight': '600' },
+    'barlow-condensed':      { 'bunny': 'barlow-condensed:400,500,600,700',   'stack': "'Barlow Condensed', ui-sans-serif, system-ui, sans-serif", 'weight': '700' },
+    'big-shoulders-display': { 'bunny': 'big-shoulders-display:400,600,700,900', 'stack': "'Big Shoulders Display', ui-sans-serif, system-ui, sans-serif", 'weight': '800' },
+    'staatliches':           { 'bunny': 'staatliches:400',                    'stack': "Staatliches, ui-sans-serif, system-ui, sans-serif", 'weight': '400' },
+    'playfair-display':      { 'bunny': 'playfair-display:400,700,900',       'stack': "'Playfair Display', ui-serif, Georgia, serif", 'weight': '700' },
+    'instrument-serif':      { 'bunny': 'instrument-serif:400',               'stack': "'Instrument Serif', ui-serif, Georgia, serif", 'weight': '400' },
+    'dm-serif-display':      { 'bunny': 'dm-serif-display:400',               'stack': "'DM Serif Display', ui-serif, Georgia, serif", 'weight': '400' },
+    'bodoni-moda':           { 'bunny': 'bodoni-moda:400,600,700,900',        'stack': "'Bodoni Moda', ui-serif, Georgia, serif", 'weight': '700' },
+    'fraunces':              { 'bunny': 'fraunces:400,600,700,900',           'stack': "Fraunces, ui-serif, Georgia, serif", 'weight': '700' },
+    'lora':                  { 'bunny': 'lora:400,500,600,700',               'stack': "Lora, ui-serif, Georgia, serif", 'weight': '600' },
+    'libre-baskerville':     { 'bunny': 'libre-baskerville:400,700',          'stack': "'Libre Baskerville', ui-serif, Georgia, serif", 'weight': '700' },
+    'ibm-plex-mono':         { 'bunny': 'ibm-plex-mono:400,500,600',          'stack': "'IBM Plex Mono', ui-monospace, monospace", 'weight': '600' },
+    'jetbrains-mono':        { 'bunny': 'jetbrains-mono:400,500,700,800',     'stack': "'JetBrains Mono', ui-monospace, monospace", 'weight': '700' }
+} %}
+
+{% set palettes = {
+    'midnight':    { 'bg': '#0b0b12', 'surface': '#15151f', 'ink': '#f4f4f6', 'muted': '#9a9aa8', 'accent': '#7c5cff', 'on_accent': '#ffffff', 'accent_2': '#4ad8ff', 'on_accent_2': '#06121a', 'line': 'rgb(255 255 255 / 0.12)' },
+    'noir':        { 'bg': '#000000', 'surface': '#0e0e0e', 'ink': '#ffffff', 'muted': '#8a8a8a', 'accent': '#ffffff', 'on_accent': '#000000', 'accent_2': '#ff3b30', 'on_accent_2': '#ffffff', 'line': 'rgb(255 255 255 / 0.18)' },
+    'acid':        { 'bg': '#0c0f0a', 'surface': '#161b12', 'ink': '#f2ffe8', 'muted': '#97a78c', 'accent': '#d6ff3f', 'on_accent': '#0c0f0a', 'accent_2': '#ff5cf0', 'on_accent_2': '#12000f', 'line': 'rgb(214 255 63 / 0.18)' },
+    'sunset':      { 'bg': '#14090f', 'surface': '#1f0f18', 'ink': '#fff1f5', 'muted': '#c39bac', 'accent': '#ff5e5b', 'on_accent': '#14090f', 'accent_2': '#ffb400', 'on_accent_2': '#1a1000', 'line': 'rgb(255 94 91 / 0.2)' },
+    'poster':      { 'bg': '#0a0a0a', 'surface': '#141414', 'ink': '#f5f0e6', 'muted': '#8f8a80', 'accent': '#e0231f', 'on_accent': '#ffffff', 'accent_2': '#d7dd2a', 'on_accent_2': '#0a0a0a', 'line': 'rgb(224 35 31 / 0.28)' },
+    'neon':        { 'bg': '#050505', 'surface': '#101010', 'ink': '#ffffff', 'muted': '#7d7d7d', 'accent': '#ff2d95', 'on_accent': '#ffffff', 'accent_2': '#00f0ff', 'on_accent_2': '#001a1c', 'line': 'rgb(255 45 149 / 0.28)' },
+    'ultraviolet': { 'bg': '#0d0616', 'surface': '#180a26', 'ink': '#f6ecff', 'muted': '#a892c0', 'accent': '#b026ff', 'on_accent': '#ffffff', 'accent_2': '#00e5c0', 'on_accent_2': '#00201b', 'line': 'rgb(176 38 255 / 0.24)' },
+    'ember':       { 'bg': '#0e0906', 'surface': '#1a110b', 'ink': '#fff3e8', 'muted': '#ad9481', 'accent': '#ff6a00', 'on_accent': '#150800', 'accent_2': '#ffd166', 'on_accent_2': '#1a1000', 'line': 'rgb(255 106 0 / 0.22)' },
+    'sea':         { 'bg': '#04141a', 'surface': '#082029', 'ink': '#e7fbff', 'muted': '#85a9b3', 'accent': '#00c2c7', 'on_accent': '#02181c', 'accent_2': '#7ce3a1', 'on_accent_2': '#04200f', 'line': 'rgb(0 194 199 / 0.2)' },
+    'slate':       { 'bg': '#12151a', 'surface': '#1b2027', 'ink': '#e8edf4', 'muted': '#909bab', 'accent': '#5b8def', 'on_accent': '#ffffff', 'accent_2': '#f4a261', 'on_accent_2': '#1a0f04', 'line': 'rgb(232 237 244 / 0.12)' },
+    'chrome':      { 'bg': '#101317', 'surface': '#191d23', 'ink': '#eef2f7', 'muted': '#98a2b0', 'accent': '#9fb4c7', 'on_accent': '#0b0e11', 'accent_2': '#d5e3f0', 'on_accent_2': '#0b0e11', 'line': 'rgb(238 242 247 / 0.14)' },
+    'bone':        { 'bg': '#f4f1ea', 'surface': '#ffffff', 'ink': '#171614', 'muted': '#6b665c', 'accent': '#171614', 'on_accent': '#f4f1ea', 'accent_2': '#c2410c', 'on_accent_2': '#ffffff', 'line': 'rgb(23 22 20 / 0.12)' },
+    'cream':       { 'bg': '#faf6ef', 'surface': '#ffffff', 'ink': '#1a1815', 'muted': '#6f685d', 'accent': '#d4462f', 'on_accent': '#ffffff', 'accent_2': '#1a1815', 'on_accent_2': '#faf6ef', 'line': 'rgb(26 24 21 / 0.12)' }
+} %}
+
+{% set styles = {
+    'normal':          { 'transform': 'none', 'tracking': '0em' },
+    'tight':           { 'transform': 'none', 'tracking': '-0.03em' },
+    'tighter':         { 'transform': 'none', 'tracking': '-0.055em' },
+    'uppercase':       { 'transform': 'uppercase', 'tracking': '0.01em' },
+    'uppercase-tight': { 'transform': 'uppercase', 'tracking': '-0.02em' },
+    'wide':            { 'transform': 'uppercase', 'tracking': '0.16em' }
+} %}
+
+{% set shapes = { 'theme': 'var(--site-radius)', 'pill': '999px', 'square': '0px' } %}
+
+{% set hf = fonts[settings.heading_font] ?? fonts['space-grotesk'] %}
+{% set bf = fonts[settings.body_font] ?? fonts['inter'] %}
+{% set hs = styles[settings.heading_style] ?? styles['tight'] %}
+
+{% if settings.palette == 'custom' %}
+  {% set p = {
+      'bg': settings.custom_bg,
+      'surface': settings.custom_surface,
+      'ink': settings.custom_ink,
+      'muted': settings.custom_muted,
+      'accent': settings.custom_accent,
+      'on_accent': settings.custom_on_accent,
+      'accent_2': settings.custom_accent_2,
+      'on_accent_2': settings.custom_on_accent_2,
+      'line': settings.custom_line
+  } %}
+{% else %}
+  {% set p = palettes[settings.palette] ?? palettes['midnight'] %}
+{% endif %}
+
+{% set families = hf.bunny == bf.bunny ? hf.bunny : hf.bunny ~ '|' ~ bf.bunny %}
+{% set strength = ((settings.texture_strength ?? 25) / 100) %}
+{% set btn_radius = shapes[settings.button_shape] ?? shapes['theme'] %}
+
+<link rel="stylesheet" href="https://fonts.bunny.net/css?family={{ families }}&display=swap" />
+
+<style>
+  :root {
+    --site-bg: {{ p.bg }};
+    --site-surface: {{ p.surface }};
+    --site-ink: {{ p.ink }};
+    --site-muted: {{ p.muted }};
+    --site-accent: {{ p.accent }};
+    --site-on-accent: {{ p.on_accent }};
+    --site-accent-2: {{ p.accent_2 }};
+    --site-on-accent-2: {{ p.on_accent_2 }};
+    --site-line: {{ p.line|raw }};
+
+    --site-font-heading: {{ hf.stack|raw }};
+    --site-font-body: {{ bf.stack|raw }};
+    --site-heading-weight: {{ settings.heading_weight == 'auto' ? hf.weight : settings.heading_weight }};
+    --site-heading-tracking: {{ hs.tracking }};
+    --site-heading-transform: {{ hs.transform }};
+    --site-heading-leading: {{ settings.heading_leading ?? '1.05' }};
+    --site-display-scale: {{ settings.display_scale ?? '1' }};
+    --site-nav-transform: {{ settings.nav_case == 'uppercase' ? 'uppercase' : 'none' }};
+    --site-nav-tracking: {{ settings.nav_case == 'uppercase' ? '0.08em' : '0em' }};
+
+    --site-radius: {{ settings.radius }};
+    --site-container: {{ settings.container }};
+    --site-btn-radius: {{ btn_radius|raw }};
+    --site-btn-transform: {{ settings.button_case == 'uppercase' ? 'uppercase' : 'none' }};
+  }
+
+  {# ---- Button style. Overrides the .btn-* defaults in global.css. ---- #}
+  {% if settings.button_style == 'outline' %}
+  .btn-primary {
+    background-color: transparent;
+    color: var(--site-accent);
+    border-color: var(--site-accent);
+  }
+  .btn-primary:hover {
+    background-color: var(--site-accent);
+    color: var(--site-on-accent);
+    opacity: 1;
+  }
+  {% elseif settings.button_style == 'brutal' %}
+  .btn {
+    border-color: var(--site-ink);
+    box-shadow: 4px 4px 0 var(--site-ink);
+  }
+  .btn:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 var(--site-ink);
+  }
+  .btn:active {
+    transform: translate(4px, 4px);
+    box-shadow: none;
+  }
+  .btn-outline {
+    background-color: var(--site-bg);
+  }
+  {% elseif settings.button_style == 'ghost' %}
+  .btn-primary {
+    background-color: transparent;
+    color: var(--site-accent);
+    padding-inline: 0;
+    border-radius: 0;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 6px;
+  }
+  .btn-primary:hover {
+    opacity: 0.7;
+  }
+  .btn-outline {
+    border-color: transparent;
+    padding-inline: 0;
+    text-decoration: underline;
+    text-underline-offset: 6px;
+  }
+  .btn-outline:hover {
+    background-color: transparent;
+    opacity: 0.7;
+  }
+  {% endif %}
+
+  {# ---- Page texture. Painted over the page by body::after in global.css. ---- #}
+  {% if settings.texture == 'grain' %}
+  :root {
+    --site-texture-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+    --site-texture-size: 140px 140px;
+    --site-texture-opacity: {{ strength }};
+    --site-texture-blend: overlay;
+  }
+  {% elseif settings.texture == 'scanlines' %}
+  :root {
+    --site-texture-image: repeating-linear-gradient(to bottom, rgb(0 0 0 / 0.9) 0px, rgb(0 0 0 / 0.9) 1px, transparent 1px, transparent 3px);
+    --site-texture-size: auto;
+    --site-texture-opacity: {{ strength }};
+    --site-texture-blend: multiply;
+  }
+  {% elseif settings.texture == 'vignette' %}
+  :root {
+    --site-texture-image: radial-gradient(ellipse at center, transparent 45%, rgb(0 0 0 / 0.85) 100%);
+    --site-texture-size: auto;
+    --site-texture-opacity: {{ strength }};
+    --site-texture-blend: multiply;
+  }
+  {% endif %}
+</style>
+{% endcanopy %}
+

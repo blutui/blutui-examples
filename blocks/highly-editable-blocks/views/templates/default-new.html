@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{% block title %}{{ settings.site_name }}{% endblock %}</title>
+    {% block meta %}{% endblock %}
+
+    <link rel="preconnect" href="https://fonts.bunny.net" />
+    <link rel="preconnect" href="https://fonts.bunny.net" crossorigin />
+
+    {{ asset('styles/global.css') | stylesheet_tag }}
+
+    {# Head sections for the page-scoped block area.
+
+       canopy.head / canopy.scripts take a handle only (no `shared` option) and
+       return nothing for a shared area, so blocks in the theme/header/footer
+       areas can't ship CSS or JS this way — put their CSS in global.css
+       instead. These calls are kept for the page-scoped `main` area. #}
+    {{ canopy.head('main') }}
+
+    {% block styles %}{% endblock %}
+  </head>
+  <body class="font-body bg-bg text-ink antialiased">
+    {# Site-wide theme: colours, fonts, radius, container width. #}
+    {{ canopy.blocks('theme-new') }}
+
+    <a
+      href="#content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-theme focus:bg-accent focus:px-4 focus:py-2 focus:text-on-accent"
+    >
+      Skip to content
+    </a>
+
+    {{ canopy.blocks('header-new') }}
+
+    <main id="content">
+      {% block body %}{% endblock %}
+    </main>
+
+    {{ canopy.blocks('footer-new') }}
+
+    {{ asset('js/app.js') | script_tag }}
+
+    {{ canopy.scripts('main') }}
+
+    {% block scripts %}{% endblock %}
+  </body>
+</html>
+

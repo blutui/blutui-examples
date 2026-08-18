@@ -1,0 +1,413 @@
+{% canopy config %}
+{
+    "title": "History / Timeline",
+    "name": "history",
+    "settings": [
+        {
+            "name": "layout",
+            "type": "select",
+            "label": "Layout",
+            "tab": "Content",
+            "options": [
+                { "value": "timeline", "label": "Timeline — vertical line, year in the margin" },
+                { "value": "alternating", "label": "Alternating — milestones left and right" },
+                { "value": "cards", "label": "Cards — grid of milestones" },
+                { "value": "list", "label": "List — year and story, one per row" },
+                { "value": "strip", "label": "Strip — swipeable row" }
+            ],
+            "default": "timeline"
+        },
+        { "name": "eyebrow", "type": "text", "label": "Eyebrow", "tab": "Content", "default": "Where we came from" },
+        { "name": "heading", "type": "heading", "label": "Heading", "tab": "Content", "default": { "value": "The story so far", "element": "h2" }, "elements": [{ "value": "h2", "label": "H2" }, { "value": "h3", "label": "H3" }] },
+        { "name": "intro", "type": "textarea", "label": "Intro", "tab": "Content", "default": "" },
+        { "name": "show_header", "type": "checkbox", "label": "Show the heading", "tab": "Content", "default": true },
+        { "name": "empty_text", "type": "text", "label": "Text shown when there's nothing to list", "tab": "Content", "default": "The history is being written — check back soon." },
+        { "name": "footer_cta", "type": "url", "label": "Button below the timeline", "tab": "Content", "default": { "url": "", "text": "", "target": "_self" } },
+        {
+            "name": "source",
+            "type": "radio",
+            "label": "Where the milestones come from",
+            "tab": "Milestones",
+            "options": [
+                { "value": "collection", "label": "A collection — managed in the dashboard" },
+                { "value": "manual", "label": "Typed into this block" }
+            ],
+            "default": "collection"
+        },
+        {
+            "name": "collection_handle",
+            "type": "select",
+            "label": "Collection",
+            "tab": "Milestones",
+            "group": "From a collection",
+            "options": [
+                { "value": "history", "label": "History" }
+            ],
+            "default": "history"
+        },
+        {
+            "name": "sort",
+            "type": "select",
+            "label": "Order",
+            "tab": "Milestones",
+            "group": "From a collection",
+            "options": [
+                { "value": "manual", "label": "Manual order field" },
+                { "value": "oldest", "label": "Oldest first" },
+                { "value": "newest", "label": "Newest first" }
+            ],
+            "default": "manual"
+        },
+        { "name": "featured_only", "type": "checkbox", "label": "Only show highlighted milestones", "tab": "Milestones", "group": "From a collection", "default": false },
+        { "name": "limit", "type": "number", "label": "Maximum milestones (0 = no limit)", "tab": "Milestones", "group": "From a collection", "min": 0, "max": 100, "default": 0 },
+        {
+            "name": "milestones",
+            "type": "list",
+            "label": "Milestones — one per item, separated by | : Year | Title | Description",
+            "tab": "Milestones",
+            "group": "Typed into this block",
+            "default": [
+                "2014 | First rehearsal | Four of us, a borrowed practice room and one working amp.",
+                "2016 | First single | Recorded live in two takes and put out ourselves.",
+                "2019 | First headline tour | Twelve cities, one van, no days off.",
+                "2023 | The new record | Written at home, finished in a barn in the middle of nowhere."
+            ]
+        },
+        { "name": "show_year", "type": "checkbox", "label": "Show the year", "tab": "Visibility", "default": true },
+        { "name": "show_image", "type": "checkbox", "label": "Show the image", "tab": "Visibility", "default": true },
+        { "name": "show_description", "type": "checkbox", "label": "Show the description", "tab": "Visibility", "default": true },
+        { "name": "show_body", "type": "checkbox", "label": "Show the longer story", "tab": "Visibility", "default": false },
+        { "name": "show_link", "type": "checkbox", "label": "Show the link", "tab": "Visibility", "default": true },
+        {
+            "name": "columns",
+            "type": "select",
+            "label": "Card columns",
+            "tab": "Appearance",
+            "options": [
+                { "value": "2", "label": "Two" },
+                { "value": "3", "label": "Three" },
+                { "value": "4", "label": "Four" }
+            ],
+            "default": "3"
+        },
+        {
+            "name": "year_style",
+            "type": "select",
+            "label": "Year style",
+            "tab": "Appearance",
+            "options": [
+                { "value": "accent", "label": "Small, accent colour" },
+                { "value": "display", "label": "Large display type" },
+                { "value": "outline", "label": "Outlined pill" }
+            ],
+            "default": "accent"
+        },
+        {
+            "name": "marker",
+            "type": "select",
+            "label": "Timeline marker",
+            "tab": "Appearance",
+            "options": [
+                { "value": "dot", "label": "Dot" },
+                { "value": "ring", "label": "Ring" },
+                { "value": "bar", "label": "Bar" },
+                { "value": "none", "label": "No line or marker" }
+            ],
+            "default": "dot"
+        },
+        {
+            "name": "card_style",
+            "type": "radio",
+            "label": "Milestone style",
+            "tab": "Appearance",
+            "options": [
+                { "value": "plain", "label": "Plain" },
+                { "value": "card", "label": "Card" }
+            ],
+            "default": "plain"
+        },
+        {
+            "name": "tone",
+            "type": "select",
+            "label": "Background",
+            "tab": "Style",
+            "options": [
+                { "value": "default", "label": "Page background" },
+                { "value": "surface", "label": "Card colour" },
+                { "value": "accent", "label": "Accent" },
+                { "value": "invert", "label": "Inverted" },
+                { "value": "custom", "label": "Custom colours" }
+            ],
+            "default": "default"
+        },
+        { "name": "bg_color", "type": "color", "label": "Custom background", "tab": "Style", "group": "Custom colours", "default": "#15151f" },
+        { "name": "text_color", "type": "color", "label": "Custom text", "tab": "Style", "group": "Custom colours", "default": "#f4f4f6" },
+        {
+            "name": "spacing",
+            "type": "select",
+            "label": "Vertical spacing",
+            "tab": "Style",
+            "options": [
+                { "value": "none", "label": "None" },
+                { "value": "sm", "label": "Small" },
+                { "value": "md", "label": "Medium" },
+                { "value": "lg", "label": "Large" },
+                { "value": "xl", "label": "Extra large" }
+            ],
+            "default": "lg"
+        },
+        {
+            "name": "align",
+            "type": "radio",
+            "label": "Header alignment",
+            "tab": "Style",
+            "options": [
+                { "value": "left", "label": "Left" },
+                { "value": "center", "label": "Centre" }
+            ],
+            "default": "left"
+        },
+        { "name": "anchor", "type": "text", "label": "Anchor ID (for menu links)", "tab": "Style", "default": "history" }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+{#
+  Band history from either the `history` Collection or a pipe-separated list
+  typed into the block. Both are normalised into one row shape up front so the
+  layouts below only deal with one structure — the same approach as the Tour
+  Dates block.
+
+  Guard the lookup with `?? []` — an unknown handle returns null, and piping
+  null into |filter throws, which Canopy swallows into a blank section.
+#}
+{% set tones = {
+    'default': 'bg-bg text-ink',
+    'surface': 'bg-surface text-ink',
+    'accent': 'bg-accent text-on-accent',
+    'invert': 'bg-ink text-bg'
+} %}
+{% set pads = { 'none': 'py-0', 'sm': 'py-10 sm:py-12', 'md': 'py-16 sm:py-20', 'lg': 'py-24 sm:py-28', 'xl': 'py-32 sm:py-40' } %}
+{% set cols = { '2': 'sm:grid-cols-2', '3': 'sm:grid-cols-2 lg:grid-cols-3', '4': 'sm:grid-cols-2 lg:grid-cols-4' } %}
+{% set markers = {
+    'dot': 'h-3 w-3 rounded-full bg-accent',
+    'ring': 'h-3.5 w-3.5 rounded-full border-2 border-accent',
+    'bar': 'h-1 w-8 bg-accent',
+    'none': ''
+} %}
+
+{% set tone_class = settings.tone == 'custom' ? '' : (tones[settings.tone] ?? tones['default']) %}
+{% set tone_style = settings.tone == 'custom' ? 'background-color:' ~ settings.bg_color ~ ';color:' ~ settings.text_color ~ ';' : '' %}
+{% set pad_class = pads[settings.spacing] ?? pads['lg'] %}
+{% set col_class = cols[settings.columns] ?? cols['3'] %}
+{% set align_class = settings.align == 'center' ? 'text-center mx-auto max-w-2xl' : '' %}
+{% set el = settings.heading.element ?? 'h2' %}
+{% set layout = settings.layout ?? 'timeline' %}
+{% set marker_class = markers[settings.marker] ?? markers['dot'] %}
+{% set has_line = settings.marker != 'none' %}
+
+{# Tailwind's content-[''] needs single quotes of its own, so these class
+   strings are written with double quotes rather than inlined below. #}
+{% set line_left = "relative before:absolute before:inset-y-2 before:left-[7px] before:w-px before:bg-line before:content-['']" %}
+{% set line_centre = "lg:before:absolute lg:before:inset-y-0 lg:before:left-1/2 lg:before:w-px lg:before:-translate-x-1/2 lg:before:bg-line lg:before:content-['']" %}
+
+{% set cfg = {
+    'year_style': settings.year_style ?? 'accent',
+    'card': settings.card_style == 'card' ? 'card p-6' : '',
+    'show_year': settings.show_year,
+    'show_image': settings.show_image,
+    'show_description': settings.show_description,
+    'show_body': settings.show_body,
+    'show_link': settings.show_link
+} %}
+
+{# ---- Normalise both sources into: year, title, description, body, image, link, link_label ---- #}
+{% set rows = [] %}
+
+{% if settings.source == 'collection' %}
+  {% set entries = cms.collection(settings.collection_handle ?? 'history') ?? [] %}
+
+  {% if settings.featured_only %}
+    {% set entries = entries|filter(e => e.featured == 'Yes') %}
+  {% endif %}
+
+  {% if settings.sort == 'oldest' %}
+    {% set entries = entries|sort((a, b) => (a.date|date('U')) <=> (b.date|date('U'))) %}
+  {% elseif settings.sort == 'newest' %}
+    {% set entries = entries|sort((a, b) => (b.date|date('U')) <=> (a.date|date('U'))) %}
+  {% else %}
+    {% set entries = entries|sort((a, b) => (a.order ?? 0) <=> (b.order ?? 0)) %}
+  {% endif %}
+
+  {% if settings.limit > 0 %}
+    {% set entries = entries|slice(0, settings.limit) %}
+  {% endif %}
+
+  {% for e in entries %}
+    {% set rows = rows|merge([{
+        'year': e.year ?: (e.date ? e.date|date('Y') : ''),
+        'title': e.title,
+        'description': e.description ?? '',
+        'body': e.body ?? '',
+        'image': e.image ? e.image | image_url({ width: 1000, format: 'webp' }) : '',
+        'link': e.link ?? '',
+        'link_label': e.link_label ?: 'Read more'
+    }]) %}
+  {% endfor %}
+
+{% else %}
+  {% for row in settings.milestones|filter(m => m|trim is not empty) %}
+    {% set p = row|split('|') %}
+    {% set rows = rows|merge([{
+        'year': (p[0] ?? '')|trim,
+        'title': (p[1] ?? '')|trim,
+        'description': (p[2] ?? '')|trim,
+        'body': '',
+        'image': '',
+        'link': '',
+        'link_label': ''
+    }]) %}
+  {% endfor %}
+{% endif %}
+
+{% import _self as ui %}
+
+{% macro year(row, cfg) %}
+  {% if cfg.show_year and row.year %}
+    {% if cfg.year_style == 'display' %}
+      <span class="font-heading block text-4xl leading-none opacity-30">{{ row.year }}</span>
+    {% elseif cfg.year_style == 'outline' %}
+      <span class="inline-block rounded-theme border border-line px-2.5 py-1 text-xs font-semibold tracking-wide uppercase">{{ row.year }}</span>
+    {% else %}
+      <span class="block text-sm font-semibold tracking-[0.16em] text-accent uppercase">{{ row.year }}</span>
+    {% endif %}
+  {% endif %}
+{% endmacro %}
+
+{% macro body(row, cfg) %}
+  <p class="font-heading mt-2 text-2xl leading-tight">{{ row.title }}</p>
+  {% if cfg.show_description and row.description %}
+    <p class="mt-2 leading-relaxed opacity-70">{{ row.description }}</p>
+  {% endif %}
+  {% if cfg.show_body and row.body %}
+    <div class="rich mt-4 text-sm">{{ row.body|raw }}</div>
+  {% endif %}
+  {% if cfg.show_link and row.link %}
+    <a href="{{ row.link }}" class="mt-4 inline-block text-sm font-semibold text-accent no-underline hover:underline">{{ row.link_label }} &rarr;</a>
+  {% endif %}
+{% endmacro %}
+
+{% macro image(row, cfg, klass) %}
+  {% if cfg.show_image and row.image %}
+    <img src="{{ row.image }}" alt="{{ row.title }}" loading="lazy" class="{{ klass }} w-full rounded-theme object-cover" />
+  {% endif %}
+{% endmacro %}
+
+<section
+  {% if settings.anchor %}id="{{ settings.anchor }}"{% endif %}
+  class="{{ tone_class }}"
+  {% if tone_style %}style="{{ tone_style }}"{% endif %}
+>
+  <div class="wrap {{ pad_class }}">
+
+    {% if settings.show_header %}
+      <div class="{{ align_class }}">
+        {% if settings.eyebrow %}<span class="eyebrow text-accent">{{ settings.eyebrow }}</span>{% endif %}
+        <{{ el }} class="mt-3 text-4xl text-balance sm:text-5xl">{{ settings.heading.value }}</{{ el }}>
+        {% if settings.intro %}<p class="mt-4 text-lg opacity-70">{{ settings.intro }}</p>{% endif %}
+      </div>
+    {% endif %}
+
+    {% if rows|length %}
+
+      {# ---------------- Alternating — left and right of a centre line ---------------- #}
+      {% if layout == 'alternating' %}
+        <div class="relative mt-14 {{ has_line ? line_centre : '' }}">
+          {% for row in rows %}
+            {% set flip = loop.index0 % 2 == 1 %}
+            <div class="relative grid gap-6 pb-14 last:pb-0 lg:grid-cols-2 lg:gap-16">
+              <div class="{{ flip ? 'lg:order-2 lg:pl-4' : 'lg:pr-4 lg:text-right' }}">
+                <div class="{{ cfg.card }}">
+                  {{ ui.year(row, cfg) }}
+                  {{ ui.body(row, cfg) }}
+                </div>
+              </div>
+              <div class="{{ flip ? 'lg:order-1' : '' }}">
+                {{ ui.image(row, cfg, 'aspect-3/2') }}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+      {# ---------------- Cards ---------------- #}
+      {% elseif layout == 'cards' %}
+        <div class="mt-12 grid gap-8 {{ col_class }}">
+          {% for row in rows %}
+            <div class="flex flex-col {{ cfg.card }}">
+              {{ ui.image(row, cfg, 'aspect-3/2 mb-5') }}
+              {{ ui.year(row, cfg) }}
+              {{ ui.body(row, cfg) }}
+            </div>
+          {% endfor %}
+        </div>
+
+      {# ---------------- Strip — horizontal scroll ---------------- #}
+      {% elseif layout == 'strip' %}
+        <div class="scroll-strip mt-12">
+          {% for row in rows %}
+            <div class="{{ cfg.card }}">
+              {{ ui.image(row, cfg, 'aspect-3/2 mb-5') }}
+              {{ ui.year(row, cfg) }}
+              {{ ui.body(row, cfg) }}
+            </div>
+          {% endfor %}
+        </div>
+
+      {# ---------------- List — year in a column, story beside it ---------------- #}
+      {% elseif layout == 'list' %}
+        <ul class="mt-12 list-none">
+          {% for row in rows %}
+            <li class="flex flex-col gap-4 border-b border-line py-8 first:border-t sm:flex-row sm:gap-10">
+              <div class="shrink-0 sm:w-40">{{ ui.year(row, cfg) }}</div>
+              <div class="min-w-0 flex-1">
+                {{ ui.body(row, cfg) }}
+                {{ ui.image(row, cfg, 'aspect-3/2 mt-5') }}
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+
+      {# ---------------- Timeline — line down the left ---------------- #}
+      {% else %}
+        <ol class="mt-12 list-none {{ has_line ? line_left : '' }}">
+          {% for row in rows %}
+            <li class="relative pb-12 last:pb-0 {{ has_line ? 'pl-10' : '' }}">
+              {% if has_line %}
+                <span class="absolute top-2 left-0 flex h-4 w-4 items-center justify-center" aria-hidden="true">
+                  <span class="{{ marker_class }}"></span>
+                </span>
+              {% endif %}
+              <div class="{{ cfg.card }}">
+                {{ ui.year(row, cfg) }}
+                {{ ui.body(row, cfg) }}
+                {{ ui.image(row, cfg, 'aspect-3/2 mt-5 max-w-lg') }}
+              </div>
+            </li>
+          {% endfor %}
+        </ol>
+      {% endif %}
+
+      {% if settings.footer_cta.url %}
+        <div class="mt-12 {{ settings.align == 'center' ? 'text-center' : '' }}">
+          <a href="{{ settings.footer_cta.url }}" target="{{ settings.footer_cta.target }}" class="btn btn-outline">{{ settings.footer_cta.text }}</a>
+        </div>
+      {% endif %}
+
+    {% else %}
+      <p class="mt-10 text-lg opacity-60">{{ settings.empty_text }}</p>
+    {% endif %}
+  </div>
+</section>
+{% endcanopy %}
+

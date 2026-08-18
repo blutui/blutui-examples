@@ -1,0 +1,51 @@
+{#
+  Renders a Blutui form using the shared field macros.
+
+  Variables:
+    handle       — 'contact' or 'newsletter'
+    submit_label — button text
+    hide_labels  — true to rely on placeholders instead of labels
+    columns      — 1 or 2
+
+  IMPORTANT: the {% form %} tag only accepts a *literal* string handle. Passing
+  a variable is a compile-time error that 500s the page — and inside a Canopy
+  block it makes the whole section render blank. So each supported form gets its
+  own branch below. To add another form, copy a branch and change the literal.
+
+  cms.form() returns falsy for a handle that doesn't exist in the dashboard,
+  which keeps the rest of the section visible instead of erroring.
+#}
+
+{% import 'components/form-fields' as ui %}
+
+{% set h = handle ?? 'contact' %}
+
+{% if h == 'newsletter' %}
+  {% if cms.form('newsletter') %}
+    {% form 'newsletter' %}
+      {{ ui.body(form, hide_labels ?? false, columns ?? 1, submit_label ?? 'Sign up') }}
+    {% endform %}
+  {% else %}
+    {{ ui.missing('newsletter') }}
+  {% endif %}
+
+{% elseif h == 'fan_club' %}
+  {% if cms.form('fan_club') %}
+    {% form 'fan_club' %}
+      {{ ui.body(form, hide_labels ?? false, columns ?? 1, submit_label ?? 'Join') }}
+    {% endform %}
+  {% else %}
+    {{ ui.missing('fan_club') }}
+  {% endif %}
+
+{% else %}
+  {% if cms.form('contact') %}
+    {% form 'contact' %}
+      {{ ui.body(form, hide_labels ?? false, columns ?? 1, submit_label ?? 'Send') }}
+    {% endform %}
+  {% else %}
+    {{ ui.missing('contact') }}
+  {% endif %}
+{% endif %}
+
+
