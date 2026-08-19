@@ -1,7 +1,7 @@
 # blutui-examples
 
 Example projects for [Blutui](https://www.blutui.com), each living in its own
-folder. Every project is self-contained — `cd` into it, install its
+folder. Every project is self-contained: `cd` into it, install its
 dependencies, and run it with the Blutui Courier CLI.
 
 ## Examples
@@ -9,9 +9,9 @@ dependencies, and run it with the Blutui Courier CLI.
 ### [`blocks/simple-blocks-usage`](blocks/simple-blocks-usage)
 
 A Schweppes-inspired brand site showing **simple, straightforward Canopy
-blocks**. Each block is a self-contained section — hero, product hero, story,
+blocks**. Each block is a self-contained section (hero, product hero, story,
 heritage timeline, recipes, nutrition table, tasting notes, royal warrant and
-more — with a small set of Content/Style settings and sensible image defaults,
+more) with a small set of Content/Style settings and sensible image defaults,
 so it's easy to see how a block's `config` and `template` sections fit
 together.
 
@@ -19,10 +19,10 @@ Highlights:
 
 - **17 content blocks** across a home page and a product page, composed with
   two layouts (`home` and `product`) and shared header/footer components.
-- **Simple settings model** — headings, text, image uploads and the occasional
+- **Simple settings model**: headings, text, image uploads and the occasional
   checkbox; every setting falls back to a bundled default image or copy, so
   blocks render finished-looking straight out of the box.
-- **Nested block partials** — repeatable rows like products, tasting notes and
+- **Nested block partials**: repeatable rows like products, tasting notes and
   nutrition entries live as sub-templates (`products/item.canvas`,
   `nutrition/row.canvas`), showing how to structure list-style blocks.
 
@@ -39,19 +39,19 @@ courier dev      # serves at https://localhost:8080
 
 An artist landing page built as a system of **highly editable Canopy blocks**.
 One Site Theme block drives colours, typography and styling site-wide via CSS
-custom properties, and every other block inherits from it — so editors can
+custom properties, and every other block inherits from it, so editors can
 compose and restyle entire pages in the Canopy editor without touching code.
 
 Highlights:
 
-- **Site Theme block** — 13 colour presets (plus full custom palettes), 36
+- **Site Theme block**: 13 colour presets (plus full custom palettes), 36
   heading fonts, button styles, corner rounding, page textures, and a display
   size scale, all mapped to Tailwind utilities through `@theme inline`.
-- **25+ content blocks** — hero (including 6 WebGL shader variants powered by
+- **25+ content blocks**: hero (including 6 WebGL shader variants powered by
   [Paper Shaders](https://paper.design)), tour dates, discography, merch,
   gallery, band members, press, FAQ, forms and more, each with multiple layout
   variations plus shared Style and Visibility tabs.
-- **Collection-driven content** — ten CMS Collections back the data blocks;
+- **Collection-driven content**: ten CMS Collections back the data blocks;
   three blocks share the `tour_dates` collection and slice it into upcoming
   shows, the next show, and past gigs automatically.
 
