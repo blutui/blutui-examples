@@ -1,0 +1,19 @@
+{% extends 'templates/default' %}
+
+{% block styles %}
+  {{ canopy.head('main') }}
+  {{ canopy.head('footer') }}
+{% endblock %}
+
+{% block body %}
+  {# Fixed showcase sequence — renders every block with its defaults, and
+     editors can still fill each one in from the Canopy editor #}
+  {{ canopy.blocks('main', ['hero', 'award-spotlight', 'awards-grid', 'judges-panel']) }}
+
+  {{ canopy.blocks('footer', { shared: true }) }}
+{% endblock %}
+
+{% block scripts %}
+  {{ canopy.scripts('main') }}
+  {{ canopy.scripts('footer') }}
+{% endblock %}

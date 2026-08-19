@@ -1,0 +1,101 @@
+{% canopy config %}
+{
+    "title": "Award Spotlight",
+    "name": "award-spotlight",
+    "settings": [
+        { "name": "eyebrow", "type": "text", "tab": "Content", "default": "Award spotlight" },
+        { "name": "award", "type": "entry", "label": "Award", "tab": "Content",
+          "collection": "awards", "display_field": "title",
+          "help": "The award to feature in this section" },
+        { "name": "judges", "type": "entry", "label": "Judging panel", "tab": "Content",
+          "collection": "judges", "multiple": true, "max": 5, "display_field": "name",
+          "description": "Pick the judges for this award. Leave empty to automatically use the judges assigned on the award entry itself." },
+        { "name": "panel_label", "type": "text", "tab": "Content", "default": "Judged by" },
+        { "name": "layout", "type": "radio", "label": "Panel position", "tab": "Style",
+          "options": [
+              { "value": "right", "label": "Panel right" },
+              { "value": "left", "label": "Panel left" }
+          ],
+          "default": "right" }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+<section id="spotlight" class="relative overflow-hidden border-y border-white/5 bg-zinc-900/60">
+  <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(45%_60%_at_85%_20%,rgba(251,191,36,0.08),transparent_70%)]"></div>
+
+  <div class="relative mx-auto max-w-7xl px-6 py-20 sm:py-28">
+    {% if settings.award %}
+      {% set award = settings.award %}
+
+      {# Field B wins; when the editor picks no judges we merge from the award's
+         own multi-select field against the judges collection instead #}
+      {% set panel = settings.judges %}
+      {% if panel | length == 0 and award.judges %}
+        {% set panel = cms.collection('judges') | filter(judge => judge.slug in award.judges) %}
+      {% endif %}
+
+      <div class="grid items-center gap-14 lg:grid-cols-5">
+        <div class="lg:col-span-3 {{ settings.layout == 'left' ? 'lg:order-2' : '' }}">
+          <p class="text-xs font-semibold uppercase tracking-[0.35em] text-amber-300/90">{{ settings.eyebrow }}</p>
+
+          <div class="mt-6 flex flex-wrap items-center gap-3 text-xs font-medium uppercase tracking-widest">
+            {% if award.category %}
+              <span class="rounded-full bg-amber-400/10 px-3 py-1 text-amber-300 ring-1 ring-amber-400/30">{{ award.category }}</span>
+            {% endif %}
+            {% if award.year %}
+              <span class="rounded-full px-3 py-1 text-zinc-400 ring-1 ring-white/10">{{ award.year }}</span>
+            {% endif %}
+          </div>
+
+          <h2 class="mt-5 font-display text-4xl sm:text-6xl font-light tracking-tight text-white text-balance">{{ award.title }}</h2>
+
+          {% if award.description %}
+            <p class="mt-6 max-w-xl text-lg leading-relaxed text-zinc-400">{{ award.description }}</p>
+          {% endif %}
+        </div>
+
+        <div class="lg:col-span-2 {{ settings.layout == 'left' ? 'lg:order-1' : '' }}">
+          <div class="rounded-3xl bg-zinc-950/80 p-8 ring-1 ring-white/10">
+            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-zinc-500">{{ settings.panel_label }}</p>
+
+            {% if panel | length > 0 %}
+              <ul class="mt-6 divide-y divide-white/5">
+                {% for judge in panel %}
+                  <li class="flex items-center gap-4 py-4 first:pt-0 last:pb-0">
+                    {% if judge.photo %}
+                      <img src="{{ judge.photo | image_url({ width: 112, height: 112, format: 'webp' }) }}"
+                           alt="{{ judge.name }}" class="size-14 rounded-full object-cover ring-1 ring-white/10" />
+                    {% else %}
+                      <span class="flex size-14 items-center justify-center rounded-full bg-amber-400/10 font-display text-lg text-amber-300 ring-1 ring-amber-400/20">
+                        {{ judge.name | split(' ') | map(part => part | first) | join | upper }}
+                      </span>
+                    {% endif %}
+                    <div>
+                      <p class="font-semibold text-white">{{ judge.name }}</p>
+                      <p class="text-sm text-zinc-500">{{ judge.role }}{% if judge.company %} · {{ judge.company }}{% endif %}</p>
+                    </div>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p class="mt-6 text-sm leading-relaxed text-zinc-500">
+                No judges assigned yet — pick them in this block's settings, or assign judges on the award entry.
+              </p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="rounded-3xl border border-dashed border-white/15 p-14 text-center">
+        <p class="font-display text-2xl text-zinc-400">Select an award to spotlight</p>
+        <p class="mx-auto mt-3 max-w-md text-sm text-zinc-500">
+          Open this block's settings and choose an entry from the <strong class="text-zinc-400">awards</strong> collection,
+          then pick one or more judges from the <strong class="text-zinc-400">judges</strong> collection.
+        </p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endcanopy %}

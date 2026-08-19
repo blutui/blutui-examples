@@ -1,0 +1,116 @@
+{% canopy config %}
+{
+    "title": "Awards Grid",
+    "name": "awards-grid",
+    "settings": [
+        { "name": "heading", "type": "heading", "tab": "Content",
+          "elements": [{ "value": "h2", "label": "H2" }, { "value": "h3", "label": "H3" }],
+          "default": { "value": "The awards", "element": "h2" } },
+        { "name": "description", "type": "textarea", "tab": "Content",
+          "default": "Every category, judged on originality, execution and impact." },
+        { "name": "source", "type": "collection", "label": "Awards collection", "tab": "Content",
+          "default": "awards",
+          "help": "All entries of the chosen collection are rendered" },
+        { "name": "category", "type": "select", "label": "Filter by category", "tab": "Content",
+          "options": [
+              { "value": "all", "label": "All categories" },
+              { "value": "Product Design", "label": "Product Design" },
+              { "value": "Brand Identity", "label": "Brand Identity" },
+              { "value": "Digital Innovation", "label": "Digital Innovation" },
+              { "value": "Craft & Making", "label": "Craft & Making" },
+              { "value": "Social Impact", "label": "Social Impact" }
+          ],
+          "default": "all" },
+        { "name": "limit", "type": "number", "tab": "Content", "default": 6, "min": 1, "max": 12 },
+        { "name": "show_judges", "type": "checkbox", "label": "Show judging panels", "tab": "Style", "default": true,
+          "description": "Resolves each award's judges from its multi-select field." },
+        { "name": "columns", "type": "radio", "tab": "Style",
+          "options": [
+              { "value": "2", "label": "2 columns" },
+              { "value": "3", "label": "3 columns" }
+          ],
+          "default": "3" }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+<section id="awards" class="relative bg-zinc-950">
+  <div class="mx-auto max-w-7xl px-6 py-20 sm:py-28">
+    <div class="max-w-2xl">
+      <p class="text-xs font-semibold uppercase tracking-[0.35em] text-amber-300/90">Categories</p>
+      <{{ settings.heading.element }} class="mt-4 font-display text-4xl sm:text-5xl font-light tracking-tight text-white">
+        {{ settings.heading.value }}
+      </{{ settings.heading.element }}>
+      {% if settings.description %}
+        <p class="mt-4 text-lg text-zinc-400">{{ settings.description }}</p>
+      {% endif %}
+    </div>
+
+    {% if settings.source and settings.source.entries | length > 0 %}
+      {% set awards = settings.source.entries | sort((a, b) => a.order <=> b.order) %}
+      {% if settings.category != 'all' %}
+        {% set awards = awards | filter(award => award.category == settings.category) %}
+      {% endif %}
+      {% set awards = awards | slice(0, settings.limit) %}
+
+      {# One lookup for the whole grid — each award's panel is matched from its
+         judges multi-select field (checkbox of judge slugs) #}
+      {% set all_judges = cms.collection('judges') %}
+
+      <div class="mt-14 grid gap-6 sm:grid-cols-2 {{ settings.columns == '3' ? 'lg:grid-cols-3' : '' }}">
+        {% for award in awards %}
+          <article class="group flex flex-col rounded-3xl bg-zinc-900/70 p-8 ring-1 ring-white/10 transition hover:-translate-y-1 hover:ring-amber-400/40">
+            <div class="flex items-center justify-between text-xs font-medium uppercase tracking-widest">
+              {% if award.category %}
+                <span class="text-amber-300/90">{{ award.category }}</span>
+              {% endif %}
+              {% if award.year %}
+                <span class="text-zinc-500">{{ award.year }}</span>
+              {% endif %}
+            </div>
+
+            <h3 class="mt-5 font-display text-2xl font-light tracking-tight text-white">{{ award.title }}</h3>
+
+            {% if award.description %}
+              <p class="mt-3 line-clamp-3 text-sm leading-relaxed text-zinc-400">{{ award.description }}</p>
+            {% endif %}
+
+            {% if settings.show_judges %}
+              {% set panel = award.judges ? all_judges | filter(judge => judge.slug in award.judges) : [] %}
+              {% if panel | length > 0 %}
+                <div class="mt-auto flex items-center gap-3 pt-6">
+                  <div class="flex -space-x-2.5">
+                    {% for judge in panel | slice(0, 4) %}
+                      {% if judge.photo %}
+                        <img src="{{ judge.photo | image_url({ width: 64, height: 64, format: 'webp' }) }}"
+                             alt="{{ judge.name }}" title="{{ judge.name }}"
+                             class="size-8 rounded-full object-cover ring-2 ring-zinc-900" />
+                      {% else %}
+                        <span title="{{ judge.name }}"
+                              class="flex size-8 items-center justify-center rounded-full bg-amber-400/10 text-[10px] font-semibold text-amber-300 ring-2 ring-zinc-900">
+                          {{ judge.name | split(' ') | map(part => part | first) | join | upper }}
+                        </span>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                  <p class="text-xs text-zinc-500">
+                    Judged by {{ panel | map(judge => judge.name | split(' ') | first) | join(', ') }}
+                  </p>
+                </div>
+              {% endif %}
+            {% endif %}
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="mt-14 rounded-3xl border border-dashed border-white/15 p-14 text-center">
+        <p class="font-display text-2xl text-zinc-400">No awards to show yet</p>
+        <p class="mx-auto mt-3 max-w-md text-sm text-zinc-500">
+          Create entries in the <strong class="text-zinc-400">awards</strong> collection and they will appear here automatically.
+        </p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endcanopy %}
