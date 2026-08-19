@@ -1,0 +1,72 @@
+{% canopy config %}
+{
+    "title": "Awards Hero",
+    "name": "hero",
+    "settings": [
+        { "name": "eyebrow", "type": "text", "tab": "Content", "default": "The Meridian Awards · 2026",
+          "help": "Small label shown above the heading" },
+        { "name": "heading", "type": "heading", "tab": "Content",
+          "elements": [{ "value": "h1", "label": "H1" }],
+          "default": { "value": "Celebrating the craft behind exceptional work", "element": "h1" } },
+        { "name": "description", "type": "textarea", "tab": "Content",
+          "default": "An annual celebration of design, innovation and impact — judged by a panel of leading practitioners from around the world." },
+        { "name": "primary_cta", "type": "url", "label": "Primary button", "tab": "Content",
+          "default": { "url": "#awards", "text": "Explore the awards", "target": "_self" } },
+        { "name": "secondary_cta", "type": "url", "label": "Secondary button", "tab": "Content",
+          "default": { "url": "#judges", "text": "Meet the judges", "target": "_self" } },
+        { "name": "categories", "type": "list", "tab": "Content", "label": "Category ticker",
+          "default": ["Product Design", "Brand Identity", "Digital Innovation", "Craft & Making", "Social Impact"],
+          "description": "Shown as a row of pills under the buttons." }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+<section class="relative overflow-hidden bg-zinc-950">
+  <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_50%_at_50%_0%,rgba(251,191,36,0.12),transparent_70%)]"></div>
+  <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-400/40 to-transparent"></div>
+
+  <div class="relative mx-auto max-w-5xl px-6 py-24 sm:py-32 text-center">
+    {% if settings.eyebrow %}
+      <p class="flex items-center justify-center gap-4 text-xs font-semibold uppercase tracking-[0.35em] text-amber-300/90">
+        <span class="h-px w-10 bg-amber-400/40"></span>
+        {{ settings.eyebrow }}
+        <span class="h-px w-10 bg-amber-400/40"></span>
+      </p>
+    {% endif %}
+
+    <{{ settings.heading.element }} class="mt-8 font-display text-5xl sm:text-7xl font-light tracking-tight text-white text-balance">
+      {{ settings.heading.value }}
+    </{{ settings.heading.element }}>
+
+    {% if settings.description %}
+      <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-zinc-400">{{ settings.description }}</p>
+    {% endif %}
+
+    <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
+      {% if settings.primary_cta.url %}
+        <a href="{{ settings.primary_cta.url }}" target="{{ settings.primary_cta.target }}"
+           class="rounded-full bg-amber-400 px-7 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-amber-300">
+          {{ settings.primary_cta.text }}
+        </a>
+      {% endif %}
+      {% if settings.secondary_cta.url %}
+        <a href="{{ settings.secondary_cta.url }}" target="{{ settings.secondary_cta.target }}"
+           class="rounded-full px-7 py-3 text-sm font-semibold text-zinc-200 ring-1 ring-white/15 transition hover:bg-white/5 hover:ring-white/30">
+          {{ settings.secondary_cta.text }}
+        </a>
+      {% endif %}
+    </div>
+
+    {% if settings.categories | length > 0 %}
+      <ul class="mt-16 flex flex-wrap items-center justify-center gap-3">
+        {% for category in settings.categories %}
+          <li class="rounded-full px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-zinc-500 ring-1 ring-white/10">
+            {{ category }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+</section>
+{% endcanopy %}

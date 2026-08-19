@@ -68,8 +68,40 @@ npm run dev      # Tailwind/Parcel watch
 courier dev      # serves at https://localhost:8080
 ```
 
+### [`blocks/collection-block`](blocks/collection-block)
+
+A fictional awards site, **The Meridian Awards**, showing how **Canopy blocks
+and Collections work together** — including two ways to model a many-to-many
+relationship (awards ↔ judges) while Blutui's collection links are still
+single-relation.
+
+Highlights:
+
+- **Technique 1: multi-select + filter** — the `awards` collection stores judge
+  slugs in a checkbox field, and templates join the two collections with a
+  `filter`, in both directions (award → judging panel, judge → their awards).
+- **Technique 2: entry-select merge** — an Award Spotlight block pairs a
+  single-select `entry` setting (awards) with a multi-select `entry` setting
+  (judges) for per-page editorial curation, falling back to Technique 1 when no
+  judges are picked.
+- **Two rendering styles** — the homepage renders a fixed showcase sequence of
+  blocks, while a freeform layout leaves an open block area for
+  dashboard-created pages; both share a site-wide Footer block area.
+
+See the project's [README](blocks/collection-block/README.md) for the full
+walkthrough, collection schemas and block reference.
+
+**Run it locally:**
+
+```bash
+cd blocks/collection-block
+npm install
+npm run dev      # Tailwind watch
+courier dev      # serves at https://localhost:8080
+```
+
 ---
 
-Both examples require the [Courier CLI](https://www.blutui.com/docs/courier)
-and a `courier.json` pointing at your own site handle (not committed, see
+All examples require the [Courier CLI](https://www.blutui.com/docs/courier)
+and a `courier.json` pointing at your own site handle (not committed — see
 `.gitignore`).

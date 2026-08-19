@@ -1,0 +1,23 @@
+{% canopy config %}
+{
+    "title": "Footer",
+    "name": "footer",
+    "settings": [
+        { "name": "site_name", "type": "text", "default": "The Meridian Awards" },
+        { "name": "tagline", "type": "text", "default": "Celebrating the craft behind exceptional work." },
+        { "name": "copyright", "type": "text", "default": "© 2026 The Meridian Awards. All rights reserved." }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+<footer class="border-t border-white/5 bg-zinc-950">
+  <div class="mx-auto flex max-w-7xl flex-col items-center gap-4 px-6 py-14 text-center">
+    <p class="font-display text-2xl text-white">{{ settings.site_name }}</p>
+    {% if settings.tagline %}
+      <p class="text-sm text-zinc-500">{{ settings.tagline }}</p>
+    {% endif %}
+    <p class="mt-4 text-xs text-zinc-600">{{ settings.copyright }}</p>
+  </div>
+</footer>
+{% endcanopy %}

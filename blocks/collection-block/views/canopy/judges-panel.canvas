@@ -1,0 +1,92 @@
+{% canopy config %}
+{
+    "title": "Judges Panel",
+    "name": "judges-panel",
+    "settings": [
+        { "name": "heading", "type": "heading", "tab": "Content",
+          "elements": [{ "value": "h2", "label": "H2" }, { "value": "h3", "label": "H3" }],
+          "default": { "value": "Meet the judges", "element": "h2" } },
+        { "name": "description", "type": "textarea", "tab": "Content",
+          "default": "A panel of practitioners who have shaped the industries they now judge." },
+        { "name": "source", "type": "collection", "label": "Judges collection", "tab": "Content",
+          "default": "judges" },
+        { "name": "show_assignments", "type": "checkbox", "label": "Show award assignments", "tab": "Style", "default": true,
+          "description": "Reverse lookup — lists the awards whose multi-select field includes each judge." },
+        { "name": "columns", "type": "radio", "tab": "Style",
+          "options": [
+              { "value": "3", "label": "3 columns" },
+              { "value": "4", "label": "4 columns" }
+          ],
+          "default": "3" }
+    ]
+}
+{% endcanopy %}
+
+{% canopy template %}
+<section id="judges" class="relative border-t border-white/5 bg-zinc-900/40">
+  <div class="mx-auto max-w-7xl px-6 py-20 sm:py-28">
+    <div class="max-w-2xl">
+      <p class="text-xs font-semibold uppercase tracking-[0.35em] text-amber-300/90">The panel</p>
+      <{{ settings.heading.element }} class="mt-4 font-display text-4xl sm:text-5xl font-light tracking-tight text-white">
+        {{ settings.heading.value }}
+      </{{ settings.heading.element }}>
+      {% if settings.description %}
+        <p class="mt-4 text-lg text-zinc-400">{{ settings.description }}</p>
+      {% endif %}
+    </div>
+
+    {% if settings.source and settings.source.entries | length > 0 %}
+      {% set judges = settings.source.entries | sort((a, b) => a.order <=> b.order) %}
+
+      {# Reverse of the awards-grid lookup: find every award that lists this
+         judge's slug in its judges multi-select field #}
+      {% set all_awards = cms.collection('awards') %}
+
+      <div class="mt-14 grid gap-6 sm:grid-cols-2 {{ settings.columns == '4' ? 'lg:grid-cols-4' : 'lg:grid-cols-3' }}">
+        {% for judge in judges %}
+          <article class="flex flex-col rounded-3xl bg-zinc-950/70 p-8 ring-1 ring-white/10 transition hover:ring-amber-400/40">
+            {% if judge.photo %}
+              <img src="{{ judge.photo | image_url({ width: 160, height: 160, format: 'webp' }) }}"
+                   alt="{{ judge.name }}" class="size-20 rounded-2xl object-cover ring-1 ring-white/10" />
+            {% else %}
+              <span class="flex size-20 items-center justify-center rounded-2xl bg-amber-400/10 font-display text-2xl text-amber-300 ring-1 ring-amber-400/20">
+                {{ judge.name | split(' ') | map(part => part | first) | join | upper }}
+              </span>
+            {% endif %}
+
+            <h3 class="mt-6 font-display text-xl text-white">{{ judge.name }}</h3>
+            <p class="mt-1 text-sm text-zinc-500">{{ judge.role }}{% if judge.company %} · {{ judge.company }}{% endif %}</p>
+
+            {% if judge.bio %}
+              <p class="mt-4 line-clamp-3 text-sm leading-relaxed text-zinc-400">{{ judge.bio }}</p>
+            {% endif %}
+
+            {% if settings.show_assignments %}
+              {% set assignments = all_awards | filter(award => award.judges and judge.slug in award.judges) %}
+              {% if assignments | length > 0 %}
+                <div class="mt-auto pt-6">
+                  <p class="text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-600">Judging</p>
+                  <ul class="mt-2 flex flex-wrap gap-2">
+                    {% for award in assignments %}
+                      <li class="rounded-full bg-amber-400/10 px-3 py-1 text-xs text-amber-300 ring-1 ring-amber-400/20">
+                        {{ award.title }}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
+            {% endif %}
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="mt-14 rounded-3xl border border-dashed border-white/15 p-14 text-center">
+        <p class="font-display text-2xl text-zinc-400">No judges to show yet</p>
+        <p class="mx-auto mt-3 max-w-md text-sm text-zinc-500">
+          Create entries in the <strong class="text-zinc-400">judges</strong> collection and they will appear here automatically.
+        </p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endcanopy %}
